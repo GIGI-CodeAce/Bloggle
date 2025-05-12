@@ -4,6 +4,11 @@ function RegisterPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  function ResetRegister(){
+    setUsername('')
+    setPassword('')
+  }
+
   async function Register(e:any) {
     e.preventDefault();
 
@@ -13,8 +18,7 @@ function RegisterPage() {
       headers: { 'Content-Type': 'application/json' },
     });
 
-    const data = await response.json();
-    console.log('Server response:', data);
+    response.status !== 200 ? alert('Registration failed') : alert('Registration suceeded'), ResetRegister()
   }
 
   return (
@@ -41,9 +45,9 @@ function RegisterPage() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button className="p-2 bg-black text-white rounded hover:bg-gray-800">
-          Register
-        </button>
+        <button 
+           className="p-2 bg-black text-white rounded hover:bg-gray-800">
+          Register  </button>
       </form>
     </main>
   );
