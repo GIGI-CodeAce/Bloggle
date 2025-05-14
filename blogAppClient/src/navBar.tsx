@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, } from "react";
 import { Link } from "react-router-dom";
+import { UserContext } from "./userContext";
 
 function NavigationBar() {
     const liStyle = "ml-3 hover:cursor-pointer w-[100px] hover:underline";
-     const [username, setUsername] = useState(null)
+    const {setUserInfo, userInfo} = useContext(UserContext)
 
     useEffect(()=>{
         fetch('http://localhost:4000/profile',{
@@ -11,14 +12,20 @@ function NavigationBar() {
             credentials: 'include',
         }).then(res => {
             res.json().then(userInfo => {
-                setUsername(userInfo.username)
+                setUserInfo(userInfo)
             })
         })
     }, [])
 
     function logout(){
-        //
+        fetch('http://localhost:4000/logout', {
+            credentials: 'include',
+            method: "POST"
+        })
+        setUserInfo(null)
     }
+
+    const username = userInfo?.username
 
     return (
         <nav className="w-full max-w-screen-xl mx-auto h-10 mb-5 flex items-center">

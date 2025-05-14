@@ -52,12 +52,21 @@ app.post('/login', async (req, res) => {
       return res.status(400).json({ error: 'Wrong credentials' });
     }
 
-    const token = jwt.sign({ id: userDoc._id, username: userDoc.username }, JWT_SECRET, {});
-    res.cookie('token', token, {
-    httpOnly: true,
-    sameSite: 'none',  
-    secure: false,
-    }).json({ message: 'Login successful' });
+      const token = jwt.sign(
+        { id: userDoc._id, username: userDoc.username },
+        JWT_SECRET,
+        {}
+      );
+
+      res.cookie('token', token, {
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: false,
+      }).json({id:userDoc._id,
+                username,
+      });
+
+
 
   } catch (err) {
     console.error('❌ Login error:', err);
@@ -81,6 +90,10 @@ app.get('/profile', (req, res) => {
     res.json(info);
   });
 });
+
+app.post('/logout', (req,res)=>{
+  res.cookie('token', '').json('ok')
+})
 
 
 app.listen(PORT, () => {

@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Navigate } from "react-router-dom";
+import { UserContext } from "./userContext";
 
 function LoginPage() {
   const [username,setUsername] = useState('')
   const [password,setPassword] = useState('')
   const [redirect, setRedirect] = useState(false)
+  const {setUserInfo} = useContext(UserContext)
 
   function ResetLogin(){
     setUsername('')
@@ -21,11 +23,13 @@ function LoginPage() {
       credentials: 'include',
     });
 
-        if (response.status !== 200) {
+        if (!response.ok) {
       alert('Registration failed');
     } else {
-      alert('Registration succeeded');
-      setRedirect(true)
+      response.json().then(userInfo => {
+        setUserInfo(userInfo)
+        setRedirect(true)
+      })
       ResetLogin();
     }
 
