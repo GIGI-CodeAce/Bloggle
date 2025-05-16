@@ -1,12 +1,14 @@
 import 'react-quill/dist/quill.snow.css';
 import { RichTextEditor } from '@mantine/rte';
 import { useState } from 'react';
+import { Navigate } from 'react-router-dom';
 
 function CreatePost() {
  const [content, setContent] = useState('<span >Your content here</span>');
  const [title, setTitle] = useState('')
  const [summary, setSummary] = useState('')
  const [files, setFiles] = useState<FileList | null>(null);
+ const [redirect, setRedirect] = useState(false)
 
 async function SubmitPost(e: React.FormEvent<HTMLFormElement>) {
   e.preventDefault();
@@ -27,6 +29,14 @@ async function SubmitPost(e: React.FormEvent<HTMLFormElement>) {
       body: data,
     });
 
+    if (!response.ok) {
+      throw new Error('Failed to create post');
+    }else{
+      setRedirect(true)
+    }
+
+    response.ok ? setRedirect(true) : Promise.reject(new Error('Failed to create post'))
+
     const result = await response.json();
     console.log('Post created:', result);
   } catch (err) {
@@ -34,6 +44,9 @@ async function SubmitPost(e: React.FormEvent<HTMLFormElement>) {
   }
 }
 
+if (redirect) {
+  return <Navigate to="/" />;
+}
 
   return (
     <main>

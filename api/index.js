@@ -6,6 +6,8 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import cookieParser from 'cookie-parser';
 import multer from 'multer';
+import fs from 'fs'
+import PostModel from './models/post.js'
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -96,9 +98,22 @@ app.get('/profile', (req, res) => {
 app.post('/logout', (req,res)=>{
   res.cookie('token', '').json('ok')
 })
-app.post('/post', uploadMiddleware.single('file') ,(req, res) => {
-  res.json({files:req.file})
+app.post('/post', uploadMiddleware.single('file'), async(req, res) => {
+  const { originalname, path } = req.file;
+  const parts = originalname.split('.');
+  const ext = parts[parts.length - 1];
+  const newPath = path+'.'+ext
+  const {title,summary,content} = req.body
+  fs.renameSync(path, newPath);
+  const postdoc = await PostModel.create({
+    title,
+    summary,
+    content,
+    cover:newPath,
+  })
+  res.json(postdoc);
 });
+
 
 
 app.listen(PORT, () => {
