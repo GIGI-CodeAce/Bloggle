@@ -5,12 +5,14 @@ import User from './models/user.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import cookieParser from 'cookie-parser';
+import multer from 'multer';
 
 import dotenv from 'dotenv';
 dotenv.config();
 
 const PORT = 4000;
 const JWT_SECRET = process.env.JWT_SECRET || 'default_jwt_secret';
+const uploadMiddleware = multer({dest: 'uploads/'})
 
 const app = express();
 app.use(cors({credentials: true,origin: 'http://localhost:3000'}));
@@ -94,6 +96,9 @@ app.get('/profile', (req, res) => {
 app.post('/logout', (req,res)=>{
   res.cookie('token', '').json('ok')
 })
+app.post('/post', uploadMiddleware.single('file') ,(req, res) => {
+  res.json({files:req.file})
+});
 
 
 app.listen(PORT, () => {
