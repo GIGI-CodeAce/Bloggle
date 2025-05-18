@@ -7,6 +7,10 @@ import RegisterPage from './src/Register.tsx'
 import DefLayout from './src/layout.tsx'
 import CreatePost from './src/createPost.tsx'
 import { UserContextProvider } from './src/userContext.tsx'
+import TimeAgo from 'javascript-time-ago'
+
+import en from 'javascript-time-ago/locale/en'
+TimeAgo.addDefaultLocale(en)
 
 createRoot(document.getElementById('root')!).render(
   <BrowserRouter>

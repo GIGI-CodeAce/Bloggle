@@ -99,22 +99,32 @@ app.post('/logout', (req,res)=>{
   res.cookie('token', '').json('ok')
 })
 app.post('/post', uploadMiddleware.single('file'), async(req, res) => {
-  const { originalname, path } = req.file;
+
+    const { originalname, path } = req.file;
   const parts = originalname.split('.');
   const ext = parts[parts.length - 1];
   const newPath = path+'.'+ext
-  const {title,summary,content} = req.body
   fs.renameSync(path, newPath);
+
+  const {token} = req.cookies
+   jwt.verify(token, JWT_SECRET, {}, async(err, info) => {
+    if (err) throw err
+
+  const {title,summary,content} = req.body
   const postdoc = await PostModel.create({
     title,
     summary,
     content,
     cover:newPath,
+    author:info.id
   })
-  res.json(postdoc);
+    res.json(postdoc);
+  });
 });
 
-
+app.get('/post', async(req, res)=>{
+  res.json(await PostModel.find().populate('author', ['username']))
+})
 
 app.listen(PORT, () => {
   console.log(`🟩 Listening on port ${PORT}`);

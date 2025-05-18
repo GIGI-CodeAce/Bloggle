@@ -20,6 +20,8 @@ async function SubmitPost(e: React.FormEvent<HTMLFormElement>) {
 
   if (files && files[0]) {
     data.set('file', files[0]);
+    console.log(files[0]);
+    
   }
 
   try {
@@ -33,6 +35,7 @@ async function SubmitPost(e: React.FormEvent<HTMLFormElement>) {
       throw new Error('Failed to create post');
     }else{
       setRedirect(true)
+      
     }
 
     response.ok ? setRedirect(true) : Promise.reject(new Error('Failed to create post'))
