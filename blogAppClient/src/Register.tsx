@@ -1,24 +1,49 @@
-import { useState } from "react"
+import { useState, useEffect, type FormEvent } from "react";
 
 function RegisterPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [warningMessage, setWarningMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
-  function ResetRegister(){
-    setUsername('')
-    setPassword('')
+  function ResetRegister() {
+    setUsername('');
+    setPassword('');
   }
 
-  async function Register(e:any) {
+  useEffect(() => {
+    setWarningMessage('');
+    setSuccessMessage('');
+  }, [username, password]);
+
+  async function Register(e: FormEvent) {
     e.preventDefault();
+
+    if (!username || !password) {
+      setWarningMessage('Please enter your register information');
+      return;
+    }
 
     const response = await fetch('http://localhost:4000/register', {
       method: 'POST',
       body: JSON.stringify({ username, password }),
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include'
     });
 
-    response.status !== 200 ? alert('Registration failed') : alert('Registration suceeded'), ResetRegister()
+    if (response.status !== 200) {
+      const errorData = await response.json();
+      if (errorData?.error === 'Username already exists') {
+        setWarningMessage('Username already taken');
+      } else {
+        setWarningMessage('Registration failed. Please try again.');
+      }
+    } else {
+      setSuccessMessage('Account created. Go to login to sign in.');
+      setTimeout(() => {
+        ResetRegister()
+      }, 2000);
+    }
   }
 
   return (
@@ -45,10 +70,17 @@ function RegisterPage() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button 
-           className="p-2 bg-black text-white rounded hover:bg-gray-800">
-          Register  </button>
+        <button
+          className="p-2 bg-black text-white rounded hover:bg-gray-800">
+          Register
+        </button>
       </form>
+
+      {/* Show warning or success message */}
+      <div className="text-center m-2">
+        {warningMessage && <p className="text-red-500">{warningMessage}</p>}
+        {successMessage && <p className="text-green-600">{successMessage}</p>}
+      </div>
     </main>
   );
 }

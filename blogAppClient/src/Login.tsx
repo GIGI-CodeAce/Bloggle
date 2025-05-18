@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { use, useContext, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { UserContext } from "./userContext";
 
@@ -7,6 +7,12 @@ function LoginPage() {
   const [password,setPassword] = useState('')
   const [redirect, setRedirect] = useState(false)
   const {setUserInfo} = useContext(UserContext)
+
+  const [warningDisplay, setWarningDisplay] = useState(false)
+  
+  useEffect(()=>{
+    setWarningDisplay(false)
+  }, [username,password])
 
   function ResetLogin(){
     setUsername('')
@@ -24,7 +30,11 @@ function LoginPage() {
     });
 
         if (!response.ok) {
-      alert('Registration failed');
+          if (username === '' && password === '') {
+            setWarningDisplay(true);
+    return;
+    }
+          setWarningDisplay(true)
     } else {
       response.json().then(userInfo => {
         setUserInfo(userInfo)
@@ -63,6 +73,16 @@ function LoginPage() {
       Login
     </button>
     </form>
+        {warningDisplay && (
+      <div className="text-center text-red-500 m-2">
+        {username === '' && password === '' ? (
+          <h1>Please enter your login information</h1>
+        ) : (
+          <h1>Invalid username and/or password</h1>
+        )}
+      </div>
+)}
+
 </main>
 
   )

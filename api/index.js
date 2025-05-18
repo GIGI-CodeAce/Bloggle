@@ -28,6 +28,7 @@ mongoose.connect(process.env.VITE_MONGO_URI)
 
 app.post('/register', async (req, res) => {
   const { username, password } = req.body;
+
   if (!username || !password) {
     return res.status(400).json({ error: 'Username and password are required' });
   }
@@ -35,13 +36,29 @@ app.post('/register', async (req, res) => {
   try {
     const hashedPassword = bcrypt.hashSync(password, 10);
     const userDoc = await User.create({ username, password: hashedPassword });
-    console.log('✅ Registered:', username);
-    res.json(userDoc);
+
+    const token = jwt.sign(
+      { id: userDoc._id, username: userDoc.username },
+      JWT_SECRET,
+      {}
+    );
+
+    res.cookie('token', token, {
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: false, 
+    }).json({ id: userDoc._id, username });
+
+    console.log('✅ Registered and logged in:', username);
   } catch (err) {
+    if (err.code === 11000) {
+      return res.status(400).json({ error: 'Username already exists' });
+    }
     console.error('❌ Registration error:', err);
     res.status(500).json({ error: 'User registration failed' });
   }
 });
+
 
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;

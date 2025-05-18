@@ -9,7 +9,6 @@ function Articles() {
         fetch('http://localhost:4000/post')
             .then(res => res.json())
             .then(data => {
-                console.log(data);
                 setPosts(data);
             })
             .catch(err => console.error("Error fetching posts:", err));
