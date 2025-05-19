@@ -10,7 +10,14 @@ import fs from 'fs'
 import PostModel from './models/post.js'
 
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { log } from 'console';
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 
 const PORT = 4000;
 const JWT_SECRET = process.env.JWT_SECRET || 'default_jwt_secret';
@@ -20,6 +27,7 @@ const app = express();
 app.use(cors({credentials: true,origin: 'http://localhost:3000'}));
 app.use(express.json());
 app.use(cookieParser())
+app.use('/uploads', express.static(__dirname+ '/uploads'))
 
 
 mongoose.connect(process.env.VITE_MONGO_URI)
@@ -87,8 +95,6 @@ app.post('/login', async (req, res) => {
                 username,
       });
 
-
-
   } catch (err) {
     console.error('❌ Login error:', err);
     res.status(500).json({ error: 'Login failed' });
@@ -116,31 +122,45 @@ app.post('/logout', (req,res)=>{
   res.cookie('token', '').json('ok')
 })
 app.post('/post', uploadMiddleware.single('file'), async(req, res) => {
+  const { originalname, path: tempPath } = req.file;
+  const ext = path.extname(originalname).toLowerCase();
+  const newFileName = Date.now() + '-' + Math.round(Math.random() * 1E9) + ext;
+  const newPath = path.join('uploads', newFileName);
+  fs.renameSync(tempPath, newPath);
 
-    const { originalname, path } = req.file;
-  const parts = originalname.split('.');
-  const ext = parts[parts.length - 1];
-  const newPath = path+'.'+ext
-  fs.renameSync(path, newPath);
+  const { token } = req.cookies;
+  jwt.verify(token, JWT_SECRET, {}, async (err, info) => {
+    if (err) return res.status(403).json({ error: 'Invalid token' });
 
-  const {token} = req.cookies
-   jwt.verify(token, JWT_SECRET, {}, async(err, info) => {
-    if (err) throw err
+    const { title, summary, content, tags } = req.body;
+    let parsedTags = [];
+    try {
+      parsedTags = JSON.parse(tags);
+    } catch (e) {
+      console.warn('⚠️ Failed to parse tags:', tags);
+    }
 
-  const {title,summary,content} = req.body
-  const postdoc = await PostModel.create({
-    title,
-    summary,
-    content,
-    cover:newPath,
-    author:info.id
-  })
-    res.json(postdoc);
+    const postDoc = await PostModel.create({
+      title,
+      summary,
+      content,
+      tags: parsedTags, // <-- use parsed tags
+      cover: newPath.replace(/\\/g, '/'),
+      author: info.id,
+    });
+
+    res.json(postDoc);
   });
 });
 
+
+// data.set('tags', JSON.stringify(tagList));
+
 app.get('/post', async(req, res)=>{
-  res.json(await PostModel.find().populate('author', ['username']))
+  res.json(await PostModel.find()
+  .populate('author', ['username'])
+  .sort({createdAt: -1})
+  .limit(22))
 })
 
 app.listen(PORT, () => {
