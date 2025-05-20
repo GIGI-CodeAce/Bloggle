@@ -3,12 +3,14 @@ import { useState, useEffect, type FormEvent } from "react";
 function RegisterPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [repeatPassword, setRepeatPassword] = useState('');
   const [warningMessage, setWarningMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
   function ResetRegister() {
     setUsername('');
     setPassword('');
+    setRepeatPassword('')
   }
 
   useEffect(() => {
@@ -16,35 +18,43 @@ function RegisterPage() {
     setSuccessMessage('');
   }, [username, password]);
 
-  async function Register(e: FormEvent) {
-    e.preventDefault();
+ async function Register(e: FormEvent) {
+  e.preventDefault();
 
-    if (!username || !password) {
-      setWarningMessage('Please enter your register information');
-      return;
-    }
+  setWarningMessage('');
+  setSuccessMessage('');
 
-    const response = await fetch('http://localhost:4000/register', {
-      method: 'POST',
-      body: JSON.stringify({ username, password }),
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include'
-    });
-
-    if (response.status !== 200) {
-      const errorData = await response.json();
-      if (errorData?.error === 'Username already exists') {
-        setWarningMessage('Username already taken');
-      } else {
-        setWarningMessage('Registration failed. Please try again.');
-      }
-    } else {
-      setSuccessMessage('Account created. Go to login to sign in.');
-      setTimeout(() => {
-        ResetRegister()
-      }, 2000);
-    }
+  if (!username || !password) {
+    setWarningMessage('Please enter your register information');
+    return;
   }
+
+  if (password !== repeatPassword) {
+    setWarningMessage('Passwords do not match.');
+    return;
+  }
+
+  const response = await fetch('http://localhost:4000/register', {
+    method: 'POST',
+    body: JSON.stringify({ username, password }),
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+  });
+
+  if (response.status !== 200) {
+    const errorData = await response.json();
+    if (errorData?.error === 'Username already exists') {
+      setWarningMessage('Username already taken');
+    } else {
+      setWarningMessage('Registration failed. Please try again.');
+    }
+  } else {
+    setSuccessMessage('Account created. Go to login to sign in.');
+    setTimeout(() => {
+      ResetRegister();
+    }, 2100);
+  }
+}
 
   return (
     <main className="max-w-screen-xl mx-auto">
@@ -68,6 +78,13 @@ function RegisterPage() {
           className="p-2 border rounded"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Repeat password"
+          className="p-2 border rounded"
+          value={repeatPassword}
+          onChange={(e) => setRepeatPassword(e.target.value)}
         />
 
         <button

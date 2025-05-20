@@ -17,7 +17,7 @@ function Articles() {
     return (
         <main className="space-y-6 max-w-screen-xl mx-auto px-4 py-6">
             {posts.length > 0 && posts.map((post: PostProps) => (
-                <PostLayout key={post.id} {...post} />
+                <PostLayout key={post._id} {...post} />
             ))}
         </main>
     );
