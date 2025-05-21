@@ -30,7 +30,7 @@ function NavigationBar() {
     return (
         <nav className="w-full max-w-screen-xl mx-auto h-10 mb-5 flex items-center">
             <ul className="flex h-full text-lg justify-between items-center w-full">
-                <Link to="/" className={`${liStyle} font-bold`}>My blog</Link>
+                <Link to="/" className={`${liStyle} font-bold`}>Bloggle</Link>
                 <ul className="flex">
             {username && (
                 <>

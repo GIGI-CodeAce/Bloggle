@@ -1,14 +1,18 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import ReactTimeAgo from "react-time-ago";
 import type { PostProps} from "./Post";
+import { UserContext } from "./userContext";
 
 function PostPage() {
   const [postInfo, setPostInfo] = useState<PostProps | null>(null);
+  const {userInfo} = useContext(UserContext)
   const { id } = useParams();
   const tags = postInfo?.tags
-
-  console.log(postInfo);
+  
+  console.log(userInfo.id);
+  console.log(postInfo?.author._id);
+  
   
 
   const authorName = typeof postInfo?.author === 'object' ? postInfo?.author.username : postInfo?.author;
@@ -44,12 +48,20 @@ useEffect(() => {
 }, [id]);
 
 
+
   if (!postInfo) return <div>Loading...</div>;
 
   return (
     <div className="post-page p-4 max-w-2xl mx-auto relative">
       <h1 className="text-3xl font-bold mb-2 text-center bg-gray-100 w-[500px] mx-auto p-1 rounded-b-3xl">{postInfo.title}</h1>
       <p className="text-sm text-gray00 mb-4 text-center bg-gray-100 w-[200px] mx-auto p-1 rounded-b-3xl">@{authorName}</p>
+
+      {userInfo.id === postInfo.author._id && (
+        <Link to={`/edit/${postInfo._id}`}>
+        <button className="bg-black text-white hover:bg-gray-700 p-1 rounded-xl">Edit</button>
+        </Link>
+      )}
+
       <div
         className="text-lg mb-4 prose max-w-none"
         dangerouslySetInnerHTML={{ __html: postInfo.content }}

@@ -1,11 +1,11 @@
 import { createContext, useState } from "react";
-import type { ReactNode } from "react"; // Type-only import
+import type { ReactNode } from "react";
 
 // Define the context
-export const UserContext = createContext<any>({}); // Define the context value type
+export const UserContext = createContext<any>({});
 
 interface UserContextProviderProps {
-  children: ReactNode; // Use ReactNode for children prop
+  children: ReactNode;
 }
 
 export function UserContextProvider({ children }: UserContextProviderProps) {

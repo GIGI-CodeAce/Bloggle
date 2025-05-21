@@ -156,11 +156,16 @@ const addTag = () => {
 
         <button
           type="submit"
-          className="text-white px-4 py-2 rounded bg-black hover:bg-gray-800"
+          className="text-white px-4 py-2 rounded cursor-pointer bg-black hover:bg-gray-800"
         >
           Submit
         </button>
       </form>
+      <div className="text-center m-2">
+        <h1 className="text-center text-xl font-extrabold mt-8">
+        Bloggle It Out: <span className="text-gray-600">Share What’s On Your Mind</span>
+        </h1>
+      </div>
     </main>
   );
 }

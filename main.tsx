@@ -9,8 +9,9 @@ import CreatePost from './src/createPost.tsx'
 import { UserContextProvider } from './src/userContext.tsx'
 import TimeAgo from 'javascript-time-ago'
 import PostPage from './src/postPage.tsx'
-
 import en from 'javascript-time-ago/locale/en'
+import EditPost from './src/editPost.tsx'
+
 TimeAgo.addDefaultLocale(en)
 
 createRoot(document.getElementById('root')!).render(
@@ -23,6 +24,7 @@ createRoot(document.getElementById('root')!).render(
       <Route path='/register' element={<RegisterPage/>}/>
       <Route path='/create' element={<CreatePost/>}/>
       <Route path='/post/:id' element={<PostPage/>}/>
+      <Route path='/edit/:id' element={<EditPost/>}/>
     </Route>
   </Routes>
   </UserContextProvider>
