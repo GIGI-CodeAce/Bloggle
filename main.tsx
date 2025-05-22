@@ -11,7 +11,7 @@ import TimeAgo from 'javascript-time-ago'
 import PostPage from './src/postPage.tsx'
 import en from 'javascript-time-ago/locale/en'
 import EditPost from './src/editPost.tsx'
-
+ 
 TimeAgo.addDefaultLocale(en)
 
 createRoot(document.getElementById('root')!).render(

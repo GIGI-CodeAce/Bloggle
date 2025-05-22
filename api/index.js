@@ -10,7 +10,7 @@ import fs from 'fs'
 import PostModel from './models/post.js'
 
 import dotenv from 'dotenv';
-import path from 'path';
+import path, { isAbsolute } from 'path';
 import { fileURLToPath } from 'url';
 import { log } from 'console';
 dotenv.config();
@@ -152,6 +152,46 @@ app.post('/post', uploadMiddleware.single('file'), async(req, res) => {
     res.json(postDoc);
   });
 });
+
+app.put('/post',uploadMiddleware.single('file'), async (req,res)=>{
+  let newPath = null
+  if(req.file){
+      const { originalname, path: tempPath } = req.file;
+      const ext = path.extname(originalname).toLowerCase();
+      const newFileName = Date.now() + '-' + Math.round(Math.random() * 1E9) + ext;
+      newPath = path.join('uploads', newFileName);
+      fs.renameSync(tempPath, newPath);
+  }
+
+  const {token} = req.cookies
+  jwt.verify(token, JWT_SECRET, {}, async (err, info) => {
+    if (err) return res.status(403).json({ error: 'Invalid token' });
+    const { id, title, summary, content, tags } = req.body;
+    let parsedTags;
+    try {
+      parsedTags = JSON.parse(tags);
+    } catch (e) {
+      return res.status(400).json({ error: 'Invalid tags format' });
+    }
+    const postDoc = await PostModel.findById(id)
+
+    const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(info.id)
+    if(!isAuthor){
+      return res.status(400).json('You are not the author..')
+    }
+
+    postDoc.set({
+       title,
+       summary, 
+       content, 
+       cover: newPath? newPath: postDoc.cover,
+       tags: parsedTags
+    })
+    await postDoc.save()
+
+    res.json(postDoc)
+  });
+})
 
 app.get('/post/:id', async(req,res)=>{
   const {id} = req.params

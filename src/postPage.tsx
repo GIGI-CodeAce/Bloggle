@@ -9,11 +9,6 @@ function PostPage() {
   const {userInfo} = useContext(UserContext)
   const { id } = useParams();
   const tags = postInfo?.tags
-  
-  console.log(userInfo.id);
-  console.log(postInfo?.author._id);
-  
-  
 
   const authorName = typeof postInfo?.author === 'object' ? postInfo?.author.username : postInfo?.author;
 
@@ -54,23 +49,22 @@ useEffect(() => {
   return (
     <div className="post-page p-4 max-w-2xl mx-auto relative">
       <h1 className="text-3xl font-bold mb-2 text-center bg-gray-100 w-[500px] mx-auto p-1 rounded-b-3xl">{postInfo.title}</h1>
-      <p className="text-sm text-gray00 mb-4 text-center bg-gray-100 w-[200px] mx-auto p-1 rounded-b-3xl">@{authorName}</p>
-
-      {userInfo.id === postInfo.author._id && (
-        <Link to={`/edit/${postInfo._id}`}>
-        <button className="bg-black text-white hover:bg-gray-700 p-1 rounded-xl">Edit</button>
-        </Link>
-      )}
+      <p className="text-sm font-bold text-gray00 mb-4 text-center bg-gray-100 w-[200px] mx-auto p-1 rounded-b-3xl">@{authorName}</p>
 
       <div
-        className="text-lg mb-4 prose max-w-none"
+        className="text-lg mb-4 prose pt-2 max-w-none"
         dangerouslySetInnerHTML={{ __html: postInfo.content }}
         ></div>
 
-      <img src={`http://localhost:4000/${postInfo.cover}`} alt="cover" className="w-full rounded-lg mb-4" />
+      <img src={`http://localhost:4000/${postInfo.cover}`} alt="cover" className="w-full pt-2 rounded-lg mb-4" />
       <div className="flex flex-wrap gap-2">
         <TagsDisplay/>
-        <div className="flex self-end mb-1 absolute right-5"><ReactTimeAgo date={postInfo.createdAt} locale="en-US" /></div>
+              {userInfo.id === postInfo.author._id && (
+        <Link to={`/edit/${postInfo._id}`}>
+        <button className="bg-black cursor-pointer text-white absolute right-[300px] bottom-[20px] hover:bg-gray-700 p-1 pl-3 pr-3 rounded-xl">Edit post</button>
+        </Link>
+      )}
+        <div className="flex self-end mb-1 absolute right-5"><ReactTimeAgo date={ new Date(postInfo.createdAt).getTime()} locale="en-US" /></div>
       </div>
     </div>
   );

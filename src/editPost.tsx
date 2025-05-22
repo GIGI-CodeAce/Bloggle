@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import RichTextEditor from "@mantine/rte";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import type { PostProps } from "./Post";
 
 function EditPost(){
@@ -11,11 +11,10 @@ function EditPost(){
       const [tagInput, setTagInput] = useState('');
       const [tags, settags] = useState<string[]>([]);
       const [redirect, setRedirect] = useState(false);
-
-      // const [postInfo, setPostInfo] = useState({})
       const {id} = useParams()
 
         useEffect(() => {
+          if(!id) return
         fetch(`http://localhost:4000/post/${id}`)
             .then((res) => {
             if (!res.ok) {
@@ -29,15 +28,12 @@ function EditPost(){
             setContent(content);
             setSummary(summary);
             settags(tags || []);
-
             
             })
             .catch((err) => {
             console.error("Failed to fetch post:", err);
             });
         }, [id]);
-
-        console.log(files);
         
 
       const addTag = () => {
@@ -62,12 +58,40 @@ function EditPost(){
     settags(tags.filter(t => t !== tag));
   };
 
+ async function updatePost(e: React.FormEvent<HTMLFormElement>){
+    e.preventDefault();
+    const data = new FormData();
+    data.set('title', title);
+    data.set('summary', summary);
+    data.set('content', content);
+    if (id !== undefined) {
+      data.set('id', id);
+    }
+    data.set('tags', JSON.stringify(tags));
+    if (files && files[0]) {
+      data.set('file', files[0]);
+    }
+
+    await fetch('http://localhost:4000/post', {
+      method: 'PUT',
+      body: data,
+      credentials: 'include'
+    });
+
+    setRedirect(true);
+  }
+
+        if(redirect){
+        console.log(id);
+        
+        return <Navigate to={`/post/${id}`}/>
+      }
+
     return(
         <main>
-                <main>
                   <h1 className="text-center text-3xl font-extrabold">Edit post</h1>
                   <form
-                    // onSubmit={'SubmitPost'}
+                    onSubmit={updatePost}
                     className="flex flex-col gap-4 mt-10 w-full max-w-xl mx-auto"
                   >
                     <input
@@ -149,10 +173,9 @@ function EditPost(){
                       type="submit"
                       className="text-white px-4 py-2 rounded bg-black hover:bg-gray-800"
                     >
-                      Submit
+                      Update post
                     </button>
                   </form>
-                </main>
         </main>
     )
 }

@@ -13,8 +13,6 @@ export interface PostProps {
   tags?: string[];
 }
 
-
-
 function PostLayout(props: PostProps) {
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
      const authorName = typeof props.author === 'object' ? props.author.username : props.author;
@@ -61,7 +59,7 @@ function PostLayout(props: PostProps) {
         </h1>
                 <span className="text-xs xl:text-base text-gray-400">
                      <span className=" mr-2">@{authorName}</span>•
-          <span className="ml-2"><ReactTimeAgo date={props.createdAt} locale="en-US" /></span><br/>
+          <span className="ml-2"><ReactTimeAgo date={ new Date(props.createdAt).getTime()} locale="en-US" /></span><br/>
         </span>
 
                 <h1

@@ -93,7 +93,6 @@ function RegisterPage() {
         </button>
       </form>
 
-      {/* Show warning or success message */}
       <div className="text-center m-2">
         {warningMessage && <p className="text-red-500">{warningMessage}</p>}
         {successMessage && <p className="text-green-600">{successMessage}</p>}
