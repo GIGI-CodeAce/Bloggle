@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { UserContext } from "./userContext";
 
 function NavigationBar() {
-    const liStyle = "ml-3 hover:cursor-pointer w-[100px] hover:underline";
+    const liStyle = "mr-4 flex items-center justify-cente hover:cursor-pointer w-auto hover:underline";
     const {setUserInfo, userInfo} = useContext(UserContext)
 
     useEffect(()=>{
@@ -30,12 +30,14 @@ function NavigationBar() {
     return (
         <nav className="w-full max-w-screen-xl mx-auto h-10 mb-5 flex items-center">
             <ul className="flex h-full text-lg justify-between items-center w-full">
-                <Link to="/" className={`${liStyle} font-bold`}>Bloggle</Link>
+                <Link to="/" className={`${liStyle} w-[150px] font-bold flex items-center justify-center`}>
+                <img className="h-7 m-1 mr-2" src="/public/bloggleLogo.png"/> Bloggle</Link>
                 <ul className="flex">
             {username && (
                 <>
-                <Link className={liStyle} to="/create">New post</Link>
-                <a className={liStyle} onClick={(()=> logout())}>Logout</a>
+                <Link className={`${liStyle} w-`} to="/create">New post 
+                 <span className="text-[11px] ml-1 font-bold"> ({username})</span></Link>
+                <a className={`${liStyle}`} onClick={(()=> logout())}>Logout</a>
                 </>
             )}
             {!username && (

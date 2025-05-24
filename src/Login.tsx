@@ -74,7 +74,7 @@ function LoginPage() {
     </button>
     </form>
         {warningDisplay && (
-      <div className="text-center text-red-500 m-2">
+      <div className="text-center text-red-600 m-2">
         {username === '' && password === '' ? (
           <h1>Please enter your login information</h1>
         ) : (

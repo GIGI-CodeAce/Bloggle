@@ -45,13 +45,21 @@ function EditPost(){
 
         if (
             cleaned.length >= 4 &&
-            cleaned.length <= 11 &&
+            cleaned.length <= 14 &&
             !tags.includes(cleaned)
         ) {
             settags([...tags, cleaned]);
             setTagInput('');
         }
         };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  if (e.key === 'Enter') {
+    e.preventDefault(); // Prevent form submission
+    addTag(); // Add the tag instead
+  }
+};
+
 
 
   const removeTag = (tag: string) => {
@@ -82,7 +90,6 @@ function EditPost(){
   }
 
         if(redirect){
-        console.log(id);
         
         return <Navigate to={`/post/${id}`}/>
       }
@@ -137,10 +144,10 @@ function EditPost(){
                         <input
                           value={tagInput}
                           onChange={e => setTagInput(e.target.value)}
-                        //   onKeyDown={handleKeyDown}
+                          onKeyDown={handleKeyDown}
                           className="border border-gray-500 p-2 flex-1 pl-7"
                           type="text"
-                          placeholder="Add a tag (min 3, max 10)"
+                          placeholder="Add a tag (min 3, max 13 chars)"
                         />
                         <button
                           type="button"

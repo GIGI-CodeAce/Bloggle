@@ -48,7 +48,7 @@ useEffect(() => {
 
   return (
     <div className="post-page p-4 max-w-2xl mx-auto relative">
-      <h1 className="text-3xl font-bold mb-2 text-center bg-gray-100 w-[500px] mx-auto p-1 rounded-b-3xl">{postInfo.title}</h1>
+      <h1 className="text-3xl font-bold mb-2 text-center bg-gray-100 w-[550px] mx-auto p-1 rounded-b-3xl">{postInfo.title}</h1>
       <p className="text-sm font-bold text-gray00 mb-4 text-center bg-gray-100 w-[200px] mx-auto p-1 rounded-b-3xl">@{authorName}</p>
 
       <div

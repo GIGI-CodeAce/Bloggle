@@ -10,9 +10,8 @@ import fs from 'fs'
 import PostModel from './models/post.js'
 
 import dotenv from 'dotenv';
-import path, { isAbsolute } from 'path';
+import path from 'path';
 import { fileURLToPath } from 'url';
-import { log } from 'console';
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -144,7 +143,7 @@ app.post('/post', uploadMiddleware.single('file'), async(req, res) => {
       title,
       summary,
       content,
-      tags: parsedTags, // <-- use parsed tags
+      tags: parsedTags,
       cover: newPath.replace(/\\/g, '/'),
       author: info.id,
     });
@@ -153,7 +152,7 @@ app.post('/post', uploadMiddleware.single('file'), async(req, res) => {
   });
 });
 
-app.put('/post',uploadMiddleware.single('file'), async (req,res)=>{
+app.put('/post', uploadMiddleware.single('file'), async (req,res)=>{
   let newPath = null
   if(req.file){
       const { originalname, path: tempPath } = req.file;

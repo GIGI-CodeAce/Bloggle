@@ -19,16 +19,16 @@ function PostLayout(props: PostProps) {
 
      const tags = props.tags
       function TagsDisplay() {
-        const displayTags = tags && tags.length > 0 ? props.tags : ['#noHashtags'];
+        const displayTags = tags && tags.length > 0 ? props.tags : [''];
 
         return (
-          <div className="mt-2 flex flex-wrap">
+          <span className="flex flex-wrap">
             {displayTags?.map((tag, index) => (
-              <span key={index} className="mr-1 text-black transition-all px-1 py-1">
-                {tag.startsWith('#') ? tag : `#${tag}`}
+              <span key={index} className=" text-black transition-all px-1 py-1">
+                {tag.startsWith('#') ? tag : ``}
               </span>
             ))}
-          </div>
+          </span>
         );
       }
 
@@ -51,25 +51,26 @@ function PostLayout(props: PostProps) {
 
       <div className="flex  flex-col">
                 <h1
-          className={`text-lg xl:text-3xl md:text-2xl font-semibold hover:cursor-pointer ${
+          className={`text-lg xl:text-3xl md:text-2xl font-semibold hover:cursor-pointer truncate ${
             hoveredIndex === props._id ? "underline" : ""
-          }`}
-        >
+          }`}>
           {props.title}
         </h1>
-                <span className="text-xs xl:text-base text-gray-400">
-                     <span className=" mr-2">@{authorName}</span>•
-          <span className="ml-2"><ReactTimeAgo date={ new Date(props.createdAt).getTime()} locale="en-US" /></span><br/>
+        <span className="text-xs xl:text-base text-gray-400 flex items-center">
+          <span className="mr-1">@{authorName}</span>
+          <span>•</span>
+          <span className="ml-1 flex items-center gap-1">
+            <ReactTimeAgo date={new Date(props.createdAt).getTime()} locale="en-US" />•
+            <TagsDisplay />
+          </span>
         </span>
+
 
                 <h1
           className={`text-sm mt-2 text-gray-500 xl:text-xl md:text-2xl font-semibold hover:cursor-pointer`}
         >
           {props.summary}
         </h1>
-        <span className="text-xs xl:text-base text-gray-500 mt-2">
-        <TagsDisplay/>
-        </span>
       </div>
     </div>
     </Link>

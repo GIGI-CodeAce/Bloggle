@@ -11,7 +11,7 @@ function CreatePost() {
   const [tagInput, setTagInput] = useState('');
   const [tagList, setTagList] = useState<string[]>([]);
   const [redirect, setRedirect] = useState(false);
-
+  const [errorWarning, setErrorWarning] = useState(false);
 
   async function SubmitPost(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -33,7 +33,10 @@ function CreatePost() {
         body: data,
       });
 
-      if (!response.ok) throw new Error('Failed to create post');
+      if (!response.ok) {
+        setErrorWarning(true);
+        throw new Error('Failed to create post');
+      }
       const result = await response.json();
       console.log('Post created:', result);
       setRedirect(true);
@@ -42,26 +45,23 @@ function CreatePost() {
     }
   }
 
-const addTag = () => {
-  let cleaned = tagInput.trim();
+  const addTag = () => {
+    let cleaned = tagInput.trim().replace(/\s+/g, '');
 
-  cleaned = cleaned.replace(/\s+/g, '');
+    if (!cleaned.startsWith('#')) {
+      cleaned = `#${cleaned}`;
+    }
 
-  if (!cleaned.startsWith('#')) cleaned = `#${cleaned}`;
+    const rawTag = cleaned.slice(1);
 
-  if (
-    cleaned.length >= 4 &&
-    cleaned.length <= 11 &&
-    !tagList.includes(cleaned)
-  ) {
-    setTagList([...tagList, cleaned]);
-    setTagInput('');
-  }
-};
-
-
-  const removeTag = (tag: string) => {
-    setTagList(tagList.filter(t => t !== tag));
+    if (
+      rawTag.length >= 3 &&
+      rawTag.length <= 13 &&
+      !tagList.includes(cleaned)
+    ) {
+      setTagList([...tagList, cleaned]);
+      setTagInput('');
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -71,6 +71,10 @@ const addTag = () => {
     }
   };
 
+  const removeTag = (tag: string) => {
+    setTagList(tagList.filter(t => t !== tag));
+  };
+
   if (redirect) {
     return <Navigate to="/" />;
   }
@@ -78,9 +82,12 @@ const addTag = () => {
   return (
     <main>
       <h1 className="text-center text-3xl font-extrabold">Create post</h1>
+      <h1 className="h-6 text-center text-red-600">
+        {errorWarning && 'Failed to create post, please try again'}
+      </h1>
       <form
         onSubmit={SubmitPost}
-        className="flex flex-col gap-4 mt-10 w-full max-w-xl mx-auto"
+        className="flex flex-col gap-4 mt-6 w-full max-w-xl mx-auto"
       >
         <input
           value={title}
@@ -117,15 +124,14 @@ const addTag = () => {
         {/* --- Tag Input --- */}
         <div>
           <div className="flex gap-2 relative">
-          <span
-            className=" text-3xl select-none absolute left-[6px] top-[3px]">#</span>
+            <span className="text-3xl select-none absolute left-[6px] top-[3px]">#</span>
             <input
               value={tagInput}
               onChange={e => setTagInput(e.target.value)}
               onKeyDown={handleKeyDown}
               className="border border-gray-500 p-2 flex-1 pl-7"
               type="text"
-              placeholder="Add a tag (min 3, max 10)"
+              placeholder="Add a tag (min 3, max 13 chars)"
             />
             <button
               type="button"
@@ -145,7 +151,7 @@ const addTag = () => {
                 <button
                   type="button"
                   onClick={() => removeTag(tag)}
-                  className="text-red-500 hover:text-red-700"
+                  className="text-red-500 hover:text-red-700 cursor-pointer"
                 >
                   &times;
                 </button>
@@ -163,7 +169,7 @@ const addTag = () => {
       </form>
       <div className="text-center m-2">
         <h1 className="text-center text-xl font-extrabold mt-8">
-        Bloggle It Out: <span className="text-gray-600">Share What’s On Your Mind</span>
+          Bloggle It Out: <span className="text-gray-600">Share What’s On Your Mind</span>
         </h1>
       </div>
     </main>
