@@ -28,27 +28,44 @@ function NavigationBar() {
     const username = userInfo?.username
 
     return (
-        <nav className="w-full max-w-screen-xl mx-auto h-10 mb-5 flex items-center">
-            <ul className="flex h-full text-lg justify-between items-center w-full">
-                <Link to="/" className={`${liStyle} w-[150px] font-bold flex items-center justify-center`}>
-                <img className="h-7 m-1 mr-2" src="/public/bloggleLogo.png"/> Bloggle</Link>
-                <ul className="flex">
-            {username && (
-                <>
-                <Link className={`${liStyle} w-`} to="/create">New post 
-                 <span className="text-[11px] ml-1 font-bold"> ({username})</span></Link>
-                <a className={`${liStyle}`} onClick={(()=> logout())}>Logout</a>
-                </>
-            )}
-            {!username && (
-                <>
-                    <Link to="/login" className={liStyle}>Login</Link>
-                    <Link to="/register" className={liStyle}>Register</Link>
-                </>
-            )}
-                </ul>
-            </ul>
-        </nav>
+        <>
+        <nav className="fixed top-0 left-0 w-full h-10 bg-[#020303c9] z-[100] text-white flex items-center">
+  <div className="max-w-screen-xl mx-auto w-full flex items-center justify-between px-4">
+    <Link
+      to="/"
+      className={`${liStyle} w-[150px] font-bold flex items-center justify-center`}
+    >
+      <img className="h-7 m-1 mr-2" src="/bloggleLogo.png" alt="Bloggle Logo" />
+      Bloggle
+    </Link>
+
+    <div className="flex space-x-4 text-lg items-center">
+      {username ? (
+        <>
+          <Link className={`${liStyle}`} to="/create">
+            New Post
+            <span className="text-[11px] ml-1 font-bold">({username})</span>
+          </Link>
+          <button className={`${liStyle}`} onClick={logout}>
+            Logout
+          </button>
+        </>
+      ) : (
+        <>
+          <Link to="/login" className={liStyle}>
+            Login
+          </Link>
+          <Link to="/register" className={liStyle}>
+            Register
+          </Link>
+        </>
+      )}
+    </div>
+  </div>
+</nav>
+<div className="h-13" />
+
+        </>
     );
 }
 

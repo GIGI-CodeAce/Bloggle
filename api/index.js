@@ -12,6 +12,7 @@ import PostModel from './models/post.js'
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { useState } from 'react';
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -191,6 +192,44 @@ app.put('/post', uploadMiddleware.single('file'), async (req,res)=>{
     res.json(postDoc)
   });
 })
+
+app.post('/post/:id/like', async (req, res) => {
+  const { token } = req.cookies;
+
+  if (!token) return res.status(401).json({ message: 'Unauthorized - No token' });
+
+  jwt.verify(token, JWT_SECRET, {}, async (err, info) => {
+    if (err) return res.status(403).json({ message: 'Invalid token' });
+
+    const userId = info.id;
+
+    try {
+      const post = await PostModel.findById(req.params.id);
+      if (!post) return res.status(404).json({ message: 'Post not found' });
+
+      // Ensure likedBy array is initialized
+      if (!post.likedBy) post.likedBy = [];
+
+      const alreadyLiked = post.likedBy.some(id => id.toString() === userId);
+
+      if (alreadyLiked) {
+        post.likedBy = post.likedBy.filter(id => id.toString() !== userId);
+      } else {
+        post.likedBy.push(userId);
+      }
+
+      post.likes = post.likedBy.length;
+      await post.save();
+
+      res.json({ likes: post.likes, liked: !alreadyLiked });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: 'Failed to toggle like' });
+    }
+  });
+});
+
+
 
 app.get('/post/:id', async(req,res)=>{
   const {id} = req.params
