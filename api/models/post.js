@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 const {Schema,model} = mongoose;
 
 const PostSchema = new Schema({
-  title:String,
+  title:{ type: String, minLength: 4, maxLength:45, unique: true },
   summary:String,
   likes: { type: Number, default: 0 },
   likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
