@@ -88,7 +88,7 @@ function HandleErrors() {
   if (title.length > 44 || title.length < 4) {
     error = 'Title length is less than 4 or more than 45';
   } else {
-    error = 'Failed to create post, please try again';
+    error = 'Failed to create post, make sure no input is empty';
   }
 
   return errorWarning ? (
@@ -152,7 +152,7 @@ function HandleErrors() {
             <button
               type="button"
               onClick={addTag}
-              className="bg-black hover:bg-gray-800 text-white px-3 rounded"
+              className="bg-black hover:bg-gray-800 transition-all cursor-pointer hover:rounded-lg text-white px-3 rounded"
             >
               Add
             </button>
@@ -177,8 +177,9 @@ function HandleErrors() {
         </div>
 
         <button
+        title='Click to submit your post'
           type="submit"
-          className="text-white px-4 py-2 rounded cursor-pointer bg-black hover:bg-gray-800"
+          className="text-white hover:rounded-xl transition-all px-4 py-2 rounded cursor-pointer bg-black hover:bg-gray-800"
         >
           Submit
         </button>

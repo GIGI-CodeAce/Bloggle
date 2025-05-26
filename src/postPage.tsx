@@ -7,7 +7,6 @@ import { UserContext } from "./userContext";
 function PostPage() {
   const [postInfo, setPostInfo] = useState<PostProps | null>(null);
   const {userInfo} = useContext(UserContext)
-  const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(0);
   const { id } = useParams();
   const tags = postInfo?.tags
@@ -48,8 +47,6 @@ useEffect(() => {
 useEffect(() => {
   if (postInfo) {
     setLikes(postInfo.likes);
-    const userLiked = postInfo.likedBy?.some((id: string) => id === userInfo.id);
-    setLiked(userLiked);
   }
 }, [postInfo, userInfo]);
 
@@ -61,15 +58,13 @@ async function handleLike() {
   const data = await res.json();
 
   setLikes(data.likes);
-  setLiked(data.liked);
 }
 
-
-  if (!postInfo) return <div>Loading...</div>;
+  if (!postInfo) return <div className="text-center text-xl text-gray-700">Loading...</div>;
 
   return (
-    <div className="post-page p-4 max-w-2xl mx-auto relative overflow-hidden min-h-[300px]">
-      <h1 className="text-3xl font-bold mb-2 text-center bg-gray-100 w-[550px] mx-auto p-1 rounded-b-3xl">{postInfo.title}</h1>
+    <div className="post-page p-4 mb-5 max-w-2xl mx-auto relative overflow-hidden min-h-[300px]">
+      <h1 className="text-xl md:text-3xl sm:text-2xl font-bold mb-2 text-center bg-gray-100 mx-auto p-1 rounded-b-3xl">{postInfo.title}</h1>
       <p className="text-sm font-bold text-gray00 mb-4 text-center bg-gray-100 w-[200px] mx-auto p-1 rounded-b-3xl">@{authorName}</p>
       <hr/>
 
@@ -82,7 +77,11 @@ async function handleLike() {
         dangerouslySetInnerHTML={{ __html: postInfo.content }}
         ></div>
 
-        <div className="absolute bottom-134 right-7 z-50 items-center gap-2">
+
+      <div>
+        <img src={`http://localhost:4000/${postInfo.cover}`} alt="cover" className="w-full pt-2 h-[510px] rounded-xl mb-4 border" />
+
+                <div className="absolute bottom-134 right-8 z-50 items-center gap-2">
           <button
             onClick={handleLike}
             className="bg-black border-white border-3 hover:bg-gray-700 cursor-pointer transition-all active:bg-red-600 text-white px-4 py-1 rounded-xl"
@@ -90,10 +89,8 @@ async function handleLike() {
             {likes === 0 ? 'Like post' : <h1>{likes} Like{likes > 1 ? 's' : ''}</h1>}
           </button>
         </div>
-
-
-      <img src={`http://localhost:4000/${postInfo.cover}`} alt="cover" className="w-full pt-2 rounded-xl mb-4" />
-        <div className="flex items-center flex-wrap rounded-xl text-white bg-[#020303c9] p-2 w-full">
+      </div>
+        <div className="flex items-center flex-wrap  text-white rounded-t-xl bg-[#020303c9] p-2 w-full">
           <TagsDisplay />
 
           {userInfo.id === postInfo.author._id && (
@@ -108,7 +105,6 @@ async function handleLike() {
             <ReactTimeAgo date={new Date(postInfo.createdAt).getTime()} locale="en-US" />
           </div>
         </div>
-
     </div>
   );
 }

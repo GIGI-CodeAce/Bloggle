@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { UserContext } from "./userContext";
 
 function NavigationBar() {
-    const liStyle = " mr-6 flex items-center justify-cente hover:cursor-pointer w-auto hover:underline";
+    const liStyle = " mr-6 flex items-center justify-cente hover:font-bold cursor-pointer w-auto hover:underline";
     const {setUserInfo, userInfo} = useContext(UserContext)
 
     useEffect(()=>{
@@ -35,7 +35,7 @@ function NavigationBar() {
       to="/"
       className={`${liStyle} w-[150px] font-bold flex items-center justify-center`}
     >
-      <img className="h-7 m-1 mr-2" src="/bloggleLogo.png" alt="Bloggle Logo" />
+      <img className="h-7 m-1 mr-2 font-imfell" src="/bloggleLogo.png" alt="Bloggle Logo" />
       Bloggle
     </Link>
 

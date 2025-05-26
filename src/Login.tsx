@@ -53,7 +53,7 @@ function LoginPage() {
 <main className="max-w-screen-xl mx-auto">
     <form className="flex flex-col gap-4 max-w-sm mx-auto mt-10"
           onSubmit={Login}>
-          <h1 className="font-bold text-3xl mx-auto">Login</h1>
+          <h1 className="font-bold text-3xl hover:underline mx-auto">Login</h1>
 
     <input type="text"
            placeholder="Username"
@@ -69,7 +69,7 @@ function LoginPage() {
            onChange={((e)=> setPassword(e.target.value))}
       />
 
-    <button className="p-2 bg-black text-white rounded hover:bg-gray-800">
+    <button className="p-2 bg-black transition-all cursor-pointer hover:rounded-xl text-white rounded hover:bg-gray-800">
       Login
     </button>
     </form>

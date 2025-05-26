@@ -67,7 +67,7 @@ function RegisterPage() {
         className="flex flex-col gap-4 max-w-sm mx-auto mt-10"
         onSubmit={Register}
       >
-        <h1 className="font-bold text-3xl mx-auto">Register</h1>
+        <h1 className="font-bold text-3xl mx-auto hover:underline">Register</h1>
 
         <input
           type="text"
@@ -93,7 +93,7 @@ function RegisterPage() {
         />
 
         <button
-          className="p-2 bg-black text-white rounded hover:bg-gray-800">
+          className="p-2 bg-black transition-all cursor-pointer hover:rounded-xl text-white rounded hover:bg-gray-800">
           Register
         </button>
       </form>

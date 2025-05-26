@@ -42,8 +42,8 @@ function EditPost() {
     if (!cleaned.startsWith('#')) cleaned = `#${cleaned}`;
 
     if (
-      cleaned.length >= 4 &&
-      cleaned.length <= 14 &&
+      cleaned.length >= 2 &&
+      cleaned.length <= 16 &&
       !tags.includes(cleaned)
     ) {
       settags([...tags, cleaned]);
@@ -65,8 +65,7 @@ function EditPost() {
   async function updatePost(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    // Validate title length on submit
-    if (title.length < 4 || title.length > 45) {
+    if (title.length < 3 || title.length > 45) {
       setErrorWarning(true);
       return;
     }
@@ -131,7 +130,7 @@ function EditPost() {
           value={title}
           onChange={e => {
             setTitle(e.target.value);
-            if (errorWarning) setErrorWarning(false); // clear error on typing
+            if (errorWarning) setErrorWarning(false);
           }}
           className="border border-gray-500 p-2"
           type="text"
@@ -175,7 +174,7 @@ function EditPost() {
               onKeyDown={handleKeyDown}
               className="border border-gray-500 p-2 flex-1 pl-7"
               type="text"
-              placeholder="Add a tag (min 3, max 13 chars)"
+              placeholder="Add a tag (min 2, max 15 chars)"
             />
             <button
               type="button"
