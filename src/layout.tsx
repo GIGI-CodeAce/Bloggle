@@ -1,7 +1,8 @@
 import { Outlet } from "react-router-dom"
 import NavigationBar from "./navBar"
+import Footer from "./footer"
 
-function DefLayout(){
+export function DefLayout(){
     return(
         <>
         <NavigationBar/>
@@ -10,4 +11,11 @@ function DefLayout(){
     )
 }
 
-export default DefLayout
+export function FooterLayout(){
+    return(
+        <>
+        <Outlet/>
+        <Footer/>
+        </>
+    )
+}

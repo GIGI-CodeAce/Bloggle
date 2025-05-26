@@ -24,6 +24,7 @@ function RegisterPage() {
   setWarningMessage('');
   setSuccessMessage('');
 
+
   if (!username || !password) {
     setWarningMessage('Please enter your register information');
     return;
@@ -46,7 +47,11 @@ function RegisterPage() {
     if (errorData?.error === 'Username already exists') {
       setWarningMessage('Username already taken');
     } else {
-      setWarningMessage('Registration failed. Please try again.');
+        if(username.length > 15 || username.length <= 3){
+    setWarningMessage('Username should be over 4 and less than 15 characters long')
+  }else{
+    setWarningMessage('Registration failed. Please try again.');
+  }
     }
   } else {
     setSuccessMessage('Account created. Go to login to sign in.');
@@ -66,7 +71,7 @@ function RegisterPage() {
 
         <input
           type="text"
-          placeholder="Username"
+          placeholder="Username (min 4, max 15 chars)"
           className="p-2 border rounded"
           value={username}
           onChange={(e) => setUsername(e.target.value)}

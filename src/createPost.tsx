@@ -56,13 +56,14 @@ function CreatePost() {
 
     if (
       rawTag.length >= 3 &&
-      rawTag.length <= 13 &&
+      rawTag.length <= 15 &&
       !tagList.includes(cleaned)
     ) {
       setTagList([...tagList, cleaned]);
       setTagInput('');
     }
   };
+
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -79,12 +80,27 @@ function CreatePost() {
     return <Navigate to="/" />;
   }
 
+function HandleErrors() {
+  let error = '';
+  console.log(errorWarning);
+  
+
+  if (title.length > 44 || title.length < 4) {
+    error = 'Title length is less than 4 or more than 45';
+  } else {
+    error = 'Failed to create post, please try again';
+  }
+
+  return errorWarning ? (
+    <h1 className="h-6 text-center text-red-600">{error}</h1>
+  ) : null;
+}
+
+
   return (
     <main>
       <h1 className="text-center text-3xl font-extrabold">Create post</h1>
-      <h1 className="h-6 text-center text-red-600">
-        {errorWarning && 'Failed to create post, please try again'}
-      </h1>
+        <HandleErrors/>
       <form
         onSubmit={SubmitPost}
         className="flex flex-col gap-4 mt-6 w-full max-w-xl mx-auto"
@@ -94,7 +110,7 @@ function CreatePost() {
           onChange={e => setTitle(e.target.value)}
           className="border border-gray-500 p-2"
           type="text"
-          placeholder="Post title"
+          placeholder="Post title (max 45 chars)"
         />
         <input
           value={summary}

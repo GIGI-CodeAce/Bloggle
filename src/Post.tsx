@@ -45,7 +45,7 @@ function PostLayout(props: PostProps) {
       className="flex items-center space-x-4 h-[120px] xl:h-[200px] transition-all"
     >
         <img
-          className={`w-[200px] h-[120px] xl:w-[400px] ${hoveredIndex ? 'border' : ''} xl:h-[200px] object-fill rounded-xl`}
+          className={`w-[200px] min-w-[150px] h-[120px] xl:w-[400px] ${hoveredIndex ? 'border' : ''} xl:h-[200px] object-fill rounded-xl`}
           src={`http://localhost:4000/${props.cover}`}
           alt="Cover"
       />
