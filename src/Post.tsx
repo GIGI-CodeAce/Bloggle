@@ -68,7 +68,7 @@ function PostLayout(props: PostProps) {
         </span>
 
                 <h1
-          className={`text-sm mt-2 text-gray-500 xl:text-xl md:text-2xl font-semibold hover:cursor-pointer`}
+          className={`text-sm mt-2 text-gray-500 xl:text-xl md:text-xl font-semibold hover:cursor-pointer`}
         >
           {props.summary}
         </h1>

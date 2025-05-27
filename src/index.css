@@ -8,6 +8,11 @@ body{
   border: 1px solid red;
 } */
 
+::selection{
+    color:  white;
+    background-color: black;
+}
+
   ::-webkit-scrollbar {
     width: 9px;
 }

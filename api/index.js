@@ -173,8 +173,8 @@ app.put('/post', uploadMiddleware.single('file'), async (req,res)=>{
       return res.status(400).json({ error: 'Invalid tags format' });
     }
     const postDoc = await PostModel.findById(id)
-
-    const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(info.id)
+    
+    const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(info.id) || info.username === 'admin'
     if(!isAuthor){
       return res.status(400).json('You are not the author..')
     }
@@ -191,6 +191,39 @@ app.put('/post', uploadMiddleware.single('file'), async (req,res)=>{
     res.json(postDoc)
   });
 })
+
+app.delete('/delete/:id', (req, res) => {
+  const { token } = req.cookies;
+  const { id } = req.params;
+
+  if (!token) {
+    return res.status(401).json({ error: 'No token provided' });
+  }
+
+  jwt.verify(token, JWT_SECRET, {}, async (err, info) => {
+    if (err) return res.status(403).json({ error: 'Invalid token' });
+
+    try {
+      const postDoc = await PostModel.findById(id);
+      if (!postDoc) {
+        return res.status(404).json({ error: 'Post not found' });
+      }
+
+      const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(info.id) || info.username === 'admin';
+      if (!isAuthor) {
+        return res.status(403).json({ error: 'You are not authorized to delete this post' });
+      }
+
+      await PostModel.findByIdAndDelete(id);
+
+      res.json({ message: 'Post deleted successfully' });
+    } catch (error) {
+      console.error('Delete post error:', error);
+      res.status(500).json({ error: 'Failed to delete post' });
+    }
+  });
+});
+
 
 app.post('/post/:id/like', async (req, res) => {
   const { token } = req.cookies;

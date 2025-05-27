@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams,useNavigate } from "react-router-dom";
 import ReactTimeAgo from "react-time-ago";
 import type { PostProps} from "./Post";
 import { UserContext } from "./userContext";
@@ -44,6 +44,33 @@ useEffect(() => {
     });
 }, [id]);
 
+const navigate = useNavigate();
+
+async function handleDelete() {
+  if (!window.confirm('Are you sure you want to delete this post?')) {
+    // User canceled, so just do nothing (stay on the page)
+    return;
+  }
+
+  try {
+    const res = await fetch(`http://localhost:4000/delete/${postInfo?._id}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    });
+    if (res.ok) {
+      navigate('/');  // Redirect after successful deletion
+    } else {
+      const data = await res.json();
+      alert('Failed to delete post: ' + (data.error || data.message));
+    }
+  } catch (err) {
+    alert('Error deleting post');
+    console.error(err);
+  }
+}
+
+
+
 useEffect(() => {
   if (postInfo) {
     setLikes(postInfo.likes);
@@ -79,28 +106,38 @@ async function handleLike() {
 
 
       <div>
-        <img src={`http://localhost:4000/${postInfo.cover}`} alt="cover" className="w-full pt-2 h-[510px] rounded-xl mb-4 border" />
+        <img src={`http://localhost:4000/${postInfo.cover}`} alt="cover" className="w-full mt-2 h-[510px] rounded-xl mb-4 border" />
 
-                <div className="absolute bottom-134 right-8 z-50 items-center gap-2">
+                <div className="absolute bottom-145 right-8 z-50 items-center gap-2">
           <button
             onClick={handleLike}
-            className="bg-black border-white border-3 hover:bg-gray-700 cursor-pointer transition-all active:bg-red-600 text-white px-4 py-1 rounded-xl"
+            className="bg-black border-white border-3 hover:bg-gray-700 cursor-pointer transition-all active:bg-blue-600 text-white px-4 py-1 rounded-xl"
           >
             {likes === 0 ? 'Like post' : <h1>{likes} Like{likes > 1 ? 's' : ''}</h1>}
           </button>
         </div>
       </div>
-        <div className="flex items-center flex-wrap  text-white rounded-t-xl bg-[#020303c9] p-2 w-full">
-          <TagsDisplay />
-
-          {userInfo.id === postInfo.author._id && (
-            <Link to={`/edit/${postInfo._id}`} className="ml-auto mr-4">
-              <button className="bg-black cursor-pointer text-white hover:bg-white transition-all hover:text-black p-1 px-3 rounded-xl">
-                Edit post
+          <div className="flex items-center justify-center flex-wrap mb-1 text-white rounded-xl border-black border-3 bg-[#020303c9] p-2 w-full gap-4">
+            {(userInfo && (userInfo.id === postInfo.author._id || userInfo.username === 'admin')) && (
+              <>
+                <Link to={`/edit/${postInfo._id}`}>
+                  <button className="bg-black cursor-pointer text-white hover:bg-white transition-all hover:text-black p-1 px-3 rounded-xl">
+                    Edit post
+                  </button>
+                </Link>
+              <button 
+                onClick={handleDelete}
+                className="bg-black cursor-pointer text-white hover:bg-red-500 transition-all hover:text-black p-1 px-3 rounded-xl"
+              >
+                Delete post
               </button>
-            </Link>
-          )}
+              </>
+            )}
+          </div>
 
+        <div className="flex items-center flex-wrap text-white rounded-t-xl bg-[#020303c9] p-2 w-full">
+          <TagsDisplay />
+          
           <div className="ml-auto text-sm opacity-80">
             <ReactTimeAgo date={new Date(postInfo.createdAt).getTime()} locale="en-US" />
           </div>

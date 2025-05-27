@@ -37,8 +37,6 @@ function CreatePost() {
         setErrorWarning(true);
         throw new Error('Failed to create post');
       }
-      const result = await response.json();
-      console.log('Post created:', result);
       setRedirect(true);
     } catch (err) {
       console.error('Error creating post:', err);
@@ -55,7 +53,7 @@ function CreatePost() {
     const rawTag = cleaned.slice(1);
 
     if (
-      rawTag.length >= 3 &&
+      rawTag.length >= 2 &&
       rawTag.length <= 15 &&
       !tagList.includes(cleaned)
     ) {
@@ -146,7 +144,7 @@ function HandleErrors() {
               onKeyDown={handleKeyDown}
               className="border border-gray-500 p-2 flex-1 pl-7"
               type="text"
-              placeholder="Add a tag (min 3, max 13 chars)"
+              placeholder="Add a tag (min 2, max 15 chars)"
             />
             <button
               type="button"
