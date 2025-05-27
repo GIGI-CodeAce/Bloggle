@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import ReactTimeAgo from 'react-time-ago'
+import { API_BASE } from "./components/api";
 
 export interface PostProps {
   _id: number;
@@ -46,7 +47,7 @@ function PostLayout(props: PostProps) {
     >
         <img
           className={`w-[200px] min-w-[150px] h-[120px] xl:w-[400px] ${hoveredIndex ? 'border' : ''} xl:h-[200px] object-fill rounded-xl`}
-          src={`http://localhost:4000/${props.cover}`}
+          src={`${API_BASE}/${props.cover}`}
           alt="Cover"
       />
 

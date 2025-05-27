@@ -1,0 +1,1 @@
+export const API_BASE = 'https://bloggle-production.up.railway.app';

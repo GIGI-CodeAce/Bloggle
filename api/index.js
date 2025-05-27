@@ -23,7 +23,8 @@ const JWT_SECRET = process.env.JWT_SECRET || 'default_jwt_secret';
 const uploadMiddleware = multer({dest: 'uploads/'})
 
 const app = express();
-app.use(cors({credentials: true,origin: ['http://localhost:3000', 'https://bloggleapp.vercel.app']}));
+app.use(cors({credentials: true,origin: ['http://localhost:3000', 'https://bloggleapp.vercel.app', 'https://bloggle-production.up.railway.app']}));
+
 app.use(express.json());
 app.use(cookieParser())
 app.use('/uploads', express.static(__dirname+ '/uploads'))
@@ -53,7 +54,7 @@ app.post('/register', async (req, res) => {
     res.cookie('token', token, {
       httpOnly: true,
       sameSite: 'lax',
-      secure: false, 
+      secure: true, 
     }).json({ id: userDoc._id, username });
 
     console.log('✅ Registered and logged in:', username);

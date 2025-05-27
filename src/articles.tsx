@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import PostLayout from "./Post";
 import type { PostProps } from "./Post";
+import { API_BASE } from "./components/api";
 
 function Articles() {
     const [posts, setPosts] = useState([]);
-
+    
     useEffect(() => {
-        fetch('http://localhost:4000/post')
+        fetch(`${API_BASE}/post`)
             .then(res => res.json())
             .then(data => {
                 setPosts(data);

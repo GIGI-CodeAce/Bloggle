@@ -2,6 +2,7 @@ import 'react-quill/dist/quill.snow.css';
 import { RichTextEditor } from '@mantine/rte';
 import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
+import { API_BASE } from './components/api';
 
 function CreatePost() {
   const [content, setContent] = useState('<span >Your content here</span>');
@@ -27,7 +28,7 @@ function CreatePost() {
     }
 
     try {
-      const response = await fetch('http://localhost:4000/post', {
+      const response = await fetch(`${API_BASE}/post`, {
         method: 'POST',
         credentials: 'include',
         body: data,

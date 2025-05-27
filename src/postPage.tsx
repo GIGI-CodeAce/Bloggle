@@ -3,12 +3,14 @@ import { Link, useParams,useNavigate } from "react-router-dom";
 import ReactTimeAgo from "react-time-ago";
 import type { PostProps} from "./Post";
 import { UserContext } from "./userContext";
+import { API_BASE } from "./components/api";
 
 function PostPage() {
   const [postInfo, setPostInfo] = useState<PostProps | null>(null);
   const {userInfo} = useContext(UserContext)
   const [likes, setLikes] = useState(0);
   const { id } = useParams();
+
   const tags = postInfo?.tags
 
   const authorName = typeof postInfo?.author === 'object' ? postInfo?.author.username : postInfo?.author;
@@ -28,7 +30,7 @@ function PostPage() {
       }
 
 useEffect(() => {
-  fetch(`http://localhost:4000/post/${id}`)
+  fetch(`${API_BASE}/post/${id}`)
     .then((res) => {
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}`);
@@ -48,17 +50,16 @@ const navigate = useNavigate();
 
 async function handleDelete() {
   if (!window.confirm('Are you sure you want to delete this post?')) {
-    // User canceled, so just do nothing (stay on the page)
     return;
   }
 
   try {
-    const res = await fetch(`http://localhost:4000/delete/${postInfo?._id}`, {
+    const res = await fetch(`${API_BASE}/delete/${postInfo?._id}`, {
       method: 'DELETE',
       credentials: 'include',
     });
     if (res.ok) {
-      navigate('/');  // Redirect after successful deletion
+      navigate('/');
     } else {
       const data = await res.json();
       alert('Failed to delete post: ' + (data.error || data.message));
@@ -78,7 +79,7 @@ useEffect(() => {
 }, [postInfo, userInfo]);
 
 async function handleLike() {
-  const res = await fetch(`http://localhost:4000/post/${id}/like`, {
+  const res = await fetch(`${API_BASE}/post/${id}/like`, {
     method: 'POST',
     credentials: 'include',
   });
@@ -108,7 +109,7 @@ async function handleLike() {
       <div>
         <img src={`http://localhost:4000/${postInfo.cover}`} alt="cover" className="w-full mt-2 h-[510px] rounded-xl mb-4 border" />
 
-                <div className="absolute bottom-145 right-8 z-50 items-center gap-2">
+                <div className="absolute bottom-133 right-8 z-50 items-center gap-2">
           <button
             onClick={handleLike}
             className="bg-black border-white border-3 hover:bg-gray-700 cursor-pointer transition-all active:bg-blue-600 text-white px-4 py-1 rounded-xl"
@@ -117,8 +118,8 @@ async function handleLike() {
           </button>
         </div>
       </div>
+                  {(userInfo && (userInfo.id === postInfo.author._id || userInfo.username === 'admin')) && (
           <div className="flex items-center justify-center flex-wrap mb-1 text-white rounded-xl border-black border-3 bg-[#020303c9] p-2 w-full gap-4">
-            {(userInfo && (userInfo.id === postInfo.author._id || userInfo.username === 'admin')) && (
               <>
                 <Link to={`/edit/${postInfo._id}`}>
                   <button className="bg-black cursor-pointer text-white hover:bg-white transition-all hover:text-black p-1 px-3 rounded-xl">
@@ -132,8 +133,8 @@ async function handleLike() {
                 Delete post
               </button>
               </>
-            )}
           </div>
+          )}
 
         <div className="flex items-center flex-wrap text-white rounded-t-xl bg-[#020303c9] p-2 w-full">
           <TagsDisplay />

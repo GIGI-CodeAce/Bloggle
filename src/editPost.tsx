@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import RichTextEditor from "@mantine/rte";
 import { Navigate, useParams } from "react-router-dom";
 import type { PostProps } from "./Post";
+import { API_BASE } from "./components/api";
 
 function EditPost() {
   const [content, setContent] = useState('<span >Your content here</span>');
@@ -16,7 +17,7 @@ function EditPost() {
 
   useEffect(() => {
     if (!id) return;
-    fetch(`http://localhost:4000/post/${id}`)
+    fetch(`${API_BASE}/post/${id}`)
       .then((res) => {
         if (!res.ok) {
           setErrorWarning(true);
@@ -83,7 +84,7 @@ function EditPost() {
     }
 
     try {
-      const response = await fetch('http://localhost:4000/post', {
+      const response = await fetch(`${API_BASE}/post`, {
         method: 'PUT',
         body: data,
         credentials: 'include'

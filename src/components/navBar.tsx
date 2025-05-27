@@ -1,6 +1,7 @@
 import { useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../userContext";
+import { API_BASE } from "./api";
 
 function NavigationBar() {
     const liStyle = " mr-6 flex items-center justify-cente hover:font-bold cursor-pointer w-auto hover:underline";
@@ -8,7 +9,7 @@ function NavigationBar() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch('http://localhost:4000/profile', {
+        fetch(`${API_BASE}/profile`, {
             method: 'GET',
             credentials: 'include',
         }).then(res => {
@@ -19,7 +20,7 @@ function NavigationBar() {
     }, []);
 
     function logout() {
-        fetch('http://localhost:4000/logout', {
+        fetch(`${API_BASE}/logout`, {
             credentials: 'include',
             method: "POST"
         }).then(() => {

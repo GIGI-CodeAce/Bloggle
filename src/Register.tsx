@@ -1,4 +1,5 @@
 import { useState, useEffect, type FormEvent } from "react";
+import { API_BASE } from "./components/api";
 
 function RegisterPage() {
   const [username, setUsername] = useState('');
@@ -35,7 +36,7 @@ function RegisterPage() {
     return;
   }
 
-  const response = await fetch('http://localhost:4000/register', {
+  const response = await fetch(`${API_BASE}/register`, {
     method: 'POST',
     body: JSON.stringify({ username, password }),
     headers: { 'Content-Type': 'application/json' },
