@@ -12,25 +12,24 @@ import PostModel from './models/post.js'
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { useState } from 'react';
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 
-const PORT = 4000;
+const PORT = process.env.PORT || 4000
 const JWT_SECRET = process.env.JWT_SECRET || 'default_jwt_secret';
 const uploadMiddleware = multer({dest: 'uploads/'})
 
 const app = express();
-app.use(cors({credentials: true,origin: 'http://localhost:3000'}));
+app.use(cors({credentials: true,origin: ['http://localhost:3000', 'https://bloggleapp.vercel.app']}));
 app.use(express.json());
 app.use(cookieParser())
 app.use('/uploads', express.static(__dirname+ '/uploads'))
 
 
-mongoose.connect(process.env.VITE_MONGO_URI)
+mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('✅ Connected to MongoDB'))
   .catch(err => console.error('❌ MongoDB connection error:', err));
 
@@ -207,7 +206,6 @@ app.post('/post/:id/like', async (req, res) => {
       const post = await PostModel.findById(req.params.id);
       if (!post) return res.status(404).json({ message: 'Post not found' });
 
-      // Ensure likedBy array is initialized
       if (!post.likedBy) post.likedBy = [];
 
       const alreadyLiked = post.likedBy.some(id => id.toString() === userId);

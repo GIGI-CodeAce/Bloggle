@@ -82,7 +82,6 @@ function CreatePost() {
 
 function HandleErrors() {
   let error = '';
-  console.log(errorWarning);
   
 
   if (title.length > 44 || title.length < 4) {

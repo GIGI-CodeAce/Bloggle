@@ -1,6 +1,6 @@
 import { useContext, useEffect, } from "react";
 import { Link } from "react-router-dom";
-import { UserContext } from "./userContext";
+import { UserContext } from "../userContext";
 
 function NavigationBar() {
     const liStyle = " mr-6 flex items-center justify-cente hover:font-bold cursor-pointer w-auto hover:underline";
