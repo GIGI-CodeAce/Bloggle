@@ -22,6 +22,9 @@ const PORT = process.env.PORT || 4000
 const JWT_SECRET = process.env.JWT_SECRET || 'default_jwt_secret';
 const uploadMiddleware = multer({dest: 'uploads/'})
 
+console.log(JWT_SECRET);
+
+
 const app = express();
 app.use(cors({credentials: true,origin: ['http://localhost:3000', 'https://bloggleapp.vercel.app', 'https://bloggle-production.up.railway.app']}));
 
@@ -90,7 +93,7 @@ app.post('/login', async (req, res) => {
       res.cookie('token', token, {
         httpOnly: true,
         sameSite: 'lax',
-        secure: false,
+        secure: true,
       }).json({id:userDoc._id,
                 username,
       });
@@ -100,6 +103,12 @@ app.post('/login', async (req, res) => {
     res.status(500).json({ error: 'Login failed' });
   }
 });
+
+app.use((req, res, next) => {
+  console.log('🧪 Cookies:', req.cookies);
+  next();
+});
+
 
 app.get('/profile', (req, res) => {
   const {token} = req.cookies
@@ -121,6 +130,7 @@ app.get('/profile', (req, res) => {
 app.post('/logout', (req,res)=>{
   res.cookie('token', '').json('ok')
 })
+
 app.post('/post', uploadMiddleware.single('file'), async(req, res) => {
   const { originalname, path: tempPath } = req.file;
   const ext = path.extname(originalname).toLowerCase();

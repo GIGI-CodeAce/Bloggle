@@ -107,7 +107,7 @@ async function handleLike() {
 
 
       <div>
-        <img src={`http://localhost:4000/${postInfo.cover}`} alt="cover" className="w-full mt-2 h-[510px] rounded-xl mb-4 border" />
+        <img src={`${API_BASE}/${postInfo.cover}`} alt="cover" className="w-full mt-2 h-[510px] rounded-xl mb-4 border" />
 
                 <div className="absolute bottom-133 right-8 z-50 items-center gap-2">
           <button

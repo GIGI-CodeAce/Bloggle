@@ -39,7 +39,7 @@ function NavigationBar() {
                         to="/"
                         className={`${liStyle} w-[150px] font-bold flex items-center justify-center`}
                     >
-                        <img className="h-7 m-1 mr-2 font-imfell" src="/bloggleLogo.png" alt="Bloggle Logo" />
+                        <img className="h-7 m-1 mr-2 font-imfell" src="https://raw.githubusercontent.com/GIGIsOtherStuff/mainWebMedia/main/AppImages/myProjectsImgs/bloggleLogo.png" alt="Bloggle Logo" />
                         Bloggle
                     </Link>
 
