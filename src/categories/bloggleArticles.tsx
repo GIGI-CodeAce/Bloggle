@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import PostLayout from "./Post";
-import type { PostProps } from "./Post";
-import { API_BASE } from "./components/api";
+import PostLayout from "../Post";
+import type { PostProps } from "../Post";
+import { API_BASE } from "../components/api";
 
 function Articles() {
     const [posts, setPosts] = useState([]);
@@ -14,6 +14,7 @@ function Articles() {
             })
             .catch(err => console.error("Error fetching posts:", err));
     }, []);
+    
 
     return (
         <main className="space-y-6 max-w-screen-xl mx-auto px-4 py-6 min-h-[440px]">

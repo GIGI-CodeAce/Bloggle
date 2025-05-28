@@ -67,7 +67,7 @@ function NavigationBar() {
                     </div>
                 </div>
             </nav>
-            <div className="h-13" />
+            <div className="h-10" />
         </>
     );
 }
