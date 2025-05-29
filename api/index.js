@@ -26,7 +26,7 @@ console.log(JWT_SECRET);
 
 
 const app = express();
-app.use(cors({credentials: true,origin: ['http://localhost:3000', 'https://bloggleapp.vercel.app', 'https://bloggle-production.up.railway.app']}));
+app.use(cors({credentials: true,origin: ['http://localhost:3000', 'https://bloggleapp.onrender.com']}));
 
 app.use(express.json());
 app.use(cookieParser())
@@ -56,7 +56,7 @@ app.post('/register', async (req, res) => {
 
     res.cookie('token', token, {
       httpOnly: true,
-      sameSite: 'lax',
+      sameSite: 'none',
       secure: true, 
     }).json({ id: userDoc._id, username });
 
@@ -92,7 +92,7 @@ app.post('/login', async (req, res) => {
 
       res.cookie('token', token, {
         httpOnly: true,
-        sameSite: 'lax',
+        sameSite: 'none',
         secure: true,
       }).json({id:userDoc._id,
                 username,
