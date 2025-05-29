@@ -10,11 +10,11 @@ function CategoriesTab() {
 
   return (
     <main className="w-full h-10 bg-[#020303b1] text-white flex items-center">
-      <ul className="max-w-screen-xl mx-auto w-full flex items-center px-2">
-                <Link to="/exclusivePosts">
+      <ul className="max-w-screen-xl select-none mx-auto w-full flex items-center px-2">
+                <Link to="/">
           <li
             className={`${baseStyle} ${
-              currentPath === "/exclusivePosts" ? activeStyle : ""
+              currentPath === "/" ? activeStyle : ""
             }`}
           >
             Only on bloggle

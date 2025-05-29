@@ -96,7 +96,7 @@ function HandleErrors() {
 
 
   return (
-    <main>
+    <main className='mt-5'>
       <h1 className="text-center text-3xl font-extrabold">Create post</h1>
         <HandleErrors/>
       <form

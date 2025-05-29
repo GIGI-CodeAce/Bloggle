@@ -71,7 +71,6 @@ async function handleDelete() {
 }
 
 
-
 useEffect(() => {
   if (postInfo) {
     setLikes(postInfo.likes);
@@ -109,7 +108,8 @@ async function handleLike() {
       <div>
         <img src={`${API_BASE}/${postInfo.cover}`} alt="cover" className="w-full mt-2 h-[510px] rounded-xl mb-4 border" />
 
-                <div className="absolute bottom-133 right-8 z-50 items-center gap-2">
+                <div className={`absolute z-50 items-center gap-2 right-8 
+                ${userInfo && (userInfo.id === postInfo.author._id || userInfo.username === 'admin') ? 'bottom-146' : 'bottom-133'}`}>
           <button
             onClick={handleLike}
             className="bg-black border-white border-3 hover:bg-gray-700 cursor-pointer transition-all active:bg-blue-600 text-white px-4 py-1 rounded-xl"

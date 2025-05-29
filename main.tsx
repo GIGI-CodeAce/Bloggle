@@ -23,7 +23,7 @@ createRoot(document.getElementById('root')!).render(
       <Route path='/' element={<DefLayout/>}>
         <Route path='/' element={<FooterLayout/>}>
         <Route path='/' element={<CategoryLayout/>}>
-            <Route path='/exclusivePosts' element={<Articles/>}/>
+            <Route path='/' element={<Articles/>}/>
             <Route path='/trustedPosts' element={<OfficialArticles/>}/>
           <Route path='/post/:id' element={<PostPage/>}/>
         </Route>
