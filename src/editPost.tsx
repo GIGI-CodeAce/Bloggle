@@ -66,7 +66,7 @@ function EditPost() {
   async function updatePost(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    if (title.length < 3 || title.length > 45) {
+    if (title.length < 3 || title.length > 40) {
       setErrorWarning(true);
       return;
     }
@@ -108,8 +108,8 @@ function EditPost() {
   function HandleErrors() {
     let error = '';
 
-    if (title.length > 44 || title.length < 4) {
-      error = 'Title length is less than 4 or more than 45';
+    if (title.length >= 40 || title.length < 4) {
+      error = 'Title length is less than 4 or more than 40';
     } else {
       error = 'Failed to update post, please try again';
     }
@@ -120,7 +120,7 @@ function EditPost() {
   }
 
   return (
-    <main>
+    <main className='mt-5'>
       <h1 className="text-center text-3xl font-extrabold">Edit post</h1>
       <HandleErrors />
       <form
@@ -135,7 +135,7 @@ function EditPost() {
           }}
           className="border border-gray-500 p-2"
           type="text"
-          placeholder="Post title"
+          placeholder="Post title (max 40 chars)"
         />
         <input
           value={summary}

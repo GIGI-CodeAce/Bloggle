@@ -83,7 +83,7 @@ function HandleErrors() {
   let error = '';
   
 
-  if (title.length > 44 || title.length < 4) {
+  if (title.length > 40 || title.length < 4) {
     error = 'Title length is less than 4 or more than 45';
   } else {
     error = 'Failed to create post, make sure no input is empty';
@@ -108,7 +108,7 @@ function HandleErrors() {
           onChange={e => setTitle(e.target.value)}
           className="border border-gray-500 p-2"
           type="text"
-          placeholder="Post title (max 45 chars)"
+          placeholder="Post title (max 40 chars)"
         />
         <input
           value={summary}

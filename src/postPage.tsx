@@ -90,7 +90,7 @@ async function handleLike() {
   if (!postInfo) return <div className="text-center text-xl text-gray-700">Loading...</div>;
 
   return (
-    <div className="post-page p-4 mb-5 max-w-2xl mx-auto relative overflow-hidden min-h-[300px]">
+    <div className=" p-4 mb-5 max-w-2xl mx-auto relative overflow-hidden min-h-[300px]">
       <h1 className="text-xl md:text-3xl sm:text-2xl font-bold mb-2 text-center bg-gray-100 mx-auto p-1 rounded-b-3xl">{postInfo.title}</h1>
       <p className="text-sm font-bold text-gray00 mb-4 text-center bg-gray-100 w-[200px] mx-auto p-1 rounded-b-3xl">@{authorName}</p>
       <hr/>
@@ -106,7 +106,7 @@ async function handleLike() {
 
 
       <div>
-        <img src={`${API_BASE}/${postInfo.cover}`} alt="cover" className="w-full mt-2 h-[510px] rounded-xl mb-4 border" />
+        <img src={`${API_BASE}/${postInfo.cover}`} alt="cover" className="w-full mt-2 h-[400px] sm:h-[510px] rounded-xl mb-4 border" />
 
                 <div className={`absolute z-50 items-center gap-2 right-8 
                 ${userInfo && (userInfo.id === postInfo.author._id || userInfo.username === 'admin') ? 'bottom-146' : 'bottom-133'}`}>
