@@ -2,7 +2,8 @@ import 'react-quill/dist/quill.snow.css';
 import { RichTextEditor } from '@mantine/rte';
 import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { API_BASE } from './components/api';
+import { API_BASE } from '../components/api';
+import { addTag,HandleErrors,removeTag } from '../components/postTools';
 
 function CreatePost() {
   const [content, setContent] = useState('<span >Your content here</span>');
@@ -44,61 +45,21 @@ function CreatePost() {
     }
   }
 
-  const addTag = () => {
-    let cleaned = tagInput.trim().replace(/\s+/g, '');
-
-    if (!cleaned.startsWith('#')) {
-      cleaned = `#${cleaned}`;
-    }
-
-    const rawTag = cleaned.slice(1);
-
-    if (
-      rawTag.length >= 2 &&
-      rawTag.length <= 15 &&
-      !tagList.includes(cleaned)
-    ) {
-      setTagList([...tagList, cleaned]);
-      setTagInput('');
-    }
-  };
-
-
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      addTag();
+      addTag({tagInput, tagList, setTagList, setTagInput});
     }
   };
 
-  const removeTag = (tag: string) => {
-    setTagList(tagList.filter(t => t !== tag));
-  };
-
-  if (redirect) {
+    if (redirect) {
     return <Navigate to="/" />;
   }
-
-function HandleErrors() {
-  let error = '';
-  
-
-  if (title.length > 40 || title.length < 4) {
-    error = 'Title length is less than 4 or more than 45';
-  } else {
-    error = 'Failed to create post, make sure no input is empty';
-  }
-
-  return errorWarning ? (
-    <h1 className="h-6 text-center text-red-600">{error}</h1>
-  ) : null;
-}
-
 
   return (
     <main className='mt-5 px-3'>
       <h1 className="text-center text-3xl font-extrabold hover:underline">Create post</h1>
-        <HandleErrors/>
+        <HandleErrors title={title} errorWarning={errorWarning} />
       <form
         onSubmit={SubmitPost}
         className="flex flex-col gap-4 mt-6 w-full max-w-xl mx-auto"
@@ -149,7 +110,7 @@ function HandleErrors() {
             />
             <button
               type="button"
-              onClick={addTag}
+              onClick={()=> addTag({tagInput, tagList, setTagList, setTagInput})}
               className="bg-black hover:bg-gray-800 transition-all cursor-pointer hover:rounded-lg text-white px-3 rounded"
             >
               Add
@@ -164,7 +125,7 @@ function HandleErrors() {
                 {tag}
                 <button
                   type="button"
-                  onClick={() => removeTag(tag)}
+                  onClick={() => removeTag({ tag, tagList, setTagList })}
                   className="text-red-500 hover:text-red-700 cursor-pointer"
                 >
                   &times;

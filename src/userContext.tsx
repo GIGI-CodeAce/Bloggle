@@ -1,7 +1,6 @@
 import { createContext, useState } from "react";
 import type { ReactNode } from "react";
 
-// Define context
 export const UserContext = createContext<any>({});
 
 interface UserContextProviderProps {

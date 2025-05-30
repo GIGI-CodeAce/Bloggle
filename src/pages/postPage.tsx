@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useParams,useNavigate } from "react-router-dom";
 import ReactTimeAgo from "react-time-ago";
-import type { PostProps} from "./Post";
-import { UserContext } from "./userContext";
-import { API_BASE } from "./components/api";
+import type { PostProps} from "../Post";
+import { UserContext } from "../userContext";
+import { API_BASE } from "../components/api";
 
 function PostPage() {
   const [postInfo, setPostInfo] = useState<PostProps | null>(null);

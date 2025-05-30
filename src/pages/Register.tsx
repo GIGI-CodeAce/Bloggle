@@ -1,5 +1,5 @@
 import { useState, useEffect, type FormEvent } from "react";
-import { API_BASE } from "./components/api";
+import { API_BASE } from "../components/api";
 
 function RegisterPage() {
   const [username, setUsername] = useState('');

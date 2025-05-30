@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import RichTextEditor from "@mantine/rte";
 import { Navigate, useParams } from "react-router-dom";
-import type { PostProps } from "./Post";
-import { API_BASE } from "./components/api";
+import type { PostProps } from "../Post";
+import { API_BASE } from "../components/api";
+import { addTag,HandleErrors,removeTag } from '../components/postTools';
 
 function EditPost() {
   const [content, setContent] = useState('<span >Your content here</span>');
@@ -10,7 +11,7 @@ function EditPost() {
   const [summary, setSummary] = useState('');
   const [files, setFiles] = useState<FileList | null>(null);
   const [tagInput, setTagInput] = useState('');
-  const [tags, settags] = useState<string[]>([]);
+  const [tagList, setTagList] = useState<string[]>([]);
   const [redirect, setRedirect] = useState(false);
   const [errorWarning, setErrorWarning] = useState(false);
   const { id } = useParams();
@@ -30,37 +31,18 @@ function EditPost() {
         setTitle(title);
         setContent(content);
         setSummary(summary);
-        settags(tags || []);
+        setTagList(tags || []);
       })
       .catch((err) => {
         console.error("Failed to fetch post:", err);
       });
   }, [id]);
 
-  const addTag = () => {
-    let cleaned = tagInput.trim().replace(/\s+/g, '');
-
-    if (!cleaned.startsWith('#')) cleaned = `#${cleaned}`;
-
-    if (
-      cleaned.length >= 2 &&
-      cleaned.length <= 16 &&
-      !tags.includes(cleaned)
-    ) {
-      settags([...tags, cleaned]);
-      setTagInput('');
-    }
-  };
-
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      addTag();
+      addTag({tagInput, tagList, setTagList, setTagInput})
     }
-  };
-
-  const removeTag = (tag: string) => {
-    settags(tags.filter(t => t !== tag));
   };
 
   async function updatePost(e: React.FormEvent<HTMLFormElement>) {
@@ -78,7 +60,7 @@ function EditPost() {
     if (id !== undefined) {
       data.set('id', id);
     }
-    data.set('tags', JSON.stringify(tags));
+    data.set('tags', JSON.stringify(tagList));
     if (files && files[0]) {
       data.set('file', files[0]);
     }
@@ -105,24 +87,10 @@ function EditPost() {
     return <Navigate to={`/post/${id}`} />;
   }
 
-  function HandleErrors() {
-    let error = '';
-
-    if (title.length >= 40 || title.length < 4) {
-      error = 'Title length is less than 4 or more than 40';
-    } else {
-      error = 'Failed to update post, please try again';
-    }
-
-    return errorWarning && (
-      <h1 className="h-6 text-center text-red-600">{error}</h1>
-    )
-  }
-
   return (
-    <main className='mt-5'>
+    <main className='mt-5 px-3'>
       <h1 className="text-center text-3xl font-extrabold">Edit post</h1>
-      <HandleErrors />
+      <HandleErrors title={title} errorWarning={errorWarning} />
       <form
         onSubmit={updatePost}
         className="flex flex-col gap-4 mt-10 w-full max-w-xl mx-auto"
@@ -179,14 +147,14 @@ function EditPost() {
             />
             <button
               type="button"
-              onClick={addTag}
+              onClick={()=>addTag({tagInput, tagList, setTagList, setTagInput})}
               className="bg-black hover:bg-gray-800 text-white px-3 rounded"
             >
               Add
             </button>
           </div>
           <div className="flex flex-wrap gap-2 mt-2">
-            {tags.map(tag => (
+            {tagList.map(tag => (
               <span
                 key={tag}
                 className="bg-gray-200 text-sm px-3 py-1 rounded-full flex items-center gap-1"
@@ -194,7 +162,7 @@ function EditPost() {
                 {tag}
                 <button
                   type="button"
-                  onClick={() => removeTag(tag)}
+                  onClick={() => removeTag({ tag, tagList, setTagList })}
                   className="text-red-500 hover:text-red-700"
                 >
                   &times;

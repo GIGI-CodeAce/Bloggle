@@ -16,7 +16,6 @@ interface NewsApiArticle {
 
 function OfficialArticles() {
   const [posts, setPosts] = useState<PostProps[]>([]);
-  console.log(API_NEWS);
   
 
   useEffect(() => {

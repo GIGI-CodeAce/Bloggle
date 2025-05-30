@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { UserContext } from "./userContext";
-import { API_BASE } from "./components/api";
+import { UserContext } from "../userContext";
+import { API_BASE } from "../components/api";
 
 function LoginPage() {
   const [username,setUsername] = useState('')
