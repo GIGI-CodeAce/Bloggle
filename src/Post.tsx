@@ -81,9 +81,9 @@ function PostContent({
   }
 
   return (
-    <div className="flex items-center space-x-3 shrink-0 sm:space-x-4 h-[120px] xl:h-[200px] transition-all">
+    <div className="flex items-center w-full overflow-hidden space-x-2 sm:space-x-4 h-[120px] xl:h-[200px] transition-all">
       <img
-        className={`w-[160px] min-w-[160px] xl:w-[350px]  sm:w-[200px] h-[120px] xl:h-[200px] object-fill rounded-xl ${
+        className={`w-[160px] min-w-[160px] xl:w-[350px] sm:w-[200px] h-[120px] xl:h-[200px] shrink-0 object-fill rounded-xl ${
           hoveredIndex === _id ? "border" : ""
         }`}
         src={cover.startsWith("http") ? cover : `${API_BASE}/${cover}`}
@@ -92,7 +92,8 @@ function PostContent({
 
       <div className="flex flex-col">
         <h1
-          className={`text-lg xl:text-3xl md:text-2xl font-semibold hover:cursor-pointer truncate w-[300px] sm:w-[600px] ${
+        title={title}
+          className={`text-sm sm:text-lg xl:text-3xl md:text-2xl inline-block max-w-[210px] md:max-w-[700px] sm:max-w-[330px] font-semibold hover:cursor-pointer truncate ${
             hoveredIndex === _id ? "underline" : ""
           }`}
         >
@@ -118,7 +119,7 @@ function PostContent({
           </div>
         </div>
 
-          <h1 className="text-sm mt-2 text-gray-500 xl:text-xl md:text-xl font-semibold hover:cursor-pointer line-clamp-2 max-w-[90%]">
+          <h1 title={summary} className="text-sm/4.5 sm:mt-2 text-gray-500 xl:text-xl md:text-xl font-semibold hover:cursor-pointer line-clamp-2 max-w-[90%] w-full break-words">
             {summary}
         </h1>
       </div>

@@ -96,8 +96,8 @@ function HandleErrors() {
 
 
   return (
-    <main className='mt-5'>
-      <h1 className="text-center text-3xl font-extrabold">Create post</h1>
+    <main className='mt-5 px-3'>
+      <h1 className="text-center text-3xl font-extrabold hover:underline">Create post</h1>
         <HandleErrors/>
       <form
         onSubmit={SubmitPost}
@@ -118,7 +118,7 @@ function HandleErrors() {
           placeholder="Post summary"
         />
         <input
-          className="border rounded p-2"
+          className="border rounded p-2 cursor-pointer"
           type="file"
           onChange={e => setFiles(e.target.files)}
         />

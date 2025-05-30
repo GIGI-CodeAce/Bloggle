@@ -58,7 +58,7 @@ function OfficialArticles() {
   }, []);
 
   return (
-    <div className="space-y-6 max-w-screen-xl mx-auto px-4 py-6 min-h-[440px]">
+    <div className="space-y-6 max-w-screen-xl mx-auto px-2 sm:px-4 py-6 min-h-[440px]">
       <ul>
         {posts.map((post: PostProps) => (
           <PostLayout key={post._id} {...post} />

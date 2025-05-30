@@ -109,7 +109,7 @@ async function handleLike() {
         <img src={`${API_BASE}/${postInfo.cover}`} alt="cover" className="w-full mt-2 h-[400px] sm:h-[510px] rounded-xl mb-4 border" />
 
                 <div className={`absolute z-50 items-center gap-2 right-8 
-                ${userInfo && (userInfo.id === postInfo.author._id || userInfo.username === 'admin') ? 'bottom-146' : 'bottom-133'}`}>
+                ${userInfo && (userInfo.id === postInfo.author._id || userInfo.username === 'admin') ? 'bottom-121 sm:bottom-148' : 'bottom-107 sm:bottom-134'}`}>
           <button
             onClick={handleLike}
             className="bg-black border-white border-3 hover:bg-gray-700 cursor-pointer transition-all active:bg-blue-600 text-white px-4 py-1 rounded-xl"

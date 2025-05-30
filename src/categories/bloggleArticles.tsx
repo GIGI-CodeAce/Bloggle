@@ -17,7 +17,7 @@ function Articles() {
     
 
     return (
-        <main className="space-y-6 max-w-screen-xl mx-auto px-4 py-6 min-h-[440px]">
+        <main className="space-y-6 max-w-screen-xl mx-auto px-2 sm:px-4 py-6 min-h-[440px]">
             {posts.length == 0 ?  
             <div className="text-gray-500 flex-col text-center justify-center mt-20">
             <h1 className="text-4xl">˙◠˙</h1>
