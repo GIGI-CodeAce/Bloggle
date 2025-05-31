@@ -284,8 +284,11 @@ app.get('/post', async(req, res)=>{
 
 // Tusted sources news api
 
+
 app.get('/news', async (req, res) => {
-  const NEWS_API_KEY = process.env.VITE_NEWS_API_KEY;
+  const NEWS_API_KEY = process.env.NEWS_API_KEY;  // or VITE_NEWS_API_KEY if you want
+
+  console.log('NEWS_API_KEY:', NEWS_API_KEY);
 
   if (!NEWS_API_KEY) {
     return res.status(500).json({ error: 'Missing NEWS_API_KEY in environment' });
@@ -295,7 +298,10 @@ app.get('/news', async (req, res) => {
 
   try {
     const response = await fetch(apiUrl);
+    console.log('NewsAPI response status:', response.status);
+
     const data = await response.json();
+    console.log('NewsAPI data:', data);
 
     if (data.status !== 'ok') {
       return res.status(500).json({ error: 'Failed to fetch news from NewsAPI', details: data });
@@ -307,6 +313,7 @@ app.get('/news', async (req, res) => {
     res.status(500).json({ error: 'Error fetching news' });
   }
 });
+
 
 
 app.listen(PORT, () => {
