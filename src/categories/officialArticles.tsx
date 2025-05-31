@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { PostProps } from "../Post";
 import PostLayout from "../Post";
-import { API_NEWS } from "../components/api";
+import { API_BASE } from "../components/api";
 
 interface NewsApiArticle {
   source: { id: string | null; name: string };
@@ -16,14 +16,11 @@ interface NewsApiArticle {
 
 function OfficialArticles() {
   const [posts, setPosts] = useState<PostProps[]>([]);
-  
 
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const res = await fetch(
-          `https://newsapi.org/v2/top-headlines?country=us&category=technology&pageSize=22&apiKey=${API_NEWS}`
-        );
+        const res = await fetch(`${API_BASE}/news`);
         const data = await res.json();
 
         if (!data.articles) return;
@@ -31,7 +28,7 @@ function OfficialArticles() {
         const formattedPosts: PostProps[] = data.articles.map(
           (article: NewsApiArticle, index: number): PostProps => ({
             _id: index + 1,
-            cover: article.urlToImage || "/uploads/example.jpg",
+            cover: article.urlToImage || "https://raw.githubusercontent.com/GIGIsOtherStuff/mainWebMedia/main/AppImages/others/imageNotFound.jpeg",
             title: article.title,
             likes: 0,
             likedBy: [],

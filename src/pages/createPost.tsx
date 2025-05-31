@@ -66,10 +66,11 @@ function CreatePost() {
       >
         <input
           value={title}
+          maxLength={35}
           onChange={e => setTitle(e.target.value)}
           className="border border-gray-500 p-2"
           type="text"
-          placeholder="Post title (max 40 chars)"
+          placeholder="Post title (max 35 chars)"
         />
         <input
           value={summary}

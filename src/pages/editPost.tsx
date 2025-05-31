@@ -48,7 +48,7 @@ function EditPost() {
   async function updatePost(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    if (title.length < 3 || title.length > 40) {
+    if (title.length < 3 || title.length > 35) {
       setErrorWarning(true);
       return;
     }
@@ -97,13 +97,14 @@ function EditPost() {
       >
         <input
           value={title}
+          maxLength={35}
           onChange={e => {
             setTitle(e.target.value);
             if (errorWarning) setErrorWarning(false);
           }}
           className="border border-gray-500 p-2"
           type="text"
-          placeholder="Post title (max 40 chars)"
+          placeholder="Post title (max 35 chars)"
         />
         <input
           value={summary}

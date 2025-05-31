@@ -22,9 +22,6 @@ const PORT = process.env.PORT || 4000
 const JWT_SECRET = process.env.JWT_SECRET || 'default_jwt_secret';
 const uploadMiddleware = multer({dest: 'uploads/'})
 
-console.log(JWT_SECRET);
-
-
 const app = express();
 app.use(cors({credentials: true,origin: ['http://localhost:3000', 'https://bloggleapp.onrender.com']}));
 
@@ -105,7 +102,6 @@ app.post('/login', async (req, res) => {
 });
 
 app.use((req, res, next) => {
-  console.log('🧪 Cookies:', req.cookies);
   next();
 });
 
@@ -271,8 +267,6 @@ app.post('/post/:id/like', async (req, res) => {
   });
 });
 
-
-
 app.get('/post/:id', async(req,res)=>{
   const {id} = req.params
   const postDoc =await PostModel.findById(id).populate('author', ['username'])
@@ -285,6 +279,35 @@ app.get('/post', async(req, res)=>{
   .sort({createdAt: -1})
   .limit(22))
 })
+
+
+
+// Tusted sources news api
+
+app.get('/news', async (req, res) => {
+  const NEWS_API_KEY = process.env.VITE_NEWS_API_KEY;
+
+  if (!NEWS_API_KEY) {
+    return res.status(500).json({ error: 'Missing NEWS_API_KEY in environment' });
+  }
+
+  const apiUrl = `https://newsapi.org/v2/top-headlines?country=us&category=technology&pageSize=22&apiKey=${NEWS_API_KEY}`;
+
+  try {
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+
+    if (data.status !== 'ok') {
+      return res.status(500).json({ error: 'Failed to fetch news from NewsAPI', details: data });
+    }
+
+    res.json(data);
+  } catch (err) {
+    console.error('❌ News API error:', err);
+    res.status(500).json({ error: 'Error fetching news' });
+  }
+});
+
 
 app.listen(PORT, () => {
   console.log(`🟩 Listening on port ${PORT}`);
