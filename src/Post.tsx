@@ -66,6 +66,7 @@ function PostContent({
   hoveredIndex,
 }: PostContentProps) {
   const authorName = typeof author === "object" ? author.username : author;
+  
 
   function TagsDisplay() {
     const displayTags = tags && tags.length > 0 ? tags : [""];
@@ -79,6 +80,8 @@ function PostContent({
       </span>
     );
   }
+
+  const hasValidTags = tags?.some(tag => tag && tag.startsWith('#'));
 
   return (
     <div className="flex items-center w-full overflow-hidden space-x-2 sm:space-x-4 h-[120px] xl:h-[200px] transition-all">
@@ -108,7 +111,8 @@ function PostContent({
               <ReactTimeAgo date={new Date(createdAt).getTime()} locale="en-US" />
             </span>
 
-            <span className="hidden sm:inline">•</span>
+            <span className="hidden sm:inline">{hasValidTags ? '•' : ''}</span>
+
             <span className="hidden sm:flex">
               <TagsDisplay />
             </span>

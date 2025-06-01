@@ -32,7 +32,9 @@ function CategoriesTab() {
     </Link>
 
     {currentPath === "/trustedPosts" && (
-      <li className="ml-auto m-[21px] hover:font-medium text-sm p-1 rounded-xl bg-[hsla(180,10%,1%,0.3)] cursor-pointer">
+      <li 
+      onClick={()=> confirm("Trusted Sources category are official news coming from a safe news api where you could check out updates about what's happening around the world")}
+      className="ml-auto m-[20px] text-[12px] p-1 rounded-xl hover:font-light hover:bg-[hsla(180,10%,1%,0.3)] bg-[hsla(180,10%,11%,0.3)] cursor-pointer">
         About this page
       </li>
     )}

@@ -8,6 +8,7 @@ function LoginPage() {
   const [password,setPassword] = useState('')
   const [redirect, setRedirect] = useState(false)
   const {setUserInfo} = useContext(UserContext)
+  const [visible, setVisible] = useState(true)
 
   const [warningDisplay, setWarningDisplay] = useState(false)
   
@@ -51,7 +52,7 @@ function LoginPage() {
   }
 
   return (
-<main className="max-w-screen-xl mx-auto">
+<main className="max-w-screen-xl mx-auto p-1">
     <form className="flex flex-col gap-4 max-w-sm mx-auto mt-10"
           onSubmit={Login}>
           <h1 className="font-bold text-3xl hover:underline mx-auto">Login</h1>
@@ -62,13 +63,17 @@ function LoginPage() {
            value={username}
            onChange={((e)=> setUsername(e.target.value))}
        />
-
-    <input type="password"
+       <div className="relative">
+          <span onClick={()=> setVisible((old)=> !old)} className="material-symbols-outlined absolute top-[10px] right-2 select-none cursor-pointer">
+            {visible ? 'visibility' : 'visibility_off'}
+        </span>
+    <input type={visible ? 'password' : 'text'}
            placeholder="Password"
-           className="p-2 border rounded" 
+           className="p-2 border rounded w-full  pr-9" 
            value={password}
            onChange={((e)=> setPassword(e.target.value))}
       />
+       </div>
 
     <button className="p-2 bg-black transition-all cursor-pointer hover:rounded-xl text-white rounded hover:bg-gray-800">
       Login

@@ -7,6 +7,7 @@ function RegisterPage() {
   const [repeatPassword, setRepeatPassword] = useState('');
   const [warningMessage, setWarningMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [visible, setVisible] = useState(true)
 
   function ResetRegister() {
     setUsername('');
@@ -63,7 +64,7 @@ function RegisterPage() {
 }
 
   return (
-    <main className="max-w-screen-xl mx-auto">
+    <main className="max-w-screen-xl mx-auto p-1">
       <form
         className="flex flex-col gap-4 max-w-sm mx-auto mt-10"
         onSubmit={Register}
@@ -78,13 +79,17 @@ function RegisterPage() {
           onChange={(e) => setUsername(e.target.value)}
         />
 
-        <input
-          type="password"
-          placeholder="Password"
-          className="p-2 border rounded"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+       <div className="relative">
+          <span onClick={()=> setVisible((old)=> !old)} className="material-symbols-outlined absolute top-[10px] right-2 select-none cursor-pointer">
+            {visible ? 'visibility' : 'visibility_off'}
+        </span>
+    <input type={visible ? 'password' : 'text'}
+           placeholder="Password"
+           className="p-2 border rounded w-full  pr-9" 
+           value={password}
+           onChange={((e)=> setPassword(e.target.value))}
+      />
+       </div>
         <input
           type="password"
           placeholder="Repeat password"
