@@ -89,11 +89,16 @@ function EditPost() {
 
   return (
     <main className='mt-5 px-3'>
-      <h1 className="text-center text-3xl font-extrabold">Edit post</h1>
-      <HandleErrors title={title} errorWarning={errorWarning} />
+            <div className='text-center'>
+                        <span 
+          className="material-symbols-outlined select-none !text-[40px] text-gray-600">
+              edit_document
+          </span>
+      </div>
+      <h1 className="text-center text-3xl mt-[-15px] font-extrabold">Edit post</h1>
       <form
         onSubmit={updatePost}
-        className="flex flex-col gap-4 mt-10 w-full max-w-xl mx-auto"
+        className="flex flex-col gap-4 mt-5 w-full max-w-xl mx-auto"
       >
         <input
           value={title}
@@ -102,14 +107,14 @@ function EditPost() {
             setTitle(e.target.value);
             if (errorWarning) setErrorWarning(false);
           }}
-          className="border border-gray-500 p-2"
+          className="border border-gray-500 p-2 rounded-lg"
           type="text"
           placeholder="Post title (max 35 chars)"
         />
         <input
           value={summary}
           onChange={e => setSummary(e.target.value)}
-          className="border border-gray-500 p-2"
+          className="border border-gray-500 p-2 rounded-lg"
           type="text"
           placeholder="Post summary"
         />
@@ -117,7 +122,7 @@ function EditPost() {
           <p className="text-sm text-gray-600">Selected: {files[0].name}</p>
         )}
         <input
-          className="border rounded p-2"
+          className="border rounded-lg p-2"
           type="file"
           onChange={e => setFiles(e.target.files)}
         />
@@ -142,14 +147,14 @@ function EditPost() {
               value={tagInput}
               onChange={e => setTagInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="border border-gray-500 p-2 flex-1 pl-7"
+              className="border border-gray-500 p-2 flex-1 pl-7 rounded-lg"
               type="text"
               placeholder="Add a tag (min 2, max 15 chars)"
             />
             <button
               type="button"
               onClick={()=>addTag({tagInput, tagList, setTagList, setTagInput})}
-              className="bg-black hover:bg-gray-800 text-white px-3 rounded"
+              className="bg-black hover:bg-gray-800 text-white px-3 rounded cursor-pointer transition-all hover:rounded-[10px] active:text-green-400"
             >
               Add
             </button>
@@ -175,11 +180,12 @@ function EditPost() {
 
         <button
           type="submit"
-          className="text-white px-4 py-2 rounded bg-black hover:bg-gray-800"
+          className="text-white px-4 py-2 rounded bg-black hover:bg-gray-800 hover:rounded-xl transition-all cursor-pointer active:text-green-400"
         >
           Update post
         </button>
       </form>
+      <HandleErrors title={title} errorWarning={errorWarning} />
       <br />
     </main>
   );

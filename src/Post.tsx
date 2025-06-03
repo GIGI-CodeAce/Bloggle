@@ -26,7 +26,7 @@ function PostLayout(props: PostProps) {
     onMouseLeave: () => setHoveredIndex(null),
     onTouchStart: () =>
       setHoveredIndex((prev) => (prev === props._id ? null : props._id)),
-    className: `flex space-x-4 mb-2 h-[120px] xl:h-[200px] rounded-xl transition-all ${
+    className: `flex space-x-4 mb-2 h-[120px] xl:h-[180px] rounded-xl transition-all ${
       hoveredIndex === props._id ? "bg-gray-100" : ""
     }`,
   };
@@ -73,20 +73,19 @@ function PostContent({
     return (
       <span className="flex flex-wrap">
         {displayTags.map((tag, index) => (
-          <span key={index} className="text-black transition-all px-1 py-1">
+          <span key={index} className="text-black transition-all p-1">
             {tag.startsWith("#") ? tag : ""}
           </span>
         ))}
       </span>
     );
   }
-
   const hasValidTags = tags?.some(tag => tag && tag.startsWith('#'));
 
   return (
-    <div className="flex items-center w-full overflow-hidden space-x-2 sm:space-x-4 h-[120px] xl:h-[200px] transition-all">
+    <div className="flex items-center w-full overflow-hidden space-x-2 sm:space-x-4 min-h-[18px] max-h-[180px] transition-all">
       <img
-        className={`w-[160px] min-w-[160px] xl:w-[350px] sm:w-[200px] h-[120px] xl:h-[200px] shrink-0 object-fill rounded-xl ${
+        className={`w-[160px] min-w-[160px] xl:w-[330px] sm:w-[200px] h-[120px] xl:h-[180px] shrink-0 object-fill rounded-xl ${
           hoveredIndex === _id ? "border" : ""
         }`}
         src={cover.startsWith("http") ? cover : `${API_BASE}/${cover}`}

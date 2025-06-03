@@ -43,20 +43,11 @@ interface HandleErrorsProps {
 }
 
 export function HandleErrors({ title, errorWarning }: HandleErrorsProps) {
-  if (!errorWarning) return null;
 
-  if (title.length < 4 || title.length > 35) {
     return (
-      <h1 className="h-6 text-center text-red-600">
-        Title must be between 4 and 35 characters
+      <h1 className="h-6 text-center text-red-600 mt-1">
+        {!errorWarning ? '' : title.length < 4 || title.length > 35 ? 'Title must be between 4 and 35 characters' : 'Failed to create post. Make sure all fields are filled in correctly.'}
       </h1>
     );
-  }
-
-  return (
-    <h1 className="h-6 text-center text-red-600">
-      Failed to create post. Make sure all fields are filled in correctly.
-    </h1>
-  );
 }
 

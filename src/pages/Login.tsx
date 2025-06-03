@@ -64,20 +64,20 @@ function LoginPage() {
           <label className="flex flex-col">
             <h1 className="hover:underline pl-1 mb-1">Username</h1>
                 <input type="text"
-           placeholder="Enter your username"
+           placeholder="Enter username"
            className="p-2 border rounded-lg"
            value={username}
            onChange={((e)=> setUsername(e.target.value))}
               />
           </label>
        <div className="relative">
-          <span onClick={()=> setVisible((old)=> !old)} className="material-symbols-outlined absolute top-[35px] right-2 select-none cursor-pointer">
+          <span onClick={()=> setVisible((old)=> !old)} className="material-symbols-outlined absolute top-[34px] right-1 p-1 select-none cursor-pointer">
             {visible ? 'visibility' : 'visibility_off'}
         </span>
         <label>
           <h1 className="hover:underline pl-1 mb-1">Password</h1>
               <input type={visible ? 'password' : 'text'}
-           placeholder="Enter your password"
+           placeholder="Enter password"
            className="p-2 border rounded-lg w-full  pr-9" 
            value={password}
            onChange={((e)=> setPassword(e.target.value))}

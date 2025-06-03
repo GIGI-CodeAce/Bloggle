@@ -58,8 +58,13 @@ function CreatePost() {
 
   return (
     <main className='mt-5 px-3'>
-      <h1 className="text-center text-3xl font-extrabold hover:underline">Create post</h1>
-        <HandleErrors title={title} errorWarning={errorWarning} />
+      <div className='text-center'>
+                        <span 
+          className="material-symbols-outlined select-none !text-[40px] mb-[-30px] text-gray-600">
+              post_add
+          </span>
+      </div>
+      <h1 className="text-center text-3xl mt-[-15px] font-extrabold hover:underline">Create post</h1>
       <form
         onSubmit={SubmitPost}
         className="flex flex-col gap-4 mt-6 w-full max-w-xl mx-auto"
@@ -68,19 +73,19 @@ function CreatePost() {
           value={title}
           maxLength={35}
           onChange={e => setTitle(e.target.value)}
-          className="border border-gray-500 p-2"
+          className="border border-gray-500 p-2 rounded-lg"
           type="text"
           placeholder="Post title (max 35 chars)"
         />
         <input
           value={summary}
           onChange={e => setSummary(e.target.value)}
-          className="border border-gray-500 p-2"
+          className="border border-gray-500 p-2 rounded-lg"
           type="text"
           placeholder="Post summary"
         />
         <input
-          className="border rounded p-2 cursor-pointer"
+          className="border rounded-lg p-2 cursor-pointer"
           type="file"
           onChange={e => setFiles(e.target.files)}
         />
@@ -139,13 +144,14 @@ function CreatePost() {
         <button
         title='Click to submit your post'
           type="submit"
-          className="text-white hover:rounded-xl transition-all px-4 py-2 rounded cursor-pointer bg-black hover:bg-gray-800"
+          className="text-white hover:rounded-xl active:text-green-400 transition-all px-4 py-2 rounded-lg cursor-pointer bg-black hover:bg-gray-800"
         >
           Submit
         </button>
       </form>
+       <HandleErrors title={title} errorWarning={errorWarning} />
       <div className="text-center m-2">
-        <h1 className="text-center text-xl font-extrabold mt-8">
+        <h1 className="text-center text-xl font-extrabold">
           Bloggle It Out: <span className="text-gray-600">Share What’s On Your Mind</span>
         </h1>
       </div>

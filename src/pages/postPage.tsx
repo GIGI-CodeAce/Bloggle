@@ -87,6 +87,7 @@ async function handleLike() {
   setLikes(data.likes);
 }
 
+
   if (!postInfo) return <div className="text-center text-xl text-gray-700">Loading...</div>;
 
   return (
@@ -102,10 +103,12 @@ async function handleLike() {
       <h1 className="text-xl text-center">{postInfo.summary}</h1>
       <br/>
       <hr/>
-      <div
-        className="text-lg mb-4 prose pt-2 max-w-none"
-        dangerouslySetInnerHTML={{ __html: postInfo.content }}
-        ></div>
+          <div
+            className={`text-lg mb-4 prose pt-2 max-w-none
+            ${postInfo.content.length > 400 ? 'first-letter:text-5xl first-letter:font-medium first-letter:float-left first-letter:leading-none first-letter:mr-2' :''}`}
+            dangerouslySetInnerHTML={{ __html: postInfo.content }}
+          ></div>
+
 
 
       <div>

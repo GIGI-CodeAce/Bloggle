@@ -59,7 +59,7 @@ function RegisterPage() {
     setSuccessMessage('Account created. Go to login to sign in.');
     setTimeout(() => {
       ResetRegister();
-    }, 2100);
+    }, 2222);
   }
 }
 
@@ -87,7 +87,7 @@ function RegisterPage() {
         </label>
 
        <div className="relative">
-          <span onClick={()=> setVisible((old)=> !old)} className="material-symbols-outlined absolute top-[38px] right-2 select-none cursor-pointer">
+          <span onClick={()=> setVisible((old)=> !old)} className="material-symbols-outlined absolute top-[34px] right-1 p-1 select-none cursor-pointer">
             {visible ? 'visibility' : 'visibility_off'}
         </span>
         <label className="flex flex-col">
@@ -114,9 +114,14 @@ function RegisterPage() {
         </button>
       </form>
 
-      <div className="text-center m-2">
+      <div className="text-center m-2 h-5">
         {warningMessage && <p className="text-red-500">{warningMessage}</p>}
         {successMessage && <p className="text-green-600">{successMessage}</p>}
+      </div>
+            <div className="text-center m-2">
+        <h1 className="text-center text-lg font-extrabold">
+          Welcome! <span className="text-gray-600">Happy to see you there</span>
+        </h1>
       </div>
     </main>
   );
