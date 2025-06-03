@@ -69,37 +69,47 @@ function RegisterPage() {
         className="flex flex-col gap-4 max-w-sm mx-auto mt-10"
         onSubmit={Register}
       >
+                  <span 
+          className="material-symbols-outlined select-none !text-[70px] mb-[-20px] text-gray-600 text-center">
+              face
+          </span>
         <h1 className="font-bold text-3xl mx-auto hover:underline">Register</h1>
 
-        <input
+        <label className="flex flex-col">
+          <h1 className="hover:underline pl-1 mb-1">Username</h1>
+          <input
           type="text"
-          placeholder="Username (min 4, max 15 chars)"
-          className="p-2 border rounded"
+          placeholder="Choose username (min 4, max 15 chars)"
+          className="p-2 border rounded-lg"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
+        </label>
 
        <div className="relative">
-          <span onClick={()=> setVisible((old)=> !old)} className="material-symbols-outlined absolute top-[10px] right-2 select-none cursor-pointer">
+          <span onClick={()=> setVisible((old)=> !old)} className="material-symbols-outlined absolute top-[38px] right-2 select-none cursor-pointer">
             {visible ? 'visibility' : 'visibility_off'}
         </span>
-    <input type={visible ? 'password' : 'text'}
-           placeholder="Password"
-           className="p-2 border rounded w-full  pr-9" 
+        <label className="flex flex-col">
+          <h1 className="hover:underline pl-1 mb-1">Password</h1>
+              <input type={visible ? 'password' : 'text'}
+           placeholder="Choose password"
+           className="p-2 border rounded-lg w-full  pr-9" 
            value={password}
            onChange={((e)=> setPassword(e.target.value))}
-      />
+            />
+        </label>
        </div>
-        <input
+                <input
           type="password"
           placeholder="Repeat password"
-          className="p-2 border rounded"
+          className="p-2 border rounded-lg"
           value={repeatPassword}
           onChange={(e) => setRepeatPassword(e.target.value)}
         />
 
         <button
-          className="p-2 bg-black transition-all cursor-pointer hover:rounded-xl text-white rounded hover:bg-gray-800">
+          className="p-2 bg-black transition-all active:text-green-300 cursor-pointer hover:rounded-xl text-white rounded-lg hover:bg-gray-800">
           Register
         </button>
       </form>

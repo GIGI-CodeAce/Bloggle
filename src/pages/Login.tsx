@@ -55,27 +55,37 @@ function LoginPage() {
 <main className="max-w-screen-xl mx-auto p-1">
     <form className="flex flex-col gap-4 max-w-sm mx-auto mt-10"
           onSubmit={Login}>
+          <span 
+          className="material-symbols-outlined select-none !text-[70px] mb-[-20px] text-gray-600 text-center">
+              account_circle
+          </span>
           <h1 className="font-bold text-3xl hover:underline mx-auto">Login</h1>
 
-    <input type="text"
-           placeholder="Username"
-           className="p-2 border rounded"
+          <label className="flex flex-col">
+            <h1 className="hover:underline pl-1 mb-1">Username</h1>
+                <input type="text"
+           placeholder="Enter your username"
+           className="p-2 border rounded-lg"
            value={username}
            onChange={((e)=> setUsername(e.target.value))}
-       />
+              />
+          </label>
        <div className="relative">
-          <span onClick={()=> setVisible((old)=> !old)} className="material-symbols-outlined absolute top-[10px] right-2 select-none cursor-pointer">
+          <span onClick={()=> setVisible((old)=> !old)} className="material-symbols-outlined absolute top-[35px] right-2 select-none cursor-pointer">
             {visible ? 'visibility' : 'visibility_off'}
         </span>
-    <input type={visible ? 'password' : 'text'}
-           placeholder="Password"
-           className="p-2 border rounded w-full  pr-9" 
+        <label>
+          <h1 className="hover:underline pl-1 mb-1">Password</h1>
+              <input type={visible ? 'password' : 'text'}
+           placeholder="Enter your password"
+           className="p-2 border rounded-lg w-full  pr-9" 
            value={password}
            onChange={((e)=> setPassword(e.target.value))}
       />
+        </label>
        </div>
 
-    <button className="p-2 bg-black transition-all cursor-pointer hover:rounded-xl text-white rounded hover:bg-gray-800">
+    <button className="p-2 bg-black transition-all active:text-green-300 cursor-pointer hover:rounded-xl text-white rounded-lg hover:bg-gray-800">
       Login
     </button>
     </form>
