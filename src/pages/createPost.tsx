@@ -15,35 +15,43 @@ function CreatePost() {
   const [redirect, setRedirect] = useState(false);
   const [errorWarning, setErrorWarning] = useState(false);
 
-  async function SubmitPost(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+async function SubmitPost(e: React.FormEvent<HTMLFormElement>) {
+  e.preventDefault()
 
-    const data = new FormData();
-    data.set('title', title);
-    data.set('summary', summary);
-    data.set('content', content);
-    data.set('tags', JSON.stringify(tagList));
-
-    if (files && files[0]) {
-      data.set('file', files[0]);
-    }
-
-    try {
-      const response = await fetch(`${API_BASE}/post`, {
-        method: 'POST',
-        credentials: 'include',
-        body: data,
-      });
-
-      if (!response.ok) {
-        setErrorWarning(true);
-        throw new Error('Failed to create post');
-      }
-      setRedirect(true);
-    } catch (err) {
-      console.error('Error creating post:', err);
-    }
+  if (title.length < 4 || title.length > 35 || summary.length < 10) {
+    setErrorWarning(true)
+    return
   }
+
+  setErrorWarning(false)
+
+  const data = new FormData()
+  data.set('title', title)
+  data.set('summary', summary)
+  data.set('content', content)
+  data.set('tags', JSON.stringify(tagList))
+
+  if (files && files[0]) {
+    data.set('file', files[0])
+  }
+
+  try {
+    const response = await fetch(`${API_BASE}/post`, {
+      method: 'POST',
+      credentials: 'include',
+      body: data,
+    });
+
+    if (!response.ok) {
+      setErrorWarning(true)
+      throw new Error('Failed to create post')
+    }
+    setRedirect(true)
+  } catch (err) {
+    console.error('Error creating post:', err)
+  }
+}
+
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -149,7 +157,7 @@ function CreatePost() {
           Submit
         </button>
       </form>
-       <HandleErrors title={title} errorWarning={errorWarning} />
+       <HandleErrors title={title} summary={summary} errorWarning={errorWarning} />
       <div className="text-center m-2">
         <h1 className="text-center text-xl font-extrabold">
           Bloggle It Out: <span className="text-gray-600">Share What’s On Your Mind</span>

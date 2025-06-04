@@ -12,6 +12,7 @@ import PostModel from './models/post.js'
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -162,11 +163,11 @@ app.post('/post', uploadMiddleware.single('file'), async(req, res) => {
 app.put('/post', uploadMiddleware.single('file'), async (req,res)=>{
   let newPath = null
   if(req.file){
-      const { originalname, path: tempPath } = req.file;
-      const ext = path.extname(originalname).toLowerCase();
+    const { originalname, path: tempPath } = req.file;
+    const ext = path.extname(originalname).toLowerCase();
       const newFileName = Date.now() + '-' + Math.round(Math.random() * 1E9) + ext;
-      newPath = path.join('uploads', newFileName);
-      fs.renameSync(tempPath, newPath);
+    newPath = path.join('uploads', newFileName);
+    fs.renameSync(tempPath, newPath);
   }
 
   const {token} = req.cookies
@@ -180,16 +181,16 @@ app.put('/post', uploadMiddleware.single('file'), async (req,res)=>{
       return res.status(400).json({ error: 'Invalid tags format' });
     }
     const postDoc = await PostModel.findById(id)
-    
+
     const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(info.id) || info.username === 'admin'
     if(!isAuthor){
       return res.status(400).json('You are not the author..')
     }
 
     postDoc.set({
-       title,
-       summary, 
-       content, 
+      title,
+      summary,
+      content,
        cover: newPath? newPath: postDoc.cover,
        tags: parsedTags
     })
@@ -286,9 +287,7 @@ app.get('/post', async(req, res)=>{
 
 
 app.get('/news', async (req, res) => {
-  const NEWS_API_KEY = process.env.NEWS_API_KEY;  // or VITE_NEWS_API_KEY if you want
-
-  console.log('NEWS_API_KEY:', NEWS_API_KEY);
+  const NEWS_API_KEY = process.env.NEWS_API_KEY;
 
   if (!NEWS_API_KEY) {
     return res.status(500).json({ error: 'Missing NEWS_API_KEY in environment' });
@@ -298,10 +297,7 @@ app.get('/news', async (req, res) => {
 
   try {
     const response = await fetch(apiUrl);
-    console.log('NewsAPI response status:', response.status);
-
     const data = await response.json();
-    console.log('NewsAPI data:', data);
 
     if (data.status !== 'ok') {
       return res.status(500).json({ error: 'Failed to fetch news from NewsAPI', details: data });

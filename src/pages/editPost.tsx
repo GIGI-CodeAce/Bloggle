@@ -14,24 +14,24 @@ function EditPost() {
   const [tagList, setTagList] = useState<string[]>([]);
   const [redirect, setRedirect] = useState(false);
   const [errorWarning, setErrorWarning] = useState(false);
-  const { id } = useParams();
+  const { id } = useParams()
 
   useEffect(() => {
     if (!id) return;
     fetch(`${API_BASE}/post/${id}`)
       .then((res) => {
         if (!res.ok) {
-          setErrorWarning(true);
-          throw new Error(`HTTP error! status: ${res.status}`);
+          setErrorWarning(true)
+          throw new Error(`HTTP error! status: ${res.status}`)
         }
-        return res.json();
+        return res.json()
       })
       .then((data: PostProps) => {
-        const { title, content, summary, tags } = data;
-        setTitle(title);
-        setContent(content);
-        setSummary(summary);
-        setTagList(tags || []);
+        const { title, content, summary, tags } = data
+        setTitle(title)
+        setContent(content)
+        setSummary(summary)
+        setTagList(tags || [])
       })
       .catch((err) => {
         console.error("Failed to fetch post:", err);
@@ -45,46 +45,48 @@ function EditPost() {
     }
   };
 
-  async function updatePost(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+async function updatePost(e: React.FormEvent<HTMLFormElement>) {
+  e.preventDefault();
 
-    if (title.length < 3 || title.length > 35) {
-      setErrorWarning(true);
-      return;
-    }
-
-    const data = new FormData();
-    data.set('title', title);
-    data.set('summary', summary);
-    data.set('content', content);
-    if (id !== undefined) {
-      data.set('id', id);
-    }
-    data.set('tags', JSON.stringify(tagList));
-    if (files && files[0]) {
-      data.set('file', files[0]);
-    }
-
-    try {
-      const response = await fetch(`${API_BASE}/post`, {
-        method: 'PUT',
-        body: data,
-        credentials: 'include'
-      });
-
-      if (!response.ok) {
-        setErrorWarning(true);
-        throw new Error('Failed to update post');
-      }
-
-      setRedirect(true);
-    } catch (err) {
-      console.error('Error updating post:', err);
-    }
+  if (title.length < 4 || title.length > 35 || summary.length < 10) {
+    setErrorWarning(true);
+    return;
   }
 
+  setErrorWarning(false);
+
+  const data = new FormData();
+  data.set('title', title);
+  data.set('summary', summary);
+  data.set('content', content);
+  if (id !== undefined) {
+    data.set('id', id);
+  }
+  data.set('tags', JSON.stringify(tagList))
+  if (files && files[0]) {
+    data.set('file', files[0])
+  }
+
+  try {
+    const response = await fetch(`${API_BASE}/post`, {
+      method: 'PUT',
+      body: data,
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      setErrorWarning(true)
+      throw new Error('Failed to update post')
+    }
+
+    setRedirect(true)
+  } catch (err) {
+    console.error('Error updating post:', err)
+  }
+}
+
   if (redirect) {
-    return <Navigate to={`/post/${id}`} />;
+    return <Navigate to={`/post/${id}`} />
   }
 
   return (
@@ -185,7 +187,7 @@ function EditPost() {
           Update post
         </button>
       </form>
-      <HandleErrors title={title} errorWarning={errorWarning} />
+      <HandleErrors title={title} summary={summary} errorWarning={errorWarning} />
       <br />
     </main>
   );
