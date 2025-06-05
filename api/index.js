@@ -24,7 +24,20 @@ const JWT_SECRET = process.env.JWT_SECRET || 'default_jwt_secret';
 const uploadMiddleware = multer({dest: 'uploads/'})
 
 const app = express();
-app.use(cors({credentials: true,origin: ['http://localhost:3000', 'https://bloggleapp.onrender.com']}));
+
+app.use(cors({
+  origin: function(origin, callback) {
+    if (!origin) return callback(null, true);
+
+    const allowedOrigins = ['http://localhost:3000', 'https://bloggleapp.onrender.com'];
+    if (allowedOrigins.indexOf(origin) === -1) {
+      return callback(new Error('Not allowed by CORS'), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true,
+}));
+
 
 app.use(express.json());
 app.use(cookieParser())
