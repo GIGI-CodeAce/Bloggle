@@ -294,68 +294,88 @@ app.get('/post', async(req, res)=>{
   .limit(22))
 })
 
-
-
-// Tusted sources news api
-
+let cachedNews = null;
+let cacheTimestamp = 0;
+const CACHE_DURATION_MS = 1000 * 60 * 10; // 10 minutes
 
 app.get('/news', async (req, res) => {
+  const now = Date.now();
+
+  if (cachedNews && now - cacheTimestamp < CACHE_DURATION_MS) {
+    console.log('🟢 Returning cached news data')
+    return res.json(cachedNews)
+  }
+
   const NEWS_API_KEYS = [
     process.env.NEWS_API_KEY1,
     process.env.NEWS_API_KEY2,
-    process.env.NEWS_API_KEY3
-  ].filter(Boolean); 
-  console.log(process.env.NEWS_API_KEY1)
-  console.log(process.env.NEWS_API_KEY2)
-  console.log(process.env.NEWS_API_KEY3)
-  
+    process.env.NEWS_API_KEY3,
+  ].filter(Boolean);
+
+  console.log('🟡 Loaded API Keys:', NEWS_API_KEYS)
 
   if (NEWS_API_KEYS.length === 0) {
     return res.status(500).json({ error: 'No News API keys provided' })
   }
 
-  const baseUrl = 'https://newsapi.org/v2/top-headlines?country=us&category=technology&pageSize=22';
+  const baseUrl =
+    'https://newsapi.org/v2/top-headlines?country=us&category=technology&pageSize=22'
 
-  let lastError = null;
+  let lastError = null
 
   for (const apiKey of NEWS_API_KEYS) {
     const apiUrl = `${baseUrl}&apiKey=${apiKey}`
-    console.log(apiUrl)
-    
+    console.log('➡️ Trying URL:', apiUrl)
+
     try {
-      const response = await fetch(apiUrl)
+      const response = await fetch(apiUrl);
+      const contentType = response.headers.get('content-type')
+
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await response.text();
+        console.error('❌ Expected JSON but got:', text.slice(0, 300))
+        lastError = {
+          status: response.status,
+          message: 'Invalid response: expected JSON but received non-JSON content',
+          raw: text.slice(0, 300),
+        };
+        continue;
+      }
+
       const data = await response.json()
 
-      console.log('🔍 Trying API key:', apiKey)
-      console.log('🔍 NewsAPI response status:', response.status)
-      console.log('🔍 NewsAPI response body:', data)
+      console.log('✅ Attempt with API key:', apiKey)
+      console.log('🔎 Status:', response.status, '| Data status:', data.status)
 
       if (response.status === 200 && data.status === 'ok') {
+        // ✅ Save to cache
+        cachedNews = data
+        cacheTimestamp = now
+
         return res.json(data)
       } else {
         lastError = {
           status: response.status,
-          details: data,
+          error: data,
         };
-        continue
       }
     } catch (err) {
-      console.error('❌ Error with API key:', apiKey, err);
-      lastError = err
-      continue
+      console.error('❌ Fetch error with API key:', apiKey, err)
+      lastError = {
+        message: err.message || 'Unknown error',
+        stack: err.stack,
+      };
     }
   }
 
-  res.status(500).json({
+  return res.status(500).json({
     error: 'All News API keys failed',
-    details: lastError
+    details: lastError,
   });
 });
 
 
 
-
-
 app.listen(PORT, () => {
-  console.log(`🟩 Listening on port ${PORT}`);
+  console.log(`🟩 Listening on port ${PORT}`)
 });

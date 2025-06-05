@@ -19,41 +19,40 @@ function OfficialArticles() {
   const [posts, setPosts] = useState<PostProps[]>([]);
   const bloggleNews = false
 
-  useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        const res = await fetch(`${API_BASE}/news`);
-        const data = await res.json();
+useEffect(() => {
+  const fetchNews = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/news`);
+      const data = await res.json();
 
-        if (!data.articles) return;
+      const formattedPosts: PostProps[] = data.articles.map(
+        (article: NewsApiArticle, index: number): PostProps => ({
+          _id: index + 1,
+          cover: article.urlToImage || "https://raw.githubusercontent.com/GIGIsOtherStuff/mainWebMedia/main/AppImages/others/imageNotFound.jpeg",
+          title: article.title,
+          likes: 0,
+          likedBy: [],
+          postUrl: article.url,
+          summary: article.description || "No summary available.",
+          content: article.content || article.description || "No content available.",
+          createdAt: new Date(article.publishedAt).getTime(),
+          author: {
+            _id: article.source.id ?? "newsapi",
+            username: article.source.name ?? "Unknown Source",
+          },
+          tags: ["news", "official", "trusted"],
+        })
+      );
 
-        const formattedPosts: PostProps[] = data.articles.map(
-          (article: NewsApiArticle, index: number): PostProps => ({
-            _id: index + 1,
-            cover: article.urlToImage || "https://raw.githubusercontent.com/GIGIsOtherStuff/mainWebMedia/main/AppImages/others/imageNotFound.jpeg",
-            title: article.title,
-            likes: 0,
-            likedBy: [],
-            postUrl: article.url,
-            summary: article.description || "No summary available.",
-            content: article.content || article.description || "No content available.",
-            createdAt: new Date(article.publishedAt).getTime(),
-            author: {
-              _id: article.source.id ?? "newsapi",
-              username: article.source.name ?? "Unknown Source",
-            },
-            tags: ["news", "official", "trusted"],
-          })
-        );
+      setPosts(formattedPosts);
+    } catch (error) {
+      console.error("Error fetching news:", error);
+    }
+  };
 
-        setPosts(formattedPosts);
-      } catch (error) {
-        console.error("Error fetching news:", error);
-      }
-    };
+  fetchNews();
+}, []);
 
-    fetchNews();
-  }, []);
 
   return (
     <div className="space-y-6 max-w-screen-xl mx-auto px-2 sm:px-4 py-6 min-h-[440px]">
