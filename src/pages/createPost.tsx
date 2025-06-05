@@ -1,7 +1,7 @@
 import 'react-quill/dist/quill.snow.css';
 import { RichTextEditor } from '@mantine/rte';
 import { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate,useNavigate } from 'react-router-dom';
 import { API_BASE } from '../components/api';
 import { addTag,HandleErrors,removeTag } from '../components/postTools';
 
@@ -14,11 +14,13 @@ function CreatePost() {
   const [tagList, setTagList] = useState<string[]>([]);
   const [redirect, setRedirect] = useState(false);
   const [errorWarning, setErrorWarning] = useState(false);
+  const [checkedTOS, setCheckedTOS] = useState(false);
 
+  const navigate = useNavigate()
 async function SubmitPost(e: React.FormEvent<HTMLFormElement>) {
   e.preventDefault()
 
-  if (title.length < 4 || title.length > 35 || summary.length < 10) {
+  if (title.length < 4 || title.length > 35 || summary.length < 10 || !checkedTOS) {
     setErrorWarning(true)
     return
   }
@@ -148,6 +150,18 @@ async function SubmitPost(e: React.FormEvent<HTMLFormElement>) {
             ))}
           </div>
         </div>
+          <label className='cursor-pointer mt-[-10px]'>
+            <input
+              className="mr-2 ml-1 scale-126 transition-all hover:bg-green-400"
+              type="checkbox"
+              checked={checkedTOS}
+              onChange={() => setCheckedTOS(prev => !prev)}
+            />
+            <span>I agree to the 
+              <span className='underline ml-1' 
+              onClick={()=> navigate('/terms')}>terms of service</span></span>
+          </label>
+
 
         <button
         title='Click to submit your post'
@@ -157,7 +171,7 @@ async function SubmitPost(e: React.FormEvent<HTMLFormElement>) {
           Submit
         </button>
       </form>
-       <HandleErrors title={title} summary={summary} errorWarning={errorWarning} />
+       <HandleErrors title={title} checkedTOS={checkedTOS} summary={summary} errorWarning={errorWarning} />
       <div className="text-center m-2">
         <h1 className="text-center text-xl font-extrabold">
           Bloggle It Out: <span className="text-gray-600">Share What’s On Your Mind</span>

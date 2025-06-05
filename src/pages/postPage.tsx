@@ -9,6 +9,7 @@ function PostPage() {
   const [postInfo, setPostInfo] = useState<PostProps | null>(null);
   const {userInfo} = useContext(UserContext)
   const [likes, setLikes] = useState(0);
+  const [isHovering, setIsHovering] = useState(false);
   const { id } = useParams();
 
   const tags = postInfo?.tags
@@ -87,6 +88,9 @@ async function handleLike() {
   setLikes(data.likes);
 }
 
+  const isOwner = userInfo &&
+  (userInfo.id === postInfo?.author._id || userInfo.username === "admin");
+
 
   if (!postInfo) return <div className="text-center text-xl text-gray-700">Loading...</div>;
 
@@ -104,7 +108,7 @@ async function handleLike() {
       <br/>
       <hr/>
           <div
-            className={`text-lg mb-4 prose pt-2 max-w-none
+            className={`text-lg mb-4 prose pt-2 max-w-none break-words
             ${postInfo.content.length > 400 ? 'first-letter:text-5xl first-letter:font-medium first-letter:float-left first-letter:leading-none first-letter:mr-2' :''}`}
             dangerouslySetInnerHTML={{ __html: postInfo.content }}
           ></div>
@@ -124,22 +128,33 @@ async function handleLike() {
           </button>
         </div>
       </div>
-                  {(userInfo && (userInfo.id === postInfo.author._id || userInfo.username === 'admin')) && (
-          <div className="flex items-center justify-center flex-wrap mb-1 text-white rounded-xl border-black border-3 bg-[#020303c9] p-2 w-full gap-4">
-              <>
-                <Link to={`/edit/${postInfo._id}`}>
-                  <button className="bg-black cursor-pointer text-white hover:bg-white transition-all hover:text-black p-1 px-3 rounded-xl">
-                    Edit post
-                  </button>
-                </Link>
-              <button 
+          {isOwner && (
+            <div
+            onMouseEnter={() => setIsHovering(true)}
+            onMouseLeave={() => setIsHovering(false)}
+              className={`flex items-center justify-center flex-wrap mb-1 text-white rounded-xl border-black border-3 transition-all bg-[#020303c9] p-2 w-full gap-4 ${
+                isHovering ? "bg-opacity-80 shadow-lg scale-[1.01]" : ""
+              }`}
+              onTouchStart={() => setIsHovering(true)}
+              onTouchEnd={() => setIsHovering(false)}
+            >
+              <Link to={`/edit/${postInfo._id}`}>
+                <button
+                  aria-label="Edit post"
+                  className="bg-black cursor-pointer text-white hover:bg-white transition-all hover:text-black p-1 px-3 rounded-xl active:scale-95"
+                >
+                  Edit post
+                </button>
+              </Link>
+
+              <button
+                aria-label="Delete post"
                 onClick={handleDelete}
-                className="bg-black cursor-pointer text-white hover:bg-red-500 transition-all hover:text-black p-1 px-3 rounded-xl"
+                className="bg-black cursor-pointer text-white hover:bg-red-500 transition-all hover:text-black p-1 px-3 rounded-xl active:scale-95"
               >
                 Delete post
               </button>
-              </>
-          </div>
+            </div>
           )}
 
         <div className="flex items-center flex-wrap text-white rounded-t-xl bg-[#020303c9] p-2 w-full">

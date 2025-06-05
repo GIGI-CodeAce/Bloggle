@@ -40,17 +40,18 @@ export function removeTag({ tag, tagList, setTagList }: RemoveTagProps) {
 interface HandleErrorsProps {
   title: string;
   summary: string
+  checkedTOS: boolean
   errorWarning: boolean;
 }
 
-export function HandleErrors({ title,summary, errorWarning }: HandleErrorsProps) {
+export function HandleErrors({ title,summary,checkedTOS, errorWarning }: HandleErrorsProps) {
 
     return (
       <h1 className="h-6 text-center text-red-600 mt-1">
         {!errorWarning ? '' : title.length < 4 || title.length > 35 ? 
         'Title must be between 4 and 35 characters' : summary.length < 10 ? 'Post summary is too short' : 
+        !checkedTOS ? 'You have to agree to our terms of service' : 
         'Failed to create post. Make sure all fields are filled in correctly.'}
       </h1>
     );
 }
-

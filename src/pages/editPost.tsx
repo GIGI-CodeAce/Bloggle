@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import RichTextEditor from "@mantine/rte";
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate,useNavigate, useParams } from "react-router-dom";
 import type { PostProps } from "../Post";
 import { API_BASE } from "../components/api";
 import { addTag,HandleErrors,removeTag } from '../components/postTools';
@@ -14,8 +14,10 @@ function EditPost() {
   const [tagList, setTagList] = useState<string[]>([]);
   const [redirect, setRedirect] = useState(false);
   const [errorWarning, setErrorWarning] = useState(false);
+  const [checkedTOS, setCheckedTOS] = useState(false);
   const { id } = useParams()
 
+  const navigate = useNavigate()
   useEffect(() => {
     if (!id) return;
     fetch(`${API_BASE}/post/${id}`)
@@ -161,7 +163,7 @@ async function updatePost(e: React.FormEvent<HTMLFormElement>) {
               Add
             </button>
           </div>
-          <div className="flex flex-wrap gap-2 mt-2">
+          <div className="flex flex-wrap gap-2 my-2">
             {tagList.map(tag => (
               <span
                 key={tag}
@@ -178,7 +180,20 @@ async function updatePost(e: React.FormEvent<HTMLFormElement>) {
               </span>
             ))}
           </div>
+          <hr/>
         </div>
+
+                  <label className='cursor-pointer mt-[-10px]'>
+            <input
+              className="mr-2 ml-1 scale-126 transition-all hover:bg-green-400"
+              type="checkbox"
+              checked={checkedTOS}
+              onChange={() => setCheckedTOS(prev => !prev)}
+            />
+            <span>I agree to the 
+              <span className='underline ml-1' 
+              onClick={()=> navigate('/terms')}>terms of service</span></span>
+          </label>
 
         <button
           type="submit"
@@ -187,7 +202,7 @@ async function updatePost(e: React.FormEvent<HTMLFormElement>) {
           Update post
         </button>
       </form>
-      <HandleErrors title={title} summary={summary} errorWarning={errorWarning} />
+      <HandleErrors title={title} checkedTOS={checkedTOS} summary={summary} errorWarning={errorWarning} />
       <br />
     </main>
   );

@@ -287,28 +287,37 @@ app.get('/post', async(req, res)=>{
 
 
 app.get('/news', async (req, res) => {
-  const NEWS_API_KEY = process.env.NEWS_API_KEY;
+  const NEWS_API_KEY = process.env.NEWS_API_KEY
 
   if (!NEWS_API_KEY) {
-    return res.status(500).json({ error: 'Missing NEWS_API_KEY in environment' });
+    return res.status(500).json({ error: 'Missing NEWS_API_KEY in environment' })
   }
 
-  const apiUrl = `https://newsapi.org/v2/top-headlines?country=us&category=technology&pageSize=22&apiKey=${NEWS_API_KEY}`;
+  const apiUrl = `https://newsapi.org/v2/top-headlines?country=us&category=technology&pageSize=22&apiKey=${NEWS_API_KEY}`
 
   try {
-    const response = await fetch(apiUrl);
-    const data = await response.json();
+    const response = await fetch(apiUrl)
+    const data = await response.json()
 
-    if (data.status !== 'ok') {
-      return res.status(500).json({ error: 'Failed to fetch news from NewsAPI', details: data });
+    //  Log response details
+    console.log('🔍 NewsAPI response status:', response.status)
+    console.log('🔍 NewsAPI response body:', data)
+
+    if (response.status !== 200 || data.status !== 'ok') {
+      return res.status(500).json({
+        error: 'Failed to fetch news from NewsAPI',
+        status: response.status,
+        details: data,
+      });
     }
 
-    res.json(data);
+    res.json(data)
   } catch (err) {
-    console.error('❌ News API error:', err);
-    res.status(500).json({ error: 'Error fetching news' });
+    console.error('❌ News API error:', err)
+    res.status(500).json({ error: 'Error fetching news' })
   }
-});
+})
+
 
 
 

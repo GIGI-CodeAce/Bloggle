@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 function TermsOfUsePage(){
     const navigate = useNavigate()
     const ruleTitleStyle = 'pl-5 font-bold sm:text-3xl text-xl my-3'
+    const buttonStyle = 'bg-black hover:bg-gray-800 font-bold transition-all m-1 cursor-pointer hover:rounded-xl py-2 text-white px-3 rounded-lg mb-7 active:text-green-400'
 
     return(
             <main className="mt-5 max-w-2xl mx-auto text-xl">
@@ -40,8 +41,10 @@ function TermsOfUsePage(){
             <p className="p-2">Bloggle is not responsible for user-generated content. However,
              we strive to provide a safe and positive environment and rely on you to help maintain this standard.</p>
              <div className="text-center">
-                <h1 className="mt-11 text-[16px]">I understand and</h1><button onClick={()=> navigate('/')} className="bg-black hover:bg-gray-800 font-bold transition-all cursor-pointer hover:rounded-xl py-2 text-white px-3 rounded-lg mb-7 active:text-green-400">
-                  Return to HomePage</button></div>
+                <h1 className="mt-11 text-[16px]">I understand and return to</h1>
+                <button onClick={()=> navigate('/')} className={buttonStyle}>
+                  HomePage</button>
+                  <button className={buttonStyle} onClick={()=> navigate('/create')}>CreatePage</button></div>
             </div>
             </main>
     )
