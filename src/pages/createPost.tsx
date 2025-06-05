@@ -1,9 +1,9 @@
 import 'react-quill/dist/quill.snow.css';
 import { RichTextEditor } from '@mantine/rte';
 import { useState } from 'react';
-import { Navigate,useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { API_BASE } from '../components/api';
-import { addTag,HandleErrors,removeTag } from '../components/postTools';
+import { addTag,HandleErrors,removeTag,TOSagreement } from '../components/postTools';
 
 function CreatePost() {
   const [content, setContent] = useState('<span >Your content here</span>');
@@ -16,7 +16,6 @@ function CreatePost() {
   const [errorWarning, setErrorWarning] = useState(false);
   const [checkedTOS, setCheckedTOS] = useState(false);
 
-  const navigate = useNavigate()
 async function SubmitPost(e: React.FormEvent<HTMLFormElement>) {
   e.preventDefault()
 
@@ -132,7 +131,7 @@ async function SubmitPost(e: React.FormEvent<HTMLFormElement>) {
               Add
             </button>
           </div>
-          <div className="flex flex-wrap gap-2 mt-2">
+          <div className="flex flex-wrap gap-2 my-2">
             {tagList.map(tag => (
               <span
                 key={tag}
@@ -149,19 +148,9 @@ async function SubmitPost(e: React.FormEvent<HTMLFormElement>) {
               </span>
             ))}
           </div>
+          <hr/>
         </div>
-          <label className='cursor-pointer mt-[-10px]'>
-            <input
-              className="mr-2 ml-1 scale-126 transition-all hover:bg-green-400"
-              type="checkbox"
-              checked={checkedTOS}
-              onChange={() => setCheckedTOS(prev => !prev)}
-            />
-            <span>I agree to the 
-              <span className='underline ml-1' 
-              onClick={()=> navigate('/terms')}>terms of service</span></span>
-          </label>
-
+        <TOSagreement checkedTOS={checkedTOS} setCheckedTOS={setCheckedTOS} />
 
         <button
         title='Click to submit your post'

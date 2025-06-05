@@ -1,169 +1,184 @@
 import { useContext, useEffect, useState } from "react";
-import { Link, useParams,useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import ReactTimeAgo from "react-time-ago";
-import type { PostProps} from "../Post";
+import type { PostProps } from "../components/Post";
 import { UserContext } from "../userContext";
 import { API_BASE } from "../components/api";
 
 function PostPage() {
   const [postInfo, setPostInfo] = useState<PostProps | null>(null);
-  const {userInfo} = useContext(UserContext)
+  const { userInfo } = useContext(UserContext);
   const [likes, setLikes] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
   const { id } = useParams();
+  const navigate = useNavigate();
 
-  const tags = postInfo?.tags
+  const isTouchDevice = typeof window !== "undefined" &&
+    ("ontouchstart" in window || navigator.maxTouchPoints > 0);
 
-  const authorName = typeof postInfo?.author === 'object' ? postInfo?.author.username : postInfo?.author;
+  const authorName = typeof postInfo?.author === "object"
+    ? postInfo?.author.username
+    : postInfo?.author;
 
-        function TagsDisplay() {
-        const displayTags = tags && tags.length > 0 ? postInfo.tags : ['#noHashtags'];
+  const tags = postInfo?.tags ?? [];
 
-        return (
-          <div className="flex">
-            {displayTags?.map((tag, index) => (
-              <span key={index} className="mr-1 text-white transition-all px-1 py-1">
-                {tag.startsWith('#') ? tag : `#${tag}`}
-              </span>
-            ))}
-          </div>
-        );
-      }
+  function TagsDisplay() {
+    const displayTags = tags.length > 0 ? tags : ["#noHashtags"];
 
-useEffect(() => {
-  fetch(`${API_BASE}/post/${id}`)
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
-      return res.json();
-    })
-    .then((data: PostProps) => {
-      setPostInfo(data);
-      setLikes(data.likes || 0);
-    })
-    .catch((err) => {
-      console.error("Failed to fetch post:", err);
-    });
-}, [id]);
-
-const navigate = useNavigate();
-
-async function handleDelete() {
-  if (!window.confirm('Are you sure you want to delete this post?')) {
-    return;
+    return (
+      <div className="flex">
+        {displayTags.map((tag, index) => (
+          <span
+            key={index}
+            className="mr-1 text-white transition-all px-1 py-1"
+          >
+            {tag.startsWith("#") ? tag : `#${tag}`}
+          </span>
+        ))}
+      </div>
+    );
   }
 
-  try {
-    const res = await fetch(`${API_BASE}/delete/${postInfo?._id}`, {
-      method: 'DELETE',
-      credentials: 'include',
-    });
-    if (res.ok) {
-      navigate('/');
-    } else {
-      const data = await res.json();
-      alert('Failed to delete post: ' + (data.error || data.message));
+  useEffect(() => {
+    fetch(`${API_BASE}/post/${id}`)
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        return res.json();
+      })
+      .then((data: PostProps) => {
+        setPostInfo(data);
+        setLikes(data.likes || 0);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch post:", err);
+      });
+  }, [id]);
+
+  async function handleDelete() {
+    if (!window.confirm("Are you sure you want to delete this post?")) return;
+
+    try {
+      const res = await fetch(`${API_BASE}/delete/${postInfo?._id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      if (res.ok) {
+        navigate("/");
+      } else {
+        const data = await res.json();
+        alert("Failed to delete post: " + (data.error || data.message));
+      }
+    } catch (err) {
+      alert("Error deleting post");
+      console.error(err);
     }
-  } catch (err) {
-    alert('Error deleting post');
-    console.error(err);
   }
-}
 
+  useEffect(() => {
+    if (postInfo) {
+      setLikes(postInfo.likes);
+    }
+  }, [postInfo, userInfo]);
 
-useEffect(() => {
-  if (postInfo) {
-    setLikes(postInfo.likes);
+  async function handleLike() {
+    const res = await fetch(`${API_BASE}/post/${id}/like`, {
+      method: "POST",
+      credentials: "include",
+    });
+    const data = await res.json();
+    setLikes(data.likes);
   }
-}, [postInfo, userInfo]);
 
-async function handleLike() {
-  const res = await fetch(`${API_BASE}/post/${id}/like`, {
-    method: 'POST',
-    credentials: 'include',
-  });
-  const data = await res.json();
-
-  setLikes(data.likes);
-}
+  const handleHoverToggle = () => {
+    if (isTouchDevice) setIsHovering((prev) => !prev);
+  };
 
   const isOwner = userInfo &&
-  (userInfo.id === postInfo?.author._id || userInfo.username === "admin");
+    (userInfo.id === postInfo?.author._id || userInfo.username === "admin");
 
-
-  if (!postInfo) return <div className="text-center text-xl text-gray-700">Loading...</div>;
+  if (!postInfo)
+    return <div className="text-center text-xl text-gray-700">Loading...</div>;
 
   return (
-    <div className=" p-4 mb-5 max-w-2xl mx-auto relative overflow-hidden min-h-[300px]">
+    <div className="p-4 mb-5 max-w-2xl mx-auto relative overflow-hidden min-h-[300px]">
       <h1 className="text-xl md:text-3xl sm:text-2xl font-bold mb-2 text-center bg-gray-100 mx-auto p-1 rounded-b-3xl break-words">
         {postInfo.title}
       </h1>
 
-      <p className="text-sm font-bold text-gray00 mb-4 text-center bg-gray-100 w-[200px] mx-auto p-1 rounded-b-3xl">@{authorName}</p>
-      <hr/>
+      <p className="text-sm font-bold text-gray00 mb-4 text-center bg-gray-100 w-[200px] mx-auto p-1 rounded-b-3xl">
+        @{authorName}
+      </p><hr /><br />
 
-      <br/>
-      <h1 className="text-xl text-center">{postInfo.summary}</h1>
-      <br/>
-      <hr/>
-          <div
-            className={`text-lg mb-4 prose pt-2 max-w-none break-words
-            ${postInfo.content.length > 400 ? 'first-letter:text-5xl first-letter:font-medium first-letter:float-left first-letter:leading-none first-letter:mr-2' :''}`}
-            dangerouslySetInnerHTML={{ __html: postInfo.content }}
-          ></div>
+      <h1 className="text-xl text-center">{postInfo.summary}</h1><br />
+      <hr />
 
-
+      <div
+        className={`text-lg mb-4 prose pt-2 max-w-none break-words ${
+          postInfo.content.length > 400
+            ? "first-letter:text-5xl first-letter:font-medium first-letter:float-left first-letter:leading-none first-letter:mr-2"
+            : ""
+        }`}
+        dangerouslySetInnerHTML={{ __html: postInfo.content }}
+      ></div>
 
       <div>
-        <img src={`${API_BASE}/${postInfo.cover}`} alt="cover" className="w-full mt-2 h-[400px] sm:h-[510px] rounded-xl mb-4 border" />
+        <img
+          src={`${API_BASE}/${postInfo.cover}`}
+          alt="cover"
+          className="w-full mt-2 h-[400px] sm:h-[510px] rounded-xl mb-4 border"
+        />
 
-                <div className={`absolute z-50 items-center gap-2 right-8 
-                ${userInfo && (userInfo.id === postInfo.author._id || userInfo.username === 'admin') ? 'bottom-121 sm:bottom-148' : 'bottom-107 sm:bottom-134'}`}>
+        <div
+          className={`absolute z-50 items-center gap-2 right-8 ${
+            isOwner ? "bottom-121 sm:bottom-148" : "bottom-107 sm:bottom-134"
+          }`}
+        >
           <button
             onClick={handleLike}
             className="bg-black border-white border-3 hover:bg-gray-700 cursor-pointer transition-all active:bg-blue-600 text-white px-4 py-1 rounded-xl"
           >
-            {likes === 0 ? 'Like post' : <h1>{likes} Like{likes > 1 ? 's' : ''}</h1>}
+            {likes === 0 ? "Like post" : <h1>{likes} Like{likes > 1 ? "s" : ""}</h1>}
           </button>
         </div>
       </div>
-          {isOwner && (
-            <div
-            onMouseEnter={() => setIsHovering(true)}
-            onMouseLeave={() => setIsHovering(false)}
-              className={`flex items-center justify-center flex-wrap mb-1 text-white rounded-xl border-black border-3 transition-all bg-[#020303c9] p-2 w-full gap-4 ${
-                isHovering ? "bg-opacity-80 shadow-lg scale-[1.01]" : ""
-              }`}
-              onTouchStart={() => setIsHovering(true)}
-              onTouchEnd={() => setIsHovering(false)}
+
+      {isOwner && (
+        <div
+          onMouseEnter={() => !isTouchDevice && setIsHovering(true)}
+          onMouseLeave={() => !isTouchDevice && setIsHovering(false)}
+          onClick={handleHoverToggle}
+          className={`flex items-center justify-center flex-wrap mb-1 text-white rounded-xl border-black border-3 transition-all bg-[#020303c9] p-2 w-full gap-4 ${
+            isHovering ? "bg-opacity-80" : ""
+          }`}
+        >
+          <Link to={`/edit/${postInfo._id}`}>
+            <button
+              aria-label="Edit post"
+              className="bg-black cursor-pointer text-white hover:bg-white transition-all hover:text-black p-1 px-3 rounded-xl active:scale-95"
             >
-              <Link to={`/edit/${postInfo._id}`}>
-                <button
-                  aria-label="Edit post"
-                  className="bg-black cursor-pointer text-white hover:bg-white transition-all hover:text-black p-1 px-3 rounded-xl active:scale-95"
-                >
-                  Edit post
-                </button>
-              </Link>
+              Edit post
+            </button>
+          </Link>
 
-              <button
-                aria-label="Delete post"
-                onClick={handleDelete}
-                className="bg-black cursor-pointer text-white hover:bg-red-500 transition-all hover:text-black p-1 px-3 rounded-xl active:scale-95"
-              >
-                Delete post
-              </button>
-            </div>
-          )}
-
-        <div className="flex items-center flex-wrap text-white rounded-t-xl bg-[#020303c9] p-2 w-full">
-          <TagsDisplay />
-          
-          <div className="ml-auto text-sm opacity-80">
-            <ReactTimeAgo date={new Date(postInfo.createdAt).getTime()} locale="en-US" />
-          </div>
+          <button
+            aria-label="Delete post"
+            onClick={handleDelete}
+            className="bg-black cursor-pointer text-white hover:bg-red-500 transition-all hover:text-black p-1 px-3 rounded-xl active:scale-95"
+          >
+            Delete post
+          </button>
         </div>
+      )}
+
+      <div className="flex items-center flex-wrap text-white rounded-t-xl bg-[#020303c9] p-2 w-full">
+        <TagsDisplay />
+        <div className="ml-auto text-sm opacity-80">
+          <ReactTimeAgo
+            date={new Date(postInfo.createdAt).getTime()}
+            locale="en-US"
+          />
+        </div>
+      </div>
     </div>
   );
 }

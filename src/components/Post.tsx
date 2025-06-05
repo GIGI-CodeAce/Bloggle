@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import ReactTimeAgo from "react-time-ago";
-import { API_BASE } from "./components/api";
+import { API_BASE } from "./api";
 
 export interface PostProps {
   _id: number;
@@ -95,7 +95,7 @@ function PostContent({
       <div className="flex flex-col">
         <h1
         title={title}
-          className={`text-sm sm:text-lg xl:text-3xl md:text-2xl inline-block max-w-[210px] md:max-w-[710px] sm:max-w-[330px] font-semibold hover:cursor-pointer truncate ${
+          className={`text-sm sm:text-lg xl:text-3xl md:text-2xl inline-block max-w-[210px] md:max-w-[730px] sm:max-w-[330px] font-semibold hover:cursor-pointer truncate ${
             hoveredIndex === _id ? "underline" : ""
           }`}
         >
@@ -117,12 +117,12 @@ function PostContent({
             </span>
           </div>
 
-                    <div className="flex sm:hidden mt-1">
+                    <div className="flex sm:hidden">
             <TagsDisplay />
           </div>
         </div>
 
-          <h1 title={summary} className="text-sm/4.5 sm:mt-2 text-gray-500 xl:text-xl md:text-xl font-semibold hover:cursor-pointer line-clamp-2 max-w-[90%] w-full break-words">
+          <h1 title={summary} className="text-sm/4.5 sm:mt-2 text-gray-500 xl:text-xl md:text-xl font-semibold hover:cursor-pointer line-clamp-2 max-w-[100%] w-full break-words">
             {summary}
         </h1>
       </div>

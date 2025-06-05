@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import PostLayout from "../Post";
-import type { PostProps } from "../Post";
+import PostLayout from "../components/Post";
+import type { PostProps } from "../components/Post";
 import { API_BASE } from "../components/api";
+import { ArticlesPlaceholder } from "../components/postTools";
 
 function Articles() {
     const [posts, setPosts] = useState([]);
-    
+    const bloggleNews = true
+
     useEffect(() => {
         fetch(`${API_BASE}/post`)
             .then(res => res.json())
@@ -18,13 +20,10 @@ function Articles() {
 
     return (
         <main className="space-y-6 max-w-screen-xl mx-auto px-2 sm:px-4 py-6 min-h-[440px]">
-            {posts.length == 0 ?  
-            <div className="text-gray-500 flex-col text-center justify-center mt-20">
-            <h1 className="text-4xl">˙◠˙</h1>
-            <p className="text-lg">No interesting blogs or news found..</p><br/>
-            <p className="text-lg">Sign in and create your own!</p>
-          </div>
-           : posts.map((post: PostProps) => (
+            {posts.length == 0 ?
+             <ArticlesPlaceholder bloggleNews={bloggleNews} />
+            :
+             posts.map((post: PostProps) => (
                 <PostLayout key={post._id} {...post} />
             ))}
         </main>

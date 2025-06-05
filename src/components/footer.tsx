@@ -1,5 +1,7 @@
+import { useNavigate } from "react-router-dom"
 
 function Footer(){
+    const navigate = useNavigate()
 
     return(
         <main className=" text-white"> 
@@ -7,7 +9,8 @@ function Footer(){
         <div className="bg-[#020303e9] h-[20px]"></div>
         <footer className=" text-center bg-linear-to-b from-[#020303c1] via-[#020303d9] to-[#020303e9] text-white h-[350px] pt-8 flex justify-around">
         <div
-            className="w-80 h-80 bg-cover hidden lg:block rounded-xl"
+        onClick={()=>navigate('/terms')}
+            className="w-80 h-80 bg-cover hidden lg:block rounded-xl cursor-pointer"
             style={{
                 backgroundImage: "url('https://raw.githubusercontent.com/GIGIsOtherStuff/mainWebMedia/main/AppImages/myProjectsImgs/bloggleLogo.png')"}}>
                 </div>
@@ -36,7 +39,7 @@ function Footer(){
             </ul>
             </div>
         </footer>
-    <h1 className="bg-[#020303e9] text-white text-sm">v1.3.8</h1>
+    <h1 className="bg-[#020303e9] text-white text-sm">v1.3.9</h1>
         </main>
     )
 }

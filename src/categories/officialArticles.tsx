@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import type { PostProps } from "../Post";
-import PostLayout from "../Post";
+import type { PostProps } from "../components/Post";
+import PostLayout from "../components/Post";
 import { API_BASE } from "../components/api";
+import { ArticlesPlaceholder } from "../components/postTools";
 
 interface NewsApiArticle {
   source: { id: string | null; name: string };
@@ -16,6 +17,7 @@ interface NewsApiArticle {
 
 function OfficialArticles() {
   const [posts, setPosts] = useState<PostProps[]>([]);
+  const bloggleNews = false
 
   useEffect(() => {
     const fetchNews = async () => {
@@ -56,12 +58,7 @@ function OfficialArticles() {
   return (
     <div className="space-y-6 max-w-screen-xl mx-auto px-2 sm:px-4 py-6 min-h-[440px]">
       <ul>
-        {posts.length == 0 ? (      
-           <div className="text-gray-500 flex-col text-center justify-center mt-20">
-            <h1 className="text-4xl">o_O</h1>
-            <p className="text-lg">No external api news found..</p><br/>
-            <p className="text-lg">Come back and retry later</p>
-          </div>) :
+        {posts.length == 0 ? (<ArticlesPlaceholder bloggleNews={bloggleNews}/>) :
         posts.map((post: PostProps) => (
           <PostLayout key={post._id} {...post} />
         ))}

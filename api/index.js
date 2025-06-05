@@ -287,36 +287,58 @@ app.get('/post', async(req, res)=>{
 
 
 app.get('/news', async (req, res) => {
-  const NEWS_API_KEY = process.env.NEWS_API_KEY
+  const NEWS_API_KEYS = [
+    process.env.NEWS_API_KEY1,
+    process.env.NEWS_API_KEY2,
+    process.env.NEWS_API_KEY3
+  ].filter(Boolean); 
+  console.log(process.env.NEWS_API_KEY1)
+  console.log(process.env.NEWS_API_KEY2)
+  console.log(process.env.NEWS_API_KEY3)
+  
 
-  if (!NEWS_API_KEY) {
-    return res.status(500).json({ error: 'Missing NEWS_API_KEY in environment' })
+  if (NEWS_API_KEYS.length === 0) {
+    return res.status(500).json({ error: 'No News API keys provided' })
   }
 
-  const apiUrl = `https://newsapi.org/v2/top-headlines?country=us&category=technology&pageSize=22&apiKey=${NEWS_API_KEY}`
+  const baseUrl = 'https://newsapi.org/v2/top-headlines?country=us&category=technology&pageSize=22';
 
-  try {
-    const response = await fetch(apiUrl)
-    const data = await response.json()
+  let lastError = null;
 
-    //  Log response details
-    console.log('🔍 NewsAPI response status:', response.status)
-    console.log('🔍 NewsAPI response body:', data)
+  for (const apiKey of NEWS_API_KEYS) {
+    const apiUrl = `${baseUrl}&apiKey=${apiKey}`
+    console.log(apiUrl)
+    
+    try {
+      const response = await fetch(apiUrl)
+      const data = await response.json()
 
-    if (response.status !== 200 || data.status !== 'ok') {
-      return res.status(500).json({
-        error: 'Failed to fetch news from NewsAPI',
-        status: response.status,
-        details: data,
-      });
+      console.log('🔍 Trying API key:', apiKey)
+      console.log('🔍 NewsAPI response status:', response.status)
+      console.log('🔍 NewsAPI response body:', data)
+
+      if (response.status === 200 && data.status === 'ok') {
+        return res.json(data)
+      } else {
+        lastError = {
+          status: response.status,
+          details: data,
+        };
+        continue
+      }
+    } catch (err) {
+      console.error('❌ Error with API key:', apiKey, err);
+      lastError = err
+      continue
     }
-
-    res.json(data)
-  } catch (err) {
-    console.error('❌ News API error:', err)
-    res.status(500).json({ error: 'Error fetching news' })
   }
-})
+
+  res.status(500).json({
+    error: 'All News API keys failed',
+    details: lastError
+  });
+});
+
 
 
 
