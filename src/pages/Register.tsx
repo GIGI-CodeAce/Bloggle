@@ -1,40 +1,40 @@
-import { useState, useEffect, type FormEvent } from "react";
-import { API_BASE } from "../components/api";
+import { useState, useEffect, type FormEvent } from "react"
+import { API_BASE } from "../components/api"
 
 function RegisterPage() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [repeatPassword, setRepeatPassword] = useState('');
-  const [warningMessage, setWarningMessage] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [repeatPassword, setRepeatPassword] = useState('')
+  const [warningMessage, setWarningMessage] = useState('')
+  const [successMessage, setSuccessMessage] = useState('')
   const [visible, setVisible] = useState(true)
 
   function ResetRegister() {
-    setUsername('');
-    setPassword('');
+    setUsername('')
+    setPassword('')
     setRepeatPassword('')
   }
 
   useEffect(() => {
-    setWarningMessage('');
-    setSuccessMessage('');
-  }, [username, password]);
+    setWarningMessage('')
+    setSuccessMessage('')
+  }, [username, password])
 
  async function Register(e: FormEvent) {
   e.preventDefault();
 
-  setWarningMessage('');
-  setSuccessMessage('');
+  setWarningMessage('')
+  setSuccessMessage('')
 
 
   if (!username || !password) {
     setWarningMessage('Please enter your register information');
-    return;
+    return
   }
 
   if (password !== repeatPassword) {
     setWarningMessage('Passwords do not match.');
-    return;
+    return
   }
 
   const response = await fetch(`${API_BASE}/register`, {
@@ -42,23 +42,23 @@ function RegisterPage() {
     body: JSON.stringify({ username, password }),
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
-  });
+  })
 
   if (response.status !== 200) {
-    const errorData = await response.json();
+    const errorData = await response.json()
     if (errorData?.error === 'Username already exists') {
-      setWarningMessage('Username already taken');
+      setWarningMessage('Username already taken')
     } else {
         if(username.length > 15 || username.length <= 3){
     setWarningMessage('Username should be over 4 and less than 15 characters long')
   }else{
-    setWarningMessage('Registration failed. Please try again.');
+    setWarningMessage('Registration failed. Please try again.')
   }
     }
   } else {
-    setSuccessMessage('Account created. Go to login to sign in.');
+    setSuccessMessage('Account created. Go to login to sign in.')
     setTimeout(() => {
-      ResetRegister();
+      ResetRegister()
     }, 2222);
   }
 }
@@ -127,4 +127,4 @@ function RegisterPage() {
   );
 }
 
-export default RegisterPage;
+export default RegisterPage

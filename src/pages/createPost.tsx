@@ -126,9 +126,9 @@ async function SubmitPost(e: React.FormEvent<HTMLFormElement>) {
             <button
               type="button"
               onClick={()=> addTag({tagInput, tagList, setTagList, setTagInput})}
-              className="bg-black hover:bg-gray-800 transition-all cursor-pointer hover:rounded-lg text-white px-3 rounded"
-            >
-              Add
+              className="bg-black active:text-green-400 hover:bg-gray-800 transition-all
+                          cursor-pointer hover:rounded-lg text-white px-3 rounded"
+            > Add
             </button>
           </div>
           <div className="flex flex-wrap gap-2 my-2">
@@ -155,13 +155,14 @@ async function SubmitPost(e: React.FormEvent<HTMLFormElement>) {
         <button
         title='Click to submit your post'
           type="submit"
-          className="text-white hover:rounded-xl active:text-green-400 transition-all px-4 py-2 rounded-lg cursor-pointer bg-black hover:bg-gray-800"
+          className="text-white hover:rounded-xl active:text-green-400 transition-all
+                       px-4 py-2 rounded-lg cursor-pointer bg-black hover:bg-gray-800"
         >
           Submit
         </button>
       </form>
        <HandleErrors title={title} checkedTOS={checkedTOS} summary={summary} errorWarning={errorWarning} />
-      <div className="text-center m-2">
+      <div className="text-center sm:my-2 my-5">
         <h1 className="text-center text-xl font-extrabold">
           Bloggle It Out: <span className="text-gray-600">Share What’s On Your Mind</span>
         </h1>

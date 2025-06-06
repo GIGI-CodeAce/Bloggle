@@ -1,35 +1,35 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import ReactTimeAgo from "react-time-ago";
-import { API_BASE } from "./api";
+import { useState } from "react"
+import { Link } from "react-router-dom"
+import ReactTimeAgo from "react-time-ago"
+import { API_BASE } from "./api"
 
 export interface PostProps {
-  _id: number;
-  cover: string;
-  title: string;
-  likes: number;
-  likedBy: Array<string>;
-  summary: string;
-  content: string;
+  _id: number
+  cover: string
+  title: string
+  likes: number
+  likedBy: Array<string>
+  summary: string
+  content: string
   createdAt: number;
-  author: { _id: string; username: string };
-  tags?: string[];
-  postUrl?: string;
+  author: { _id: string; username: string }
+  tags?: string[]
+  postUrl?: string
 }
 
 function PostLayout(props: PostProps) {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-    typeof props.author === "object" ? props.author.username : props.author;
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+    typeof props.author === "object" ? props.author.username : props.author
 
   const commonProps = {
     onMouseEnter: () => setHoveredIndex(props._id),
     onMouseLeave: () => setHoveredIndex(null),
     onTouchStart: () =>
       setHoveredIndex((prev) => (prev === props._id ? null : props._id)),
-    className: `flex space-x-4 mb-2 h-[120px] xl:h-[180px] rounded-xl transition-all ${
+    className: `flex space-x-4 sm:mb-3 mb-2 h-[120px] xl:h-[180px] rounded-xl transition-all ${
       hoveredIndex === props._id ? "bg-gray-100" : ""
     }`,
-  };
+  }
 
   if (props.postUrl) {
     return (
@@ -41,7 +41,7 @@ function PostLayout(props: PostProps) {
       >
         <PostContent {...props} hoveredIndex={hoveredIndex} />
       </a>
-    );
+    )
   }
 
   return (
@@ -130,4 +130,4 @@ function PostContent({
   );
 }
 
-export default PostLayout;
+export default PostLayout

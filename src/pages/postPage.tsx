@@ -7,23 +7,20 @@ import { API_BASE } from "../components/api";
 
 function PostPage() {
   const [postInfo, setPostInfo] = useState<PostProps | null>(null);
-  const { userInfo } = useContext(UserContext);
-  const [likes, setLikes] = useState(0);
-  const [isHovering, setIsHovering] = useState(false);
-  const { id } = useParams();
-  const navigate = useNavigate();
-
-  const isTouchDevice = typeof window !== "undefined" &&
-    ("ontouchstart" in window || navigator.maxTouchPoints > 0);
+  const { userInfo } = useContext(UserContext)
+  const [likes, setLikes] = useState(0)
+  const [isHovering, setIsHovering] = useState('')
+  const { id } = useParams()
+  const navigate = useNavigate()
 
   const authorName = typeof postInfo?.author === "object"
     ? postInfo?.author.username
     : postInfo?.author;
 
-  const tags = postInfo?.tags ?? [];
+  const tags = postInfo?.tags ?? []
 
   function TagsDisplay() {
-    const displayTags = tags.length > 0 ? tags : ["#noHashtags"];
+    const displayTags = tags.length > 0 ? tags : ["#noHashtags"]
 
     return (
       <div className="flex">
@@ -43,16 +40,16 @@ function PostPage() {
     fetch(`${API_BASE}/post/${id}`)
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-        return res.json();
+        return res.json()
       })
       .then((data: PostProps) => {
         setPostInfo(data);
-        setLikes(data.likes || 0);
+        setLikes(data.likes || 0)
       })
       .catch((err) => {
-        console.error("Failed to fetch post:", err);
+        console.error("Failed to fetch post:", err)
       });
-  }, [id]);
+  }, [id])
 
   async function handleDelete() {
     if (!window.confirm("Are you sure you want to delete this post?")) return;
@@ -61,43 +58,42 @@ function PostPage() {
       const res = await fetch(`${API_BASE}/delete/${postInfo?._id}`, {
         method: "DELETE",
         credentials: "include",
-      });
+      })
       if (res.ok) {
-        navigate("/");
+        navigate("/")
       } else {
-        const data = await res.json();
+        const data = await res.json()
         alert("Failed to delete post: " + (data.error || data.message));
       }
     } catch (err) {
-      alert("Error deleting post");
+      alert("Error deleting post")
       console.error(err);
     }
   }
 
   useEffect(() => {
     if (postInfo) {
-      setLikes(postInfo.likes);
+      setLikes(postInfo.likes)
     }
-  }, [postInfo, userInfo]);
+  }, [postInfo, userInfo])
 
   async function handleLike() {
     const res = await fetch(`${API_BASE}/post/${id}/like`, {
       method: "POST",
       credentials: "include",
     });
-    const data = await res.json();
+    const data = await res.json()
     setLikes(data.likes);
   }
 
   const handleHoverToggle = () => {
-    if (isTouchDevice) setIsHovering((prev) => !prev);
   };
 
   const isOwner = userInfo &&
-    (userInfo.id === postInfo?.author._id || userInfo.username === "admin");
+    (userInfo.id === postInfo?.author._id || userInfo.username === "admin")
 
   if (!postInfo)
-    return <div className="text-center text-xl text-gray-700">Loading...</div>;
+    return <div className="text-center text-xl text-gray-700">Loading...</div>
 
   return (
     <div className="p-4 mb-5 max-w-2xl mx-auto relative overflow-hidden min-h-[300px]">
@@ -135,7 +131,7 @@ function PostPage() {
         >
           <button
             onClick={handleLike}
-            className="bg-black border-white border-3 hover:bg-gray-700 cursor-pointer transition-all active:bg-blue-600 text-white px-4 py-1 rounded-xl"
+            className="bg-black border-white border-2 hover:bg-gray-800 cursor-pointer transition-all active:bg-blue-600 text-white px-4 py-1 rounded-xl"
           >
             {likes === 0 ? "Like post" : <h1>{likes} Like{likes > 1 ? "s" : ""}</h1>}
           </button>
@@ -144,8 +140,6 @@ function PostPage() {
 
       {isOwner && (
         <div
-          onMouseEnter={() => !isTouchDevice && setIsHovering(true)}
-          onMouseLeave={() => !isTouchDevice && setIsHovering(false)}
           onClick={handleHoverToggle}
           className={`flex items-center justify-center flex-wrap mb-1 text-white rounded-xl border-black border-3 transition-all bg-[#020303c9] p-2 w-full gap-4 ${
             isHovering ? "bg-opacity-80" : ""
@@ -153,17 +147,23 @@ function PostPage() {
         >
           <Link to={`/edit/${postInfo._id}`}>
             <button
+              onMouseEnter={() => setIsHovering('edit')}
+              onMouseLeave={() => setIsHovering('')}
               aria-label="Edit post"
-              className="bg-black cursor-pointer text-white hover:bg-white transition-all hover:text-black p-1 px-3 rounded-xl active:scale-95"
+              className={`bg-black cursor-pointer transition-all p-1 px-3 rounded-xl active:scale-95
+                          ${isHovering == 'edit' ? 'bg-white text-black' :''}`}
             >
               Edit post
             </button>
           </Link>
 
           <button
+            onMouseEnter={() => setIsHovering('delete')}
+            onMouseLeave={() => setIsHovering('')}
             aria-label="Delete post"
             onClick={handleDelete}
-            className="bg-black cursor-pointer text-white hover:bg-red-500 transition-all hover:text-black p-1 px-3 rounded-xl active:scale-95"
+            className={`bg-black cursor-pointer text-white transition-all p-1 px-3 rounded-xl active:scale-95
+                        ${isHovering == "delete" ? 'bg-red-500 text-black' :''}`}
           >
             Delete post
           </button>
@@ -183,4 +183,4 @@ function PostPage() {
   );
 }
 
-export default PostPage;
+export default PostPage

@@ -6,7 +6,7 @@ import { ArticlesPlaceholder } from "../components/postTools";
 
 function Articles() {
     const [posts, setPosts] = useState([]);
-    const bloggleNews = true
+    const bloggleNews = true;
 
     useEffect(() => {
         fetch(`${API_BASE}/post`)
@@ -16,16 +16,18 @@ function Articles() {
             })
             .catch(err => console.error("Error fetching posts:", err));
     }, []);
-    
+
 
     return (
-        <main className="space-y-6 max-w-screen-xl mx-auto px-2 sm:px-4 py-6 min-h-[440px]">
-            {posts.length == 0 ?
-             <ArticlesPlaceholder bloggleNews={bloggleNews} />
-            :
-             posts.map((post: PostProps) => (
-                <PostLayout key={post._id} {...post} />
-            ))}
+                <main className="relative space-y-6 max-w-screen-xl mx-auto px-2 sm:px-4 pt-6 pb-2 min-h-[440px]">
+            {posts.length === 0 ? (
+                <ArticlesPlaceholder bloggleNews={bloggleNews} />
+            ) : (
+                posts.map((post: PostProps) => (
+                    <PostLayout key={post._id} {...post} />
+                ))
+            )}
+
         </main>
     );
 }

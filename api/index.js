@@ -296,84 +296,47 @@ app.get('/post', async(req, res)=>{
 
 let cachedNews = null;
 let cacheTimestamp = 0;
-const CACHE_DURATION_MS = 1000 * 60 * 10; // 10 minutes
+const CACHE_DURATION_MS = 1000 * 60 * 10;
+
+
+// News backend
 
 app.get('/news', async (req, res) => {
-  const now = Date.now();
+  const now = Date.now()
+  const GUARDIAN_API_KEY = process.env.NEWS_API_KEY
+  const GUARDIAN_BASE_URL = `https://content.guardianapis.com/search?section=technology&show-fields=all&page-size=22&api-key=${GUARDIAN_API_KEY}`
+
+  if (!GUARDIAN_API_KEY) {
+    return res.status(500).json({ error: 'No Guardian API key provided' });
+  }
 
   if (cachedNews && now - cacheTimestamp < CACHE_DURATION_MS) {
-    console.log('🟢 Returning cached news data')
-    return res.json(cachedNews)
+    console.log('🟢 Returning cached Guardian news data');
+    return res.json(cachedNews);
   }
 
-  const NEWS_API_KEYS = [
-    process.env.NEWS_API_KEY1,
-    process.env.NEWS_API_KEY2,
-    process.env.NEWS_API_KEY3,
-  ].filter(Boolean);
+  try {
+    const response = await fetch(GUARDIAN_BASE_URL);
+    const contentType = response.headers.get('content-type');
 
-  console.log('🟡 Loaded API Keys:', NEWS_API_KEYS)
-
-  if (NEWS_API_KEYS.length === 0) {
-    return res.status(500).json({ error: 'No News API keys provided' })
-  }
-
-  const baseUrl =
-    'https://newsapi.org/v2/top-headlines?country=us&category=technology&pageSize=22'
-
-  let lastError = null
-
-  for (const apiKey of NEWS_API_KEYS) {
-    const apiUrl = `${baseUrl}&apiKey=${apiKey}`
-    console.log('➡️ Trying URL:', apiUrl)
-
-    try {
-      const response = await fetch(apiUrl);
-      const contentType = response.headers.get('content-type')
-
-      if (!contentType || !contentType.includes('application/json')) {
-        const text = await response.text();
-        console.error('❌ Expected JSON but got:', text.slice(0, 300))
-        lastError = {
-          status: response.status,
-          message: 'Invalid response: expected JSON but received non-JSON content',
-          raw: text.slice(0, 300),
-        };
-        continue;
-      }
-
-      const data = await response.json()
-
-      console.log('✅ Attempt with API key:', apiKey)
-      console.log('🔎 Status:', response.status, '| Data status:', data.status)
-
-      if (response.status === 200 && data.status === 'ok') {
-        // ✅ Save to cache
-        cachedNews = data
-        cacheTimestamp = now
-
-        return res.json(data)
-      } else {
-        lastError = {
-          status: response.status,
-          error: data,
-        };
-      }
-    } catch (err) {
-      console.error('❌ Fetch error with API key:', apiKey, err)
-      lastError = {
-        message: err.message || 'Unknown error',
-        stack: err.stack,
-      };
+    if (!contentType || !contentType.includes('application/json')) {
+      const text = await response.text();
+      return res.status(500).json({ error: 'Expected JSON but got non-JSON', raw: text.slice(0, 300) });
     }
+
+    const data = await response.json();
+
+    if (response.status === 200 && data.response?.status === "ok") {
+      cachedNews = data;
+      cacheTimestamp = now;
+      return res.json(data);
+    } else {
+      return res.status(500).json({ error: 'Failed to fetch news from The Guardian', details: data });
+    }
+  } catch (err) {
+    return res.status(500).json({ error: 'Fetch error', message: err.message });
   }
-
-  return res.status(500).json({
-    error: 'All News API keys failed',
-    details: lastError,
-  });
 });
-
 
 
 app.listen(PORT, () => {

@@ -121,9 +121,6 @@ async function updatePost(e: React.FormEvent<HTMLFormElement>) {
           type="text"
           placeholder="Post summary"
         />
-        {files?.[0] && (
-          <p className="text-sm text-gray-600">Selected: {files[0].name}</p>
-        )}
         <input
           className="border rounded-lg p-2"
           type="file"
@@ -157,9 +154,9 @@ async function updatePost(e: React.FormEvent<HTMLFormElement>) {
             <button
               type="button"
               onClick={()=>addTag({tagInput, tagList, setTagList, setTagInput})}
-              className="bg-black hover:bg-gray-800 text-white px-3 rounded cursor-pointer transition-all hover:rounded-[10px] active:text-green-400"
-            >
-              Add
+              className="bg-black hover:bg-gray-800 text-white px-3 rounded cursor-pointer
+                           transition-all hover:rounded-[10px] active:text-green-400"
+            > Add
             </button>
           </div>
           <div className="flex flex-wrap gap-2 my-2">

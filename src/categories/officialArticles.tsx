@@ -1,69 +1,63 @@
-import { useEffect, useState } from "react";
-import type { PostProps } from "../components/Post";
-import PostLayout from "../components/Post";
-import { API_BASE } from "../components/api";
-import { ArticlesPlaceholder } from "../components/postTools";
-
-interface NewsApiArticle {
-  source: { id: string | null; name: string };
-  author: string | null;
-  title: string;
-  description: string | null;
-  url: string;
-  urlToImage: string | null;
-  publishedAt: string;
-  content: string | null;
-}
+import { useEffect, useState } from "react"
+import type { PostProps } from "../components/Post"
+import PostLayout from "../components/Post"
+import { API_BASE } from "../components/api"
+import { ArticlesPlaceholder } from "../components/postTools"
 
 function OfficialArticles() {
-  const [posts, setPosts] = useState<PostProps[]>([]);
+  const [posts, setPosts] = useState<PostProps[]>([])
   const bloggleNews = false
 
-useEffect(() => {
-  const fetchNews = async () => {
-    try {
-      const res = await fetch(`${API_BASE}/news`);
-      const data = await res.json();
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/news`)
+        const data = await res.json()
 
-      const formattedPosts: PostProps[] = data.articles.map(
-        (article: NewsApiArticle, index: number): PostProps => ({
+        if (!data.response?.results || data.response.results.length === 0) {
+          setPosts([])
+          return
+        }
+
+        const formattedPosts: PostProps[] = data.response.results.map((article: any, index: number): PostProps => ({
           _id: index + 1,
-          cover: article.urlToImage || "https://raw.githubusercontent.com/GIGIsOtherStuff/mainWebMedia/main/AppImages/others/imageNotFound.jpeg",
-          title: article.title,
+          cover:
+            article.fields?.thumbnail ||
+            "https://raw.githubusercontent.com/GIGIsOtherStuff/mainWebMedia/main/AppImages/others/imageNotFound.jpeg",
+          title: article.webTitle,
           likes: 0,
           likedBy: [],
-          postUrl: article.url,
-          summary: article.description || "No summary available.",
-          content: article.content || article.description || "No content available.",
-          createdAt: new Date(article.publishedAt).getTime(),
+          postUrl: article.webUrl,
+          summary: article.fields?.trailText || "No summary available.",
+          content: article.fields?.bodyText || "No content available.",
+          createdAt: new Date(article.webPublicationDate).getTime(),
           author: {
-            _id: article.source.id ?? "newsapi",
-            username: article.source.name ?? "Unknown Source",
+            _id: article.fields?.byline || "guardian",
+            username: article.fields?.byline || "The Guardian",
           },
-          tags: ["news", "official", "trusted"],
-        })
-      );
+          tags: ["news", "official", "guardian"],
+        }));
 
-      setPosts(formattedPosts);
-    } catch (error) {
-      console.error("Error fetching news:", error);
-    }
-  };
+        setPosts(formattedPosts)
+      } catch (error) {
+        console.error("Error fetching Guardian news:", error)
+      }
+    };
 
-  fetchNews();
-}, []);
-
+    fetchNews();
+  }, []);
 
   return (
-    <div className="space-y-6 max-w-screen-xl mx-auto px-2 sm:px-4 py-6 min-h-[440px]">
+    <div className="space-y-6 max-w-screen-xl mx-auto px-2 sm:px-4 pt-6 pb-2 min-h-[440px]">
       <ul>
-        {posts.length == 0 ? (<ArticlesPlaceholder bloggleNews={bloggleNews}/>) :
-        posts.map((post: PostProps) => (
-          <PostLayout key={post._id} {...post} />
-        ))}
+        {posts.length === 0 ? (
+          <ArticlesPlaceholder bloggleNews={bloggleNews} />
+        ) : (
+          posts.map((post: PostProps) => <PostLayout key={post._id} {...post} />)
+        )}
       </ul>
     </div>
   );
 }
 
-export default OfficialArticles;
+export default OfficialArticles

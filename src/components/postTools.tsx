@@ -2,32 +2,32 @@ import { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface AddTagProps {
-  tagInput: string;
-  tagList: string[];
-  setTagList: (tags: string[]) => void;
-  setTagInput: (input: string) => void;
+  tagInput: string
+  tagList: string[]
+  setTagList: (tags: string[]) => void
+  setTagInput: (input: string) => void
 }
 
 export function addTag({ tagInput, tagList, setTagList, setTagInput }: AddTagProps) {
-  let cleaned = tagInput.trim().replace(/\s+/g, '');
+  let cleaned = tagInput.trim().replace(/\s+/g, '')
 
   if (!cleaned.startsWith('#')) {
-    cleaned = `#${cleaned}`;
+    cleaned = `#${cleaned}`
   }
 
-  const rawTag = cleaned.slice(1);
+  const rawTag = cleaned.slice(1)
 
   if (
     rawTag.length >= 2 &&
     rawTag.length <= 15 &&
     !tagList.includes(cleaned)
   ) {
-    setTagList([...tagList, cleaned]);
-    setTagInput('');
+    setTagList([...tagList, cleaned])
+    setTagInput('')
   }
 }
 interface ArticlesPlaceholderProps {
-  bloggleNews: boolean;
+  bloggleNews: boolean
 }
 
 export function ArticlesPlaceholder({ bloggleNews }: ArticlesPlaceholderProps) {
@@ -35,11 +35,11 @@ export function ArticlesPlaceholder({ bloggleNews }: ArticlesPlaceholderProps) {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setNotFound(true);
+      setNotFound(true)
     }, 1000);
 
-    return () => clearTimeout(timer);
-  }, []);
+    return () => clearTimeout(timer)
+  }, [])
 
   return (
     <div className="text-gray-500 flex-col text-center justify-center mt-20">
@@ -71,8 +71,8 @@ export function ArticlesPlaceholder({ bloggleNews }: ArticlesPlaceholderProps) {
 }
 
 interface TOSProps {
-  checkedTOS: boolean;
-  setCheckedTOS: React.Dispatch<React.SetStateAction<boolean>>;
+  checkedTOS: boolean
+  setCheckedTOS: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export function TOSagreement({ checkedTOS, setCheckedTOS }: TOSProps) {
@@ -81,7 +81,7 @@ export function TOSagreement({ checkedTOS, setCheckedTOS }: TOSProps) {
   return (
     <label className="cursor-pointer mt-[-10px]">
       <input
-        className="mr-2 ml-1 scale-126 transition-all hover:bg-green-400"
+        className="mr-2 ml-1 scale-126 bg-green-400 transition-all hover:bg-green-400"
         type="checkbox"
         checked={checkedTOS}
         onChange={() => setCheckedTOS((prev) => !prev)}
@@ -98,31 +98,31 @@ export function TOSagreement({ checkedTOS, setCheckedTOS }: TOSProps) {
 
 
 export interface RemoveTagProps {
-  tag: string;
-  tagList: string[];
-  setTagList: (tags: string[]) => void;
+  tag: string
+  tagList: string[]
+  setTagList: (tags: string[]) => void
 }
 
 export function removeTag({ tag, tagList, setTagList }: RemoveTagProps) {
-  setTagList(tagList.filter(t => t !== tag));
+  setTagList(tagList.filter(t => t !== tag))
 }
 
 
 interface HandleErrorsProps {
-  title: string;
+  title: string
   summary: string
   checkedTOS: boolean
-  errorWarning: boolean;
+  errorWarning: boolean
 }
 
 export function HandleErrors({ title,summary,checkedTOS, errorWarning }: HandleErrorsProps) {
 
     return (
-      <h1 className="h-6 text-center text-red-600 mt-1">
+      <h1 className="h-6 text-center text-[15px] text-red-600 mt-1">
         {!errorWarning ? '' : title.length < 4 || title.length > 35 ? 
         'Title must be between 4 and 35 characters' : summary.length < 10 ? 'Post summary is too short' : 
         !checkedTOS ? 'You have to agree to our terms of service' : 
         'Failed to create post. Make sure all fields are filled in correctly.'}
       </h1>
-    );
+    )
 }
