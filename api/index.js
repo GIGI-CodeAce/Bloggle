@@ -8,6 +8,7 @@ import cookieParser from 'cookie-parser';
 import multer from 'multer';
 import fs from 'fs'
 import PostModel from './models/post.js'
+import moderationRoutes from './moderation.js';
 
 import dotenv from 'dotenv';
 import path from 'path';
@@ -17,7 +18,6 @@ dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
 
 const PORT = process.env.PORT || 4000
 const JWT_SECRET = process.env.JWT_SECRET || 'default_jwt_secret';
@@ -42,6 +42,8 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser())
 app.use('/uploads', express.static(__dirname+ '/uploads'))
+app.use(express.json());
+app.use('/api', moderationRoutes);
 
 
 mongoose.connect(process.env.MONGO_URI)

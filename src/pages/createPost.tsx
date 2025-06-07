@@ -17,23 +17,50 @@ function CreatePost() {
   const [checkedTOS, setCheckedTOS] = useState(false);
 
 async function SubmitPost(e: React.FormEvent<HTMLFormElement>) {
-  e.preventDefault()
+  e.preventDefault();
 
   if (title.length < 4 || title.length > 35 || summary.length < 10 || !checkedTOS) {
-    setErrorWarning(true)
-    return
+    setErrorWarning(true);
+    return;
   }
 
-  setErrorWarning(false)
+  setErrorWarning(false);
 
-  const data = new FormData()
-  data.set('title', title)
-  data.set('summary', summary)
-  data.set('content', content)
-  data.set('tags', JSON.stringify(tagList))
+  // --- AI Moderation Step ---
+  try {
+    const moderationRes = await fetch(`${API_BASE}/api/moderate`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        title,
+        summary,
+        content,
+      }),
+    });
+
+    if (!moderationRes.ok) {
+      const errorData = await moderationRes.json();
+      alert(`AI Moderation failed: ${errorData.message || 'Content flagged'}`);
+      return;
+    }
+  } catch (modError) {
+    console.error('AI Moderation error:', modError);
+    alert('An error occurred during moderation. Please try again.');
+    return;
+  }
+
+  // --- Proceed to Submit Post ---
+  const data = new FormData();
+  data.set('title', title);
+  data.set('summary', summary);
+  data.set('content', content);
+  data.set('tags', JSON.stringify(tagList));
 
   if (files && files[0]) {
-    data.set('file', files[0])
+    data.set('file', files[0]);
   }
 
   try {
@@ -44,25 +71,27 @@ async function SubmitPost(e: React.FormEvent<HTMLFormElement>) {
     });
 
     if (!response.ok) {
-      setErrorWarning(true)
-      throw new Error('Failed to create post')
+      setErrorWarning(true);
+      throw new Error('Failed to create post');
     }
-    setRedirect(true)
+
+    setRedirect(true);
   } catch (err) {
-    console.error('Error creating post:', err)
+    console.error('Error creating post:', err);
   }
 }
 
 
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      e.preventDefault();
-      addTag({tagInput, tagList, setTagList, setTagInput});
+      e.preventDefault()
+      addTag({tagInput, tagList, setTagList, setTagInput})
     }
   };
 
     if (redirect) {
-    return <Navigate to="/" />;
+    return <Navigate to="/" />
   }
 
   return (
@@ -171,4 +200,4 @@ async function SubmitPost(e: React.FormEvent<HTMLFormElement>) {
   );
 }
 
-export default CreatePost;
+export default CreatePost

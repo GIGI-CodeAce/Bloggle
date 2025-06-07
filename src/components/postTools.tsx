@@ -61,7 +61,7 @@ export function ArticlesPlaceholder({ bloggleNews }: ArticlesPlaceholderProps) {
         )
       ) : (
         <div>
-        <span className="material-symbols-outlined revert !text-[25px]">
+        <span className="material-symbols-outlined revert animate-spin !text-[25px]">
           refresh</span>
         <div className="text-xl animate-pulse">Loading API...</div>
         </div>

@@ -13,7 +13,7 @@ import PostPage from './src/pages/postPage.tsx'
 import en from 'javascript-time-ago/locale/en'
 import EditPost from './src/pages/editPost.tsx'
 import OfficialArticles from './src/categories/officialArticles.tsx'
-import TermsOfUsePage from './src/pages/termsOfSse.tsx'
+import TermsOfUsePage from './src/pages/termsOfSuse.tsx'
  
 TimeAgo.addDefaultLocale(en)
 
