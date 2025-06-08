@@ -6,7 +6,7 @@ import { API_BASE } from '../components/api';
 import { addTag,HandleErrors,removeTag,TOSagreement } from '../components/postTools';
 
 function CreatePost() {
-  const [content, setContent] = useState('<span >Your content here</span>');
+  const [content, setContent] = useState('<span >Post content goes here</span>');
   const [title, setTitle] = useState('');
   const [summary, setSummary] = useState('');
   const [files, setFiles] = useState<FileList | null>(null);
