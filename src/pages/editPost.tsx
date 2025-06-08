@@ -17,6 +17,9 @@ function EditPost() {
   const [checkedTOS, setCheckedTOS] = useState(false);
   const { id } = useParams()
 
+  const [loading, setLoading] = useState(false);
+  const [isContentFlagged, setIsContentFlagged] = useState(false)
+
   useEffect(() => {
     if (!id) return;
     fetch(`${API_BASE}/post/${id}`)
@@ -48,13 +51,51 @@ function EditPost() {
 
 async function updatePost(e: React.FormEvent<HTMLFormElement>) {
   e.preventDefault();
+  setLoading(true)
 
-  if (title.length < 4 || title.length > 35 || summary.length < 10) {
+  if (title.length < 4 || title.length > 44 || summary.length < 10) {
     setErrorWarning(true);
+    setLoading(false)
     return;
   }
 
   setErrorWarning(false);
+
+    try {
+    const moderationRes = await fetch(`${API_BASE}/api/moderate`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        title,
+        summary,
+        content,
+      }),
+    });
+
+    if (!moderationRes.ok) {
+      setIsContentFlagged(true)
+      setErrorWarning(true);
+      setLoading(false)
+try {
+  const errorData = await moderationRes.json();
+  if (errorData.message) {
+    console.log(errorData.message);
+  }
+} catch {
+  console.error('Failed to parse moderation error response');
+}
+
+      return;
+    }
+    setIsContentFlagged(false)
+  } catch (modError) {
+    console.error('AI Moderation error:', modError);
+    alert('An error occurred during moderation. Please try again.');
+    return;
+  }
 
   const data = new FormData();
   data.set('title', title);
@@ -105,14 +146,14 @@ async function updatePost(e: React.FormEvent<HTMLFormElement>) {
       >
         <input
           value={title}
-          maxLength={35}
+          maxLength={44}
           onChange={e => {
             setTitle(e.target.value);
-            if (errorWarning) setErrorWarning(false);
+            if (errorWarning) setErrorWarning(false)
           }}
           className="border border-gray-500 p-2 rounded-lg"
           type="text"
-          placeholder="Post title (max 35 chars)"
+          placeholder="Post title (max 44 chars)"
         />
         <input
           value={summary}
@@ -180,17 +221,25 @@ async function updatePost(e: React.FormEvent<HTMLFormElement>) {
         </div>
         <TOSagreement checkedTOS={checkedTOS} setCheckedTOS={setCheckedTOS}/>
 
-        <button
-          type="submit"
-          className="text-white px-4 py-2 rounded bg-black hover:bg-gray-800 hover:rounded-xl transition-all cursor-pointer active:text-green-400"
-        >
-          Update post
-        </button>
+            <button
+              title="Click to submit your post"
+              type="submit"
+              className="text-white hover:rounded-xl active:text-green-400 transition-all px-4 py-2 rounded-lg cursor-pointer bg-black hover:bg-gray-800 flex items-center justify-center"
+              disabled={loading}
+            >
+              {loading ? (
+                <span className="material-symbols-outlined animate-spin !text-[25px]">
+                  refresh
+                </span>
+              ) : (
+                'Update post'
+              )}
+            </button>
       </form>
-      <HandleErrors title={title} checkedTOS={checkedTOS} summary={summary} errorWarning={errorWarning} />
+      <HandleErrors title={title} isModerated={isContentFlagged} checkedTOS={checkedTOS} summary={summary} errorWarning={errorWarning} />
       <br />
     </main>
   );
 }
 
-export default EditPost;
+export default EditPost

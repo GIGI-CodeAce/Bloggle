@@ -42,7 +42,6 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser())
 app.use('/uploads', express.static(__dirname+ '/uploads'))
-app.use(express.json());
 app.use('/api', moderationRoutes);
 
 
@@ -143,18 +142,25 @@ app.post('/logout', (req,res)=>{
   res.cookie('token', '').json('ok')
 })
 
-app.post('/post', uploadMiddleware.single('file'), async(req, res) => {
+app.post('/post', uploadMiddleware.single('file'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'No file uploaded.' });
+  }
+
   const { originalname, path: tempPath } = req.file;
   const ext = path.extname(originalname).toLowerCase();
   const newFileName = Date.now() + '-' + Math.round(Math.random() * 1E9) + ext;
   const newPath = path.join('uploads', newFileName);
+  
   fs.renameSync(tempPath, newPath);
 
   const { token } = req.cookies;
+
   jwt.verify(token, JWT_SECRET, {}, async (err, info) => {
     if (err) return res.status(403).json({ error: 'Invalid token' });
 
     const { title, summary, content, tags } = req.body;
+
     let parsedTags = [];
     try {
       parsedTags = JSON.parse(tags);
@@ -162,16 +168,24 @@ app.post('/post', uploadMiddleware.single('file'), async(req, res) => {
       console.warn('⚠️ Failed to parse tags:', tags);
     }
 
-    const postDoc = await PostModel.create({
-      title,
-      summary,
-      content,
-      tags: parsedTags,
-      cover: newPath.replace(/\\/g, '/'),
-      author: info.id,
-    });
+    try {
+      const postDoc = await PostModel.create({
+        title,
+        summary,
+        content,
+        tags: parsedTags,
+        cover: newPath.replace(/\\/g, '/'),
+        author: info.id,
+      });
 
-    res.json(postDoc);
+      res.json(postDoc);
+    } catch (err) {
+      if (err.code === 11000) {
+        return res.status(400).json({ error: 'Duplicate post title.' })
+      }
+      console.error(err);
+      res.status(500).json({ error: 'Server error creating post.' })
+    }
   });
 });
 

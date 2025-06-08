@@ -112,16 +112,18 @@ interface HandleErrorsProps {
   title: string
   summary: string
   checkedTOS: boolean
+  isModerated:boolean
   errorWarning: boolean
 }
 
-export function HandleErrors({ title,summary,checkedTOS, errorWarning }: HandleErrorsProps) {
+export function HandleErrors({ title,summary,checkedTOS,isModerated, errorWarning }: HandleErrorsProps) {
 
     return (
       <h1 className="h-6 text-center text-[15px] text-red-600 mt-1">
-        {!errorWarning ? '' : title.length < 4 || title.length > 35 ? 
-        'Title must be between 4 and 35 characters' : summary.length < 10 ? 'Post summary is too short' : 
+        {!errorWarning ? '' : title.length < 4 || title.length > 44 ? 'Title must be between 4 and 44 characters' :
+        summary.length < 10 ? 'Post summary is too short' : 
         !checkedTOS ? 'You have to agree to our terms of service' : 
+        isModerated ? 'Our moderation tools detected some offensive content, please try again' :
         'Failed to create post. Make sure all fields are filled in correctly.'}
       </h1>
     )

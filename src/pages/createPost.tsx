@@ -16,11 +16,18 @@ function CreatePost() {
   const [errorWarning, setErrorWarning] = useState(false);
   const [checkedTOS, setCheckedTOS] = useState(false);
 
+  const [isContentFlagged, setIsContentFlagged] = useState(false)
+   const [loading, setLoading] = useState(false);
+
 async function SubmitPost(e: React.FormEvent<HTMLFormElement>) {
   e.preventDefault();
+  setLoading(true)
+  setErrorWarning(false);
+  setIsContentFlagged(false);
 
-  if (title.length < 4 || title.length > 35 || summary.length < 10 || !checkedTOS) {
+  if (title.length < 4 || title.length > 44 || summary.length < 10 || !checkedTOS) {
     setErrorWarning(true);
+    setLoading(false)
     return;
   }
 
@@ -42,10 +49,21 @@ async function SubmitPost(e: React.FormEvent<HTMLFormElement>) {
     });
 
     if (!moderationRes.ok) {
-      const errorData = await moderationRes.json();
-      alert(`AI Moderation failed: ${errorData.message || 'Content flagged'}`);
+      setIsContentFlagged(true)
+      setErrorWarning(true);
+      setLoading(false)
+try {
+  const errorData = await moderationRes.json();
+  if (errorData.message) {
+    console.log(errorData.message);
+  }
+} catch {
+  console.error('Failed to parse moderation error response');
+}
+
       return;
     }
+    setIsContentFlagged(false)
   } catch (modError) {
     console.error('AI Moderation error:', modError);
     alert('An error occurred during moderation. Please try again.');
@@ -70,17 +88,21 @@ async function SubmitPost(e: React.FormEvent<HTMLFormElement>) {
       body: data,
     });
 
-    if (!response.ok) {
-      setErrorWarning(true);
-      throw new Error('Failed to create post');
-    }
-
-    setRedirect(true);
-  } catch (err) {
-    console.error('Error creating post:', err);
+  if (!response.ok) {
+    const errorText = await response.text()
+    console.error('Server responded with:', errorText)
+    setErrorWarning(true);
+    throw new Error('Failed to create post')
   }
+
+  setRedirect(true)
+} catch (err) {
+  console.error('Error creating post:', err)
 }
 
+setLoading(false
+)
+}
 
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -93,6 +115,7 @@ async function SubmitPost(e: React.FormEvent<HTMLFormElement>) {
     if (redirect) {
     return <Navigate to="/" />
   }
+
 
   return (
     <main className='mt-5 px-3'>
@@ -109,11 +132,11 @@ async function SubmitPost(e: React.FormEvent<HTMLFormElement>) {
       >
         <input
           value={title}
-          maxLength={35}
+          maxLength={44}
           onChange={e => setTitle(e.target.value)}
           className="border border-gray-500 p-2 rounded-lg"
           type="text"
-          placeholder="Post title (max 35 chars)"
+          placeholder="Post title (max 44 chars)"
         />
         <input
           value={summary}
@@ -181,16 +204,23 @@ async function SubmitPost(e: React.FormEvent<HTMLFormElement>) {
         </div>
         <TOSagreement checkedTOS={checkedTOS} setCheckedTOS={setCheckedTOS} />
 
-        <button
-        title='Click to submit your post'
-          type="submit"
-          className="text-white hover:rounded-xl active:text-green-400 transition-all
-                       px-4 py-2 rounded-lg cursor-pointer bg-black hover:bg-gray-800"
-        >
-          Submit
-        </button>
+            <button
+              title="Click to submit your post"
+              type="submit"
+              className="text-white hover:rounded-xl active:text-green-400 transition-all px-4 py-2 rounded-lg cursor-pointer bg-black hover:bg-gray-800 flex items-center justify-center"
+              disabled={loading}
+            >
+              {loading ? (
+                <span className="material-symbols-outlined animate-spin !text-[25px]">
+                  refresh
+                </span>
+              ) : (
+                'Submit'
+              )}
+            </button>
+
       </form>
-       <HandleErrors title={title} checkedTOS={checkedTOS} summary={summary} errorWarning={errorWarning} />
+       <HandleErrors title={title} checkedTOS={checkedTOS} isModerated={isContentFlagged} summary={summary} errorWarning={errorWarning} />
       <div className="text-center sm:my-2 my-5">
         <h1 className="text-center text-xl font-extrabold">
           Bloggle It Out: <span className="text-gray-600">Share What’s On Your Mind</span>
