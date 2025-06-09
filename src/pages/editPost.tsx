@@ -53,7 +53,7 @@ async function updatePost(e: React.FormEvent<HTMLFormElement>) {
   e.preventDefault();
   setLoading(true)
 
-  if (title.length < 4 || title.length > 44 || summary.length < 10) {
+  if (title.length < 4 || title.length > 44 || summary.length < 10 || !checkedTOS) {
     setErrorWarning(true);
     setLoading(false)
     return;

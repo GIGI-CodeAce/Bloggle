@@ -2,11 +2,17 @@ import { useEffect, useState } from "react"
 import type { PostProps } from "../components/Post"
 import PostLayout from "../components/Post"
 import { API_BASE } from "../components/api"
-import { ArticlesPlaceholder } from "../components/postTools"
+import { ArticlesPlaceholder, ScrollToTopArrow } from "../components/postTools"
 
 function OfficialArticles() {
   const [posts, setPosts] = useState<PostProps[]>([])
+  const [moreThan3posts,setMoreThan3posts] = useState(false)
   const bloggleNews = false
+
+  useEffect(() => {
+    setMoreThan3posts(posts.length >= 3);
+}, [posts.length]);
+
 
   useEffect(() => {
     const fetchNews = async () => {
@@ -56,6 +62,7 @@ function OfficialArticles() {
           posts.map((post: PostProps) => <PostLayout key={post._id} {...post} />)
         )}
       </ul>
+        <ScrollToTopArrow moreThan3posts={moreThan3posts} />
     </div>
   );
 }

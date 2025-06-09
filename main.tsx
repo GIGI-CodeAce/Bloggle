@@ -4,7 +4,7 @@ import Articles from './src/categories/bloggleArticles.tsx'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import LoginPage from './src/pages/Login.tsx'
 import RegisterPage from './src/pages/Register.tsx'
-import {CategoryLayout, DefLayout, ScrollToTopArrow} from './src/components/layouts.tsx'
+import {CategoryLayout, DefLayout} from './src/components/layouts.tsx'
 import {FooterLayout} from './src/components/layouts.tsx'
 import CreatePost from './src/pages/createPost.tsx'
 import { UserContextProvider } from './src/userContext.tsx'
@@ -24,10 +24,8 @@ createRoot(document.getElementById('root')!).render(
       <Route path='/' element={<DefLayout/>}>
         <Route path='/' element={<FooterLayout/>}>
           <Route path='/' element={<CategoryLayout/>}>
-            <Route path='/' element={<ScrollToTopArrow/>}>
                 <Route path='/' element={<Articles/>}/>
                 <Route path='/trustedPosts' element={<OfficialArticles/>}/>
-            </Route>
               <Route path='/terms' element={<TermsOfUsePage/>}/>
               <Route path='/post/:id' element={<PostPage/>}/>
           </Route>
