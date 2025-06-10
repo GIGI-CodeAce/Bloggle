@@ -2,7 +2,7 @@
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/GIGIsOtherStuff/mainWebMedia/main/AppImages/myProjectsImgs/bloggleLogo.png" 
-      width="40%" height="60%" alt="project-image">
+      width="50%" height="70%" alt="project-image">
 </p>
 
 <p id="description">
@@ -57,17 +57,32 @@ createRoot(document.getElementById('root')!).render(
 
 // ...
 ```
+
+```javascript
+// ...
+//  Snippet of backend code when connecting routes with imported functions
+
+app.post('/register', async (req, res) => RegisterPost(req,res))
+app.post('/login', async (req, res) => LoginPost(req,res))
+app.post('/logout', (req,res)=>{res.cookie('token', '').json('ok')})
+
+app.post('/post', uploadMiddleware.single('file'), async (req, res) => PostPost(req,res));
+app.put('/post', uploadMiddleware.single('file'), async (req,res)=> PutPost(req,res))
+app.get('/post/:id', async(req,res)=> GetPostId(req,res))
+app.delete('/delete/:id', (req, res) => DeletePostById(req,res))
+
+app.post('/post/:id/like', async (req, res) => PostLikeId(req,res))
+
+// ...
+```
 <h2 align="center">Project Screenshots:</h2>
 <div align="center">
-<div>
-<h3>Rolling</h3>
+
   <img src="./public/registerPage.png" alt="project-screenshot" width="400" height="500">
-</div>
-<h3>Rare undiscovered cards</h3>
- <img src=" " alt="project-screenshot"  style="width: 100%; height: 400px">
   <img src="./public/postsPreview.png" alt="project-screenshot" style="width: 100%; height: 400px">
-<h3>Few samples</h3>
   <img src="./public/trustedPage.png" alt="project-screenshot" style="width: 100%; height: 400px">
+
+</div>
 
   ## 🪪 License
 This project is licensed under the [MIT License](LICENSE).
