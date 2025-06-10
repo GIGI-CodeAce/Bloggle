@@ -1,7 +1,8 @@
 <h1 align="center" id="title">MEMES RNG</h1>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/GIGIsOtherStuff/mainWebMedia/main/AppImages/myProjectsImgs/bloggleLogo.png" alt="project-image">
+  <img src="https://raw.githubusercontent.com/GIGIsOtherStuff/mainWebMedia/main/AppImages/myProjectsImgs/bloggleLogo.png" 
+      width="40%" height="60%" alt="project-image">
 </p>
 
 <p id="description">
@@ -24,6 +25,8 @@
 *   Trusted Sources page: official news coming from a news API to check out updates about what's happening around the world.
 *   Has an API content moderation system using AI that checks posts for offensive content
 
+<h2 align="center">Snippets of code</h2><br/>
+
 ```javascript
 // ...
 // Bloggle's codebase HTML main tree:
@@ -35,10 +38,8 @@ createRoot(document.getElementById('root')!).render(
       <Route path='/' element={<DefLayout/>}>
         <Route path='/' element={<FooterLayout/>}>
           <Route path='/' element={<CategoryLayout/>}>
-            <Route path='/' element={<ScrollToTopArrow/>}>
                 <Route path='/' element={<Articles/>}/>
                 <Route path='/trustedPosts' element={<OfficialArticles/>}/>
-            </Route>
               <Route path='/terms' element={<TermsOfUsePage/>}/>
               <Route path='/post/:id' element={<PostPage/>}/>
           </Route>
@@ -60,13 +61,17 @@ createRoot(document.getElementById('root')!).render(
 <div align="center">
 <div>
 <h3>Rolling</h3>
-  <img src="    " alt="project-screenshot" width="400" height="500">
+  <img src="./public/registerPage.png" alt="project-screenshot" width="400" height="500">
 </div>
 <h3>Rare undiscovered cards</h3>
  <img src=" " alt="project-screenshot"  style="width: 100%; height: 400px">
-  <img src="    " alt="project-screenshot" style="width: 100%; height: 400px">
+  <img src="./public/postsPreview.png" alt="project-screenshot" style="width: 100%; height: 400px">
 <h3>Few samples</h3>
-  <img src="    " alt="project-screenshot" style="width: 100%; height: 400px">
+  <img src="./public/trustedPage.png" alt="project-screenshot" style="width: 100%; height: 400px">
+
+  ## 🪪 License
+This project is licensed under the [MIT License](LICENSE).
+
 </div><br></br>
 
 [![Portfolio](https://img.shields.io/badge/Portfolio-62b1ff?style=for-the-badge&logo=web&logoColor=white)](https://www.gigicodeace.com)
