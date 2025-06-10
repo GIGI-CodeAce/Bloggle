@@ -57,6 +57,7 @@ createRoot(document.getElementById('root')!).render(
 
 // ...
 ```
+<hr/>
 
 ```javascript
 // ...
@@ -78,9 +79,9 @@ app.post('/post/:id/like', async (req, res) => PostLikeId(req,res))
 <h2 align="center">Project Screenshots:</h2>
 <div align="center">
 
-  <img src="./public/registerPage.png" alt="project-screenshot" width="400" height="400"><hr/>
-  <img src="./public/postsPreview.png" alt="project-screenshot" style="width: 100%; height: 369px"><hr/>
-  <img src="./public/trustedPage.png" alt="project-screenshot" style="width: 100%; height: 3690px"><hr/>
+  <img src="./public/registerPage.png" alt="project-screenshot" width="440" height="410"><hr/>
+  <img src="./public/postsPreview.png" alt="project-screenshot" style="width: 900%; height: 369px"><hr/>
+  <img src="./public/trustedPage.png" alt="project-screenshot" style="width: 90%; height: 369px"><hr/>
 
 </div>
 
