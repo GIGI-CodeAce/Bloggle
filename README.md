@@ -6,7 +6,8 @@
 </p>
 
 <p id="description">
-  Bloggle is a news-based app where users can write their own posts, manage them easily, and discover other content shared by others.
+  Bloggle is a news-based app where users can write their own posts, manage them easily, and discover other content shared by others. 
+  Built w/react,tailwind,typescript and using various API's for it to work including google,guardian and mongoDB
 </p>
 
 <h2 align="center">Visit here</h2>
@@ -24,6 +25,7 @@
 *   Only on Bloggle page: posts made by users who made an account exclusively on bloggle
 *   Trusted Sources page: official news coming from a news API to check out updates about what's happening around the world.
 *   Has an API content moderation system using AI that checks posts for offensive content
+*   And explore many other website mechanics and features by trying it on your own 
 
 <h2 align="center">Snippets of code</h2><br/>
 
