@@ -1,9 +1,10 @@
-import { useContext, useEffect, useState } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
-import ReactTimeAgo from "react-time-ago";
-import type { PostProps } from "../components/Post";
-import { UserContext } from "../userContext";
-import { API_BASE } from "../components/api";
+import { useContext, useEffect, useState } from "react"
+import { Link, useParams, useNavigate } from "react-router-dom"
+import ReactTimeAgo from "react-time-ago"
+import type { PostProps } from "../components/Post"
+import { UserContext } from "../userContext"
+import { API_BASE } from "../components/api"
+import { ScrollToTopArrow } from "../components/postTools"
 
 function PostPage() {
   const [postInfo, setPostInfo] = useState<PostProps | null>(null);
@@ -11,6 +12,7 @@ function PostPage() {
   const [likes, setLikes] = useState(0)
   const [isHovering, setIsHovering] = useState('')
   const { id } = useParams()
+  const [moreThan450Chars,setMoreThan450Chars] = useState(false)
   const navigate = useNavigate()
 
   const authorName = typeof postInfo?.author === "object"
@@ -39,7 +41,7 @@ function PostPage() {
   useEffect(() => {
     fetch(`${API_BASE}/post/${id}`)
       .then((res) => {
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`)
         return res.json()
       })
       .then((data: PostProps) => {
@@ -63,13 +65,22 @@ function PostPage() {
         navigate("/")
       } else {
         const data = await res.json()
-        alert("Failed to delete post: " + (data.error || data.message));
+        alert("Failed to delete post: " + (data.error || data.message))
       }
     } catch (err) {
       alert("Error deleting post")
-      console.error(err);
+      console.error(err)
     }
   }
+
+useEffect(() => {
+  if (typeof postInfo?.content === 'string' && postInfo.content.length >= 500) {
+    setMoreThan450Chars(true)
+  } else {
+    setMoreThan450Chars(false)
+  }
+}, [postInfo?.content])
+
 
   useEffect(() => {
     if (postInfo) {
@@ -89,6 +100,8 @@ function PostPage() {
   const handleHoverToggle = () => {
   };
 
+  console.log(postInfo?.content.length);
+  
   const isOwner = userInfo &&
     (userInfo.id === postInfo?.author._id || userInfo.username === "admin")
 
@@ -96,7 +109,7 @@ function PostPage() {
     return <div className="text-center text-xl text-gray-700">Loading...</div>
 
   return (
-    <div className="p-4 mb-5 max-w-2xl mx-auto relative overflow-hidden min-h-[300px]">
+    <div className="px-4 pt-4 pb-1 max-w-2xl mx-auto relative overflow-hidden min-h-[300px]">
       <h1 className="text-xl md:text-3xl sm:text-2xl font-bold mb-2 text-center bg-gray-100 mx-auto p-1 rounded-b-3xl break-words">
         {postInfo.title}
       </h1>
@@ -110,7 +123,7 @@ function PostPage() {
 
       <div
         className={`text-lg mb-4 prose pt-2 max-w-none break-words ${
-          postInfo.content.length > 400
+          postInfo.content.length > 500
             ? "first-letter:text-5xl first-letter:font-medium first-letter:float-left first-letter:leading-none first-letter:mr-2"
             : ""
         }`}
@@ -170,7 +183,7 @@ function PostPage() {
         </div>
       )}
 
-      <div className="flex items-center flex-wrap text-white rounded-t-xl bg-[#020303c9] p-2 w-full">
+      <div className="flex items-center flex-wrap mb-5 text-white rounded-t-xl bg-[#020303c9] p-2 w-full">
         <TagsDisplay />
         <div className="ml-auto text-sm opacity-80">
           <ReactTimeAgo
@@ -179,6 +192,7 @@ function PostPage() {
           />
         </div>
       </div>
+      {moreThan450Chars && <ScrollToTopArrow moreThan3posts={moreThan450Chars} />}
     </div>
   );
 }
