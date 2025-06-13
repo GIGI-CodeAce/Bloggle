@@ -39,7 +39,7 @@ function Footer(){
             </ul>
             </div>
         </footer>
-    <h1 className="bg-[#020303e9] text-white text-sm">v1.4.1</h1>
+    <h1 className="bg-[#020303e9] text-white text-sm">v1.4.2</h1>
         </main>
     )
 }

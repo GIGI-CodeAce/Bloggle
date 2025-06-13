@@ -2,17 +2,28 @@ import { useEffect, useState } from "react"
 import type { PostProps } from "../components/Post"
 import PostLayout from "../components/Post"
 import { API_BASE } from "../components/api"
-import { ArticlesPlaceholder, ScrollToTopArrow,ContentPages } from "../components/postTools"
+import {
+  ArticlesPlaceholder,
+  ScrollToTopArrow,
+  ContentPages,
+} from "../components/postTools"
 
 function OfficialArticles() {
-  const [allPosts, setAllPosts] = useState<PostProps[]>([])
+  const [posts, setPosts] = useState<PostProps[]>([])
   const [currentPage, setCurrentPage] = useState(1)
+  const [moreThan15posts, setMoreThan15posts] = useState(false)
   const bloggleNews = false
 
-      const paginatedPosts = allPosts.slice(
-    (currentPage - 1) * 15,
-    currentPage * 15
+  const postsPerPage = 15
+  const paginatedPosts = posts.slice(
+    (currentPage - 1) * postsPerPage,
+    currentPage * postsPerPage
   )
+
+    useEffect(() => {
+    setMoreThan15posts(true)
+
+    }, [posts.length])
 
   useEffect(() => {
     const fetchNews = async () => {
@@ -21,7 +32,7 @@ function OfficialArticles() {
         const data = await res.json()
 
         if (!data.response?.results || data.response.results.length === 0) {
-          setAllPosts([])
+          setPosts([])
           return
         }
 
@@ -45,7 +56,7 @@ function OfficialArticles() {
             tags: ["news", "official", "guardian"],
           }))
 
-        setAllPosts(formattedPosts)
+        setPosts(formattedPosts)
       } catch (error) {
         console.error("Error fetching Guardian news:", error)
       }
@@ -55,19 +66,24 @@ function OfficialArticles() {
   }, [])
 
   return (
-    <div className="space-y-6 max-w-screen-xl mx-auto px-2 sm:px-4 pt-6 pb-2 min-h-[440px]">
-      <ul>
-        {paginatedPosts.length === 0 ? (
-          <ArticlesPlaceholder bloggleNews={bloggleNews} />
-        ) : (
-          paginatedPosts.map((post: PostProps) => (
-            <PostLayout key={post._id} {...post} />
-          ))
-        )}
-      </ul>
-      <ScrollToTopArrow moreThan3posts={allPosts.length >= 3} />
-      <ContentPages allPosts={allPosts} currentPage={currentPage} setCurrentPage={setCurrentPage} />
-    </div>
+    <main className="space-y-6 max-w-screen-xl mx-auto px-2 sm:px-4 pt-6 pb-2 min-h-[440px]">
+      {posts.length === 0 ? (
+        <ArticlesPlaceholder bloggleNews={bloggleNews} />
+      ) : (
+        paginatedPosts.map((post: PostProps) => (
+          <PostLayout key={post._id} {...post} />
+        ))
+      )}
+
+      <ScrollToTopArrow moreThan3posts={posts.length >= 3} />
+      <ContentPages
+        allPosts={posts}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        postsPerPage={postsPerPage}
+        moreThan15posts={moreThan15posts}
+      />
+    </main>
   )
 }
 

@@ -98,20 +98,25 @@ export function TOSagreement({ checkedTOS, setCheckedTOS }: TOSProps) {
 
 interface ContentPagesInterface{
   allPosts: any
+  postsPerPage: number
   currentPage: number
   setCurrentPage:any
+  moreThan15posts: boolean
+
 }
 
-export function ContentPages({allPosts, currentPage, setCurrentPage}: ContentPagesInterface) {
-    const totalPages = Math.ceil(allPosts.length / 2)
+export function ContentPages({allPosts, currentPage, setCurrentPage, postsPerPage,moreThan15posts}: ContentPagesInterface) {
+    const totalPages = Math.ceil(allPosts.length / postsPerPage)
 
   const buttonsStyleBase =
-    "p-1 border w-8 h-8 mx-1 rounded-xl transition-all cursor-pointer select-none flex items-center justify-center";
+    "p-1 border w-9 h-9 mx-1 rounded-xl sm:w-8 sm:h-8  transition-all cursor-pointer select-none flex items-center justify-center";
   const activeStyle = "bg-[#020303e9] text-white";
   const inactiveStyle = "hover:bg-gray-200";
 
+  if(!moreThan15posts) return null
+
   return (
-    <div className="text-center flex justify-center mt-4">
+    <div className="text-center flex mb-3 justify-center mt-[-15px]">
       {[...Array(totalPages)].map((_, i) => {
         const pageNum = i + 1;
         const isActive = currentPage === pageNum;
