@@ -97,7 +97,7 @@ const CACHE_DURATION_MS = 1000 * 60 * 10;
 app.get('/news', async (req, res) => {
   const now = Date.now()
   const GUARDIAN_API_KEY = process.env.NEWS_API_KEY
-  const GUARDIAN_BASE_URL = `https://content.guardianapis.com/search?section=technology&show-fields=all&page-size=22&api-key=${GUARDIAN_API_KEY}`
+  const GUARDIAN_BASE_URL = `https://content.guardianapis.com/search?section=technology&show-fields=all&page-size=45&api-key=${GUARDIAN_API_KEY}`
 
   if (!GUARDIAN_API_KEY) {
     return res.status(500).json({ error: 'No Guardian API key provided' });

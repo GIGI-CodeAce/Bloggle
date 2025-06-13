@@ -96,6 +96,46 @@ export function TOSagreement({ checkedTOS, setCheckedTOS }: TOSProps) {
   );
 }
 
+interface ContentPagesInterface{
+  allPosts: any
+  currentPage: number
+  setCurrentPage:any
+}
+
+export function ContentPages({allPosts, currentPage, setCurrentPage}: ContentPagesInterface) {
+    const totalPages = Math.ceil(allPosts.length / 2)
+
+  const buttonsStyleBase =
+    "p-1 border w-8 h-8 mx-1 rounded-xl transition-all cursor-pointer select-none flex items-center justify-center";
+  const activeStyle = "bg-[#020303e9] text-white";
+  const inactiveStyle = "hover:bg-gray-200";
+
+  return (
+    <div className="text-center flex justify-center mt-4">
+      {[...Array(totalPages)].map((_, i) => {
+        const pageNum = i + 1;
+        const isActive = currentPage === pageNum;
+        return (
+          <button
+            key={i}
+            className={`${buttonsStyleBase} ${isActive ? activeStyle : inactiveStyle}`}
+            onClick={() => setCurrentPage(pageNum)}
+          >
+            {pageNum}
+          </button>
+        );
+      })}
+
+      <button
+        className={`material-symbols-outlined ${buttonsStyleBase} ${inactiveStyle}`}
+        onClick={() => setCurrentPage(currentPage === totalPages ? 1 : currentPage + 1)}
+      >
+        chevron_right
+      </button>
+    </div>
+  );
+}
+
 export function ScrollToTopArrow({ moreThan3posts }: { moreThan3posts: boolean }) {
 
     const scrollToTop = () => {
