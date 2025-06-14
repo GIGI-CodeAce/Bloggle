@@ -175,7 +175,6 @@ export function ScrollToTopArrow({ moreThan3posts }: { moreThan3posts: boolean }
     )
 }
 
-
 export interface RemoveTagProps {
   tag: string
   tagList: string[]

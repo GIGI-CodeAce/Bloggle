@@ -21,8 +21,7 @@ function OfficialArticles() {
   )
 
     useEffect(() => {
-    setMoreThan15posts(true)
-
+    setMoreThan15posts(posts.length >= 15)
     }, [posts.length])
 
   useEffect(() => {
