@@ -15,7 +15,6 @@ export function DefLayout() {
 }
 
 export function FooterLayout() {
-
     return (
         <>
             <Outlet />
@@ -42,7 +41,6 @@ export function ScrollToTopArrow(){
     useEffect(() => {
         const handleScroll = () => {
         }
-
         window.addEventListener("scroll", handleScroll)
         return () => window.removeEventListener("scroll", handleScroll)
     }, [])

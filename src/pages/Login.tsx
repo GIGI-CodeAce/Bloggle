@@ -63,7 +63,7 @@ function LoginPage() {
 
           <label className="flex flex-col">
             <h1 className="hover:underline pl-1 mb-1">Username</h1>
-                <input type="text"
+                <input type="username"
            placeholder="Enter username"
            className="p-2 border rounded-lg"
            value={username}

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import React,{ useState } from "react"
 import { Link } from "react-router-dom"
 import ReactTimeAgo from "react-time-ago"
 import { API_BASE } from "./api"
@@ -130,4 +130,4 @@ function PostContent({
   );
 }
 
-export default PostLayout
+export default React.memo(PostLayout)

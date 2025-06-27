@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import React,{ useEffect, useState } from "react"
 import type { PostProps } from "../components/Post"
 import PostLayout from "../components/Post"
 import { API_BASE } from "../components/api"
@@ -86,4 +86,4 @@ function OfficialArticles() {
   )
 }
 
-export default OfficialArticles
+export default React.memo(OfficialArticles)

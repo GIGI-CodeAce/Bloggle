@@ -97,7 +97,8 @@ try {
 
   setRedirect(true)
 } catch (err) {
-  console.error('Error creating post:', err)
+  console.error('Error creating post..')
+  // , err
 }
 
 setLoading(false

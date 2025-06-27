@@ -22,7 +22,7 @@ function PostPage() {
   const tags = postInfo?.tags ?? []
 
   function TagsDisplay() {
-    const displayTags = tags.length > 0 ? tags : ["#noHashtags"]
+    const displayTags = tags.length > 0 ? tags : ["#noHashTags"]
 
     return (
       <div className="flex">

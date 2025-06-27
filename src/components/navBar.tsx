@@ -19,7 +19,10 @@ function NavigationBar() {
     });
   }, []);
 
-  function logout() {
+function logout() {
+  const LogoutConfirm = window.confirm('Are you sure you wanna log out?');
+
+  if (LogoutConfirm) {
     fetch(`${API_BASE}/logout`, {
       credentials: 'include',
       method: "POST"
@@ -28,6 +31,8 @@ function NavigationBar() {
       navigate('/');
     });
   }
+}
+
 
   const username = userInfo?.username;
 
