@@ -95,7 +95,7 @@ function PostContent({
       <div className="flex flex-col">
         <h1
         title={title}
-          className={`text-sm sm:text-lg xl:text-3xl md:text-2xl inline-block max-w-[210px] md:max-w-[730px] sm:max-w-[330px] font-semibold hover:cursor-pointer truncate ${
+          className={`text-sm sm:text-lg xl:text-3xl xl:h-10 md:text-2xl inline-block max-w-[210px] md:max-w-[730px] sm:max-w-[330px] font-semibold hover:cursor-pointer truncate ${
             hoveredIndex === _id ? "underline" : ""
           }`}
         >
@@ -117,8 +117,8 @@ function PostContent({
             </span>
           </div>
 
-                    <div className="flex sm:hidden">
-            <TagsDisplay />
+            <div className="flex sm:hidden">
+              <TagsDisplay />
           </div>
         </div>
 

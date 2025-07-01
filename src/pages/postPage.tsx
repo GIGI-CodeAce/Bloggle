@@ -74,13 +74,35 @@ function PostPage() {
   }
 
 useEffect(() => {
-  if (typeof postInfo?.content === 'string' && postInfo.content.length >= 500) {
+  if (typeof postInfo?.content === 'string' && postInfo.content.length >= 550) {
     setMoreThan450Chars(true)
   } else {
     setMoreThan450Chars(false)
   }
 }, [postInfo?.content])
 
+console.log(postInfo?.content);
+
+function CoverImage({ src, alt }:any) {
+  const [imageError, setImageError] = useState(false);
+
+  return (
+    <div>
+      {!imageError ? (
+        <img
+          src={src}
+          alt={alt}
+          onError={() => setImageError(true)}
+          className="w-full mt-2 h-[400px] sm:h-[510px] rounded-xl mb-4 border"
+        />
+      ) : (
+        <div className="w-full mt-2 h-[400px] sm:h-[510px] rounded-xl mb-4 border flex items-center justify-center bg-gray-200 text-gray-700">
+          Image not available..
+        </div>
+      )}
+    </div>
+  );
+}
 
   useEffect(() => {
     if (postInfo) {
@@ -123,28 +145,24 @@ useEffect(() => {
 
       <div
         className={`text-lg mb-4 prose pt-2 max-w-none break-words ${
-          postInfo.content.length > 500
+          postInfo.content.length > 550
             ? "first-letter:text-5xl first-letter:font-medium first-letter:float-left first-letter:leading-none first-letter:mr-2"
             : ""
         }`}
         dangerouslySetInnerHTML={{ __html: postInfo.content }}
       ></div>
 
-      <div>
-        <img
-          src={`${API_BASE}/${postInfo.cover}`}
-          alt="cover"
-          className="w-full mt-2 h-[400px] sm:h-[510px] rounded-xl mb-4 border"
-        />
+      <div className="relative">
+          <CoverImage
+            src={`${API_BASE}/${postInfo.cover}`}
+            alt="cover"
+          />
 
         <div
-          className={`absolute z-50 items-center gap-2 right-8 ${
-            isOwner ? "bottom-121 sm:bottom-148" : "bottom-107 sm:bottom-134"
-          }`}
-        >
+          className={`absolute z-50 items-center gap-2 top-5 right-5`}>
           <button
             onClick={handleLike}
-            className="bg-black border-white border-2 hover:bg-gray-800 cursor-pointer transition-all active:bg-blue-600 text-white px-4 py-1 rounded-xl"
+            className="bg-black border-white border-2 w-[100px] hover:bg-gray-800 cursor-pointer transition-all active:bg-blue-600 text-white px-4 py-1 rounded-xl"
           >
             {likes === 0 ? "Like post" : <h1>{likes} Like{likes > 1 ? "s" : ""}</h1>}
           </button>
