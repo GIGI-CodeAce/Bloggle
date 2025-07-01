@@ -162,7 +162,7 @@ function CoverImage({ src, alt }:any) {
           className={`absolute z-50 items-center gap-2 top-5 right-5`}>
           <button
             onClick={handleLike}
-            className="bg-black border-white border-2 w-[100px] hover:bg-gray-800 cursor-pointer transition-all active:bg-blue-600 text-white px-4 py-1 rounded-xl"
+            className="bg-black border-white border-2 w-[103px] hover:bg-gray-800 cursor-pointer transition-all active:bg-blue-600 text-white px-4 py-1 rounded-xl"
           >
             {likes === 0 ? "Like post" : <h1>{likes} Like{likes > 1 ? "s" : ""}</h1>}
           </button>
