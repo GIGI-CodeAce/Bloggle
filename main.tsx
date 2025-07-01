@@ -14,6 +14,7 @@ import en from 'javascript-time-ago/locale/en'
 import EditPost from './src/pages/editPost.tsx'
 import OfficialArticles from './src/categories/officialArticles.tsx'
 import TermsOfUsePage from './src/pages/termsOfSuse.tsx'
+import PostPageLayout from './src/pages/postPagePlaceholder.tsx'
  
 TimeAgo.addDefaultLocale(en)
 
@@ -28,6 +29,7 @@ createRoot(document.getElementById('root')!).render(
                 <Route path='/trustedPosts' element={<OfficialArticles/>}/>
               <Route path='/terms' element={<TermsOfUsePage/>}/>
               <Route path='/post/:id' element={<PostPage/>}/>
+              <Route path='/layout' element={<PostPageLayout/>}/>
           </Route>
       </Route>
         <Route path='/login' element={<LoginPage/>}/>

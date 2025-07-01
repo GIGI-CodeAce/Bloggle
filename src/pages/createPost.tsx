@@ -6,18 +6,18 @@ import { API_BASE } from '../components/api';
 import { addTag,HandleErrors,removeTag,TOSagreement } from '../components/postTools';
 
 function CreatePost() {
-  const [content, setContent] = useState('<span >Post content goes here</span>');
-  const [title, setTitle] = useState('');
-  const [summary, setSummary] = useState('');
-  const [files, setFiles] = useState<FileList | null>(null);
-  const [tagInput, setTagInput] = useState('');
-  const [tagList, setTagList] = useState<string[]>([]);
-  const [redirect, setRedirect] = useState(false);
-  const [errorWarning, setErrorWarning] = useState(false);
-  const [checkedTOS, setCheckedTOS] = useState(false);
+  const [content, setContent] = useState('<span >Post content goes here</span>')
+  const [title, setTitle] = useState('')
+  const [summary, setSummary] = useState('')
+  const [files, setFiles] = useState<FileList | null>(null)
+  const [tagInput, setTagInput] = useState('')
+  const [tagList, setTagList] = useState<string[]>([])
+  const [redirect, setRedirect] = useState(false)
+  const [errorWarning, setErrorWarning] = useState(false)
+  const [checkedTOS, setCheckedTOS] = useState(false)
 
   const [isContentFlagged, setIsContentFlagged] = useState(false)
-   const [loading, setLoading] = useState(false);
+   const [loading, setLoading] = useState(false)
 
 async function SubmitPost(e: React.FormEvent<HTMLFormElement>) {
   e.preventDefault();
@@ -66,19 +66,19 @@ try {
     setIsContentFlagged(false)
   } catch (modError) {
     console.error('AI Moderation error:', modError);
-    alert('An error occurred during moderation. Please try again.');
-    return;
+    alert('An error occurred during moderation. Please try again.')
+    return
   }
 
   // --- Proceed to Submit Post ---
-  const data = new FormData();
-  data.set('title', title);
-  data.set('summary', summary);
-  data.set('content', content);
-  data.set('tags', JSON.stringify(tagList));
+  const data = new FormData()
+  data.set('title', title)
+  data.set('summary', summary)
+  data.set('content', content)
+  data.set('tags', JSON.stringify(tagList))
 
   if (files && files[0]) {
-    data.set('file', files[0]);
+    data.set('file', files[0])
   }
 
   try {
@@ -86,7 +86,7 @@ try {
       method: 'POST',
       credentials: 'include',
       body: data,
-    });
+    })
 
   if (!response.ok) {
     const errorText = await response.text()

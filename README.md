@@ -1,4 +1,4 @@
-<h1 align="center" id="title">Bloggle v1.4.2</h1>
+<h1 align="center" id="title">Bloggle v1.4.3</h1>
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/GIGIsOtherStuff/mainWebMedia/main/AppImages/myProjectsImgs/bloggleLogo.png" 

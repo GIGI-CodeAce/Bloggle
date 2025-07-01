@@ -5,6 +5,7 @@ import type { PostProps } from "../components/Post"
 import { UserContext } from "../userContext"
 import { API_BASE } from "../components/api"
 import { ScrollToTopArrow } from "../components/postTools"
+import PostPageLayout from "./postPagePlaceholder"
 
 function PostPage() {
   const [postInfo, setPostInfo] = useState<PostProps | null>(null);
@@ -81,7 +82,7 @@ useEffect(() => {
   }
 }, [postInfo?.content])
 
-console.log(postInfo?.content);
+// console.log(postInfo?.content);
 
 function CoverImage({ src, alt }:any) {
   const [imageError, setImageError] = useState(false);
@@ -122,13 +123,12 @@ function CoverImage({ src, alt }:any) {
   const handleHoverToggle = () => {
   };
 
-  console.log(postInfo?.content.length);
+  // console.log(postInfo?.content.length);
   
   const isOwner = userInfo &&
     (userInfo.id === postInfo?.author._id || userInfo.username === "admin")
 
-  if (!postInfo)
-    return <div className="text-center text-xl text-gray-700">Loading...</div>
+  if (!postInfo) return <PostPageLayout/>
 
   return (
     <div className="px-4 pt-4 pb-1 max-w-2xl mx-auto relative overflow-hidden min-h-[300px]">

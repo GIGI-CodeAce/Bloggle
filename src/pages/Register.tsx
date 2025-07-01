@@ -59,7 +59,7 @@ function RegisterPage() {
     setSuccessMessage('Account created. Go to login to sign in.')
     setTimeout(() => {
       ResetRegister()
-    }, 2222);
+    }, 2222)
   }
 }
 

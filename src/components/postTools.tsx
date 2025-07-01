@@ -54,9 +54,9 @@ export function ArticlesPlaceholder({ bloggleNews }: ArticlesPlaceholderProps) {
         ) : (
                     <>
             <h1 className="text-3xl mb-1">o_O</h1>
-            <p className="text-lg">No external API news found...</p>
+            <p className="text-lg">No external news found...</p>
             <br />
-            <p className="text-lg">Come back and retry later</p>
+            <p className="text-lg">Come back and try later</p>
           </>
         )
       ) : (
