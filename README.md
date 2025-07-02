@@ -16,6 +16,12 @@
   <a href="https://bloggleapp.onrender.com">BloggleApp.onrender.com</a>
 </div>
 
+<hr style="border: none; border-top: 0px solid #ccc; width: 60%; margin: 20px auto;" />
+
+<h5 align="center">
+  <u>Note:</u> When visiting this website, the API backend may take up to <u>one minute</u> to fully start due to its hosting setup.
+</h5>
+
 <h2 align="center">🧐 Features</h2>
 
 <h4>Here're some of the project's best features</h4>
