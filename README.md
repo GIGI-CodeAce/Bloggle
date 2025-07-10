@@ -2,7 +2,7 @@
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/GIGIsOtherStuff/mainWebMedia/main/AppImages/myProjectsImgs/bloggleLogo.png" 
-      width="50%" height="70%" alt="project-image">
+      width="50%" height="320" alt="project-image">
 </p>
 
 <p id="description">
@@ -32,6 +32,48 @@
 *   Trusted Sources page: official news coming from a news API to check out updates about what's happening around the world.
 *   Has an API content moderation system using AI that checks posts for offensive content
 *   And explore many other website mechanics and features by trying it on your own 
+  
+  
+<h2 align="center">Languages and tools used</h2>
+<p align="center">
+  </a>
+  <a href="https://www.w3.org/html/" target="_blank" rel="noreferrer">
+    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/html5/html5-original-wordmark.svg"
+            alt="html5" width="40" height="40" />
+  </a>
+    <a href="https://tailwindcss.com/" target="_blank" rel="noreferrer">
+      <img src="https://raw.githubusercontent.com/GIGIsOtherStuff/mainWebMedia/main/AppImages/Languages/Colored/tailwind.png" 
+            alt="tailwind" width="40" height="40" />
+  </a>
+    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank" rel="noreferrer">
+      <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg" 
+            alt="javascript" width="40" height="40" />
+  </a>
+    <a href="https://www.typescriptlang.org/" target="_blank" rel="noreferrer">
+      <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg" 
+            alt="typescript" width="40" height="40"/>
+  </a>
+    <a href="https://reactjs.org/" target="_blank" rel="noreferrer">
+      <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original-wordmark.svg" 
+            alt="react" width="40" height="40" />
+  </a>
+    <a href="https://nodejs.org" target="_blank" rel="noreferrer"> 
+      <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/nodejs/nodejs-original-wordmark.svg" 
+            alt="nodejs" width="40" height="40"/> 
+  </a>
+    <a href="https://www.theguardian.com/europe" target="_blank" rel="noreferrer"> 
+    <img src="https://raw.githubusercontent.com/GIGIsOtherStuff/mainWebMedia/main/AppImages/Tools/guardian.png" 
+            alt="Guardian" width="40" height="40"/> 
+  </a>
+    <a href="https://www.mongodb.com" target="_blank" rel="noreferrer"> 
+      <img src="https://raw.githubusercontent.com/GIGIsOtherStuff/mainWebMedia/main/AppImages/Tools/mongodb.png" 
+            alt="MongoDB" width="40" height="40"/> 
+  </a>
+    <a href="https://huggingface.co" target="_blank" rel="noreferrer">
+      <img src="https://raw.githubusercontent.com/GIGIsOtherStuff/mainWebMedia/main/AppImages/Tools/huggingface.png" 
+            alt="HuggingFace" width="40" height="40"/> 
+  </a></a>
+</p>
 
 <h2 align="center">Snippets of code</h2><br/>
 
@@ -62,7 +104,6 @@ createRoot(document.getElementById('root')!).render(
   </BrowserRouter>
 )
 
-
 // ...
 ```
 <hr/>
@@ -87,7 +128,7 @@ app.post('/post/:id/like', async (req, res) => PostLikeId(req,res))
 <h2 align="center">Project Screenshots:</h2>
 <div align="center">
 
-  <img src="./public/registerPage.png" alt="project-screenshot" width="440" height="410"><hr/>
+  <img src="./public/registerPage.png" alt="project-screenshot" width="460" height="450"><hr/>
   <img src="./public/postsPreview.png" alt="project-screenshot" style="width: 900%; height: 369px"><hr/>
   <img src="./public/trustedPage.png" alt="project-screenshot" style="width: 90%; height: 369px"><hr/>
 
