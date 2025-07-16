@@ -32,6 +32,7 @@ interface ArticlesPlaceholderProps {
 
 export function ArticlesPlaceholder({ bloggleNews }: ArticlesPlaceholderProps) {
   const [notFound, setNotFound] = useState(false);
+  const LoadingAPIMessage = bloggleNews ? 'Looking for Bloggle posts...' : 'Looking for official posts...'
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -63,7 +64,7 @@ export function ArticlesPlaceholder({ bloggleNews }: ArticlesPlaceholderProps) {
         <div>
         <span className="material-symbols-outlined revert animate-spin !text-[25px]">
           refresh</span>
-        <div className="text-xl animate-pulse">Loading API...</div>
+        <div className="text-xl animate-pulse">{LoadingAPIMessage}</div>
         </div>
       )}
     </div>
@@ -81,7 +82,8 @@ export function TOSagreement({ checkedTOS, setCheckedTOS }: TOSProps) {
   return (
     <label className="cursor-pointer mt-[-10px]">
       <input
-        className="mr-2 ml-1 scale-126 bg-green-400 transition-all hover:bg-green-400"
+        className="mr-2 ml-1 scale-126 bg-green-400 transition-all 
+                   cursor-pointer hover:bg-green-400"
         type="checkbox"
         checked={checkedTOS}
         onChange={() => setCheckedTOS((prev) => !prev)}
@@ -192,17 +194,21 @@ interface HandleErrorsProps {
   checkedTOS: boolean
   isModerated:boolean
   errorWarning: boolean
+  loading:boolean
 }
 
-export function HandleErrors({ title,summary,checkedTOS,isModerated, errorWarning }: HandleErrorsProps) {
+export function HandleErrors({ title,summary,checkedTOS,isModerated, errorWarning, loading }: HandleErrorsProps) {
 
     return (
       <h1 className="h-6 text-center text-[15px] text-red-600 mt-1">
-        {!errorWarning ? '' : title.length < 4 || title.length > 44 ? 'Title must be between 4 and 44 characters' :
-        summary.length < 10 ? 'Post summary is too short' : 
-        !checkedTOS ? 'You have to agree to our terms of service' : 
-        isModerated ? 'Our moderation tools detected some offensive content, please try again' :
-        'Failed to create post. Make sure all fields are filled in correctly.'}
+    {loading
+      ? 'Checking content...' : !errorWarning
+      ? '' : title.length < 4 || title.length > 44
+      ? 'Title must be between 4 and 44 characters' : summary.length < 10
+      ? 'Post summary is too short' : !checkedTOS
+      ? 'You have to agree to our terms of service' : isModerated
+      ? 'Our moderation tools detected some offensive content, please try again' :
+       'Failed to create post. Make sure all fields are filled in correctly.'}
       </h1>
     )
 }

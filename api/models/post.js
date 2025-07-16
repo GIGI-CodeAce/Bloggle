@@ -8,7 +8,8 @@ const PostSchema = new Schema({
   likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   content:String,
   tags: [String],
-  cover:String,
+  cover: Buffer,
+  coverType: String,
   author:{type:Schema.Types.ObjectId, ref:'User'},
 }, {
   timestamps: true,

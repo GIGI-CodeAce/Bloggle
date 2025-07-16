@@ -80,12 +80,23 @@ app.get('/profile', (req, res) => {
   })
 })
 
-app.get('/post', async(req, res)=>{
-  res.json(await PostModel.find()
-  .populate('author', ['username'])
-  .sort({createdAt: -1})
-  .limit(22))
-})
+app.get('/post', async (req, res) => {
+  const posts = await PostModel.find()
+    .populate('author', ['username'])
+    .sort({ createdAt: -1 })
+    .limit(22);
+
+  const formattedPosts = posts.map(post => {
+    const postObj = post.toObject();
+    postObj.cover = post.cover
+      ? `data:${post.coverType};base64,${post.cover.toString('base64')}`
+      : null;
+    return postObj;
+  });
+
+  res.json(formattedPosts);
+});
+
 
 let cachedNews = null;
 let cacheTimestamp = 0;

@@ -20,7 +20,7 @@ function NavigationBar() {
   }, []);
 
 function logout() {
-  const LogoutConfirm = window.confirm('Are you sure you wanna log out?');
+  const LogoutConfirm = window.confirm('Are you sure you want to log out?');
 
   if (LogoutConfirm) {
     fetch(`${API_BASE}/logout`, {

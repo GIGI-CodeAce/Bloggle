@@ -221,7 +221,7 @@ setLoading(false
             </button>
 
       </form>
-       <HandleErrors title={title} checkedTOS={checkedTOS} isModerated={isContentFlagged} summary={summary} errorWarning={errorWarning} />
+       <HandleErrors title={title} checkedTOS={checkedTOS} isModerated={isContentFlagged} summary={summary} errorWarning={errorWarning} loading={loading} />
       <div className="text-center sm:my-2 my-5">
         <h1 className="text-center text-xl font-extrabold">
           Bloggle It Out: <span className="text-gray-600">Share What’s On Your Mind</span>

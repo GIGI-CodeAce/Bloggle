@@ -1,8 +1,8 @@
-<h1 align="center" id="title">Bloggle v1.4.3</h1>
+<h1 align="center" id="title">Bloggle v1.4.4</h1>
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/GIGIsOtherStuff/mainWebMedia/main/AppImages/myProjectsImgs/bloggleLogo.png" 
-      width="50%" height="340" alt="project-image">
+      width="40%" height="250" alt="project-image">
 </p>
 
 <p id="description">
@@ -128,9 +128,9 @@ app.post('/post/:id/like', async (req, res) => PostLikeId(req,res))
 <h2 align="center">Project Screenshots:</h2>
 <div align="center">
 
-  <img src="./public/registerPage.png" alt="project-screenshot" width="460" height="450"><hr/>
-  <img src="./public/postsPreview.png" alt="project-screenshot" style="width: 900%; height: 369px"><hr/>
-  <img src="./public/trustedPage.png" alt="project-screenshot" style="width: 90%; height: 369px"><hr/>
+  <img src="./public/registerPage.png" alt="project-screenshot" width="470" height="480"><hr/>
+  <img src="./public/postsPreview.png" alt="project-screenshot" style="width: 900%; height: 375px"><hr/>
+  <img src="./public/trustedPage.png" alt="project-screenshot" style="width: 90%; height: 375px"><hr/>
 
 </div>
 

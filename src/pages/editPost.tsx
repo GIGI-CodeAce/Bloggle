@@ -6,15 +6,15 @@ import { API_BASE } from "../components/api";
 import { addTag,HandleErrors,removeTag,TOSagreement } from '../components/postTools';
 
 function EditPost() {
-  const [content, setContent] = useState('<span >Your content here</span>');
-  const [title, setTitle] = useState('');
-  const [summary, setSummary] = useState('');
-  const [files, setFiles] = useState<FileList | null>(null);
-  const [tagInput, setTagInput] = useState('');
-  const [tagList, setTagList] = useState<string[]>([]);
-  const [redirect, setRedirect] = useState(false);
-  const [errorWarning, setErrorWarning] = useState(false);
-  const [checkedTOS, setCheckedTOS] = useState(false);
+  const [content, setContent] = useState('<span >Your content here</span>')
+  const [title, setTitle] = useState('')
+  const [summary, setSummary] = useState('')
+  const [files, setFiles] = useState<FileList | null>(null)
+  const [tagInput, setTagInput] = useState('')
+  const [tagList, setTagList] = useState<string[]>([])
+  const [redirect, setRedirect] = useState(false)
+  const [errorWarning, setErrorWarning] = useState(false)
+  const [checkedTOS, setCheckedTOS] = useState(false)
   const { id } = useParams()
 
   const [loading, setLoading] = useState(false);
@@ -77,24 +77,24 @@ async function updatePost(e: React.FormEvent<HTMLFormElement>) {
 
     if (!moderationRes.ok) {
       setIsContentFlagged(true)
-      setErrorWarning(true);
+      setErrorWarning(true)
       setLoading(false)
 try {
-  const errorData = await moderationRes.json();
+  const errorData = await moderationRes.json()
   if (errorData.message) {
-    console.log(errorData.message);
+    console.log(errorData.message)
   }
 } catch {
-  console.error('Failed to parse moderation error response');
+  console.error('Failed to parse moderation error response')
 }
 
       return;
     }
     setIsContentFlagged(false)
   } catch (modError) {
-    console.error('AI Moderation error:', modError);
-    alert('An error occurred during moderation. Please try again.');
-    return;
+    console.error('AI Moderation error:', modError)
+    alert('An error occurred during moderation. Please try again.')
+    return
   }
 
   const data = new FormData();
@@ -236,7 +236,7 @@ try {
               )}
             </button>
       </form>
-      <HandleErrors title={title} isModerated={isContentFlagged} checkedTOS={checkedTOS} summary={summary} errorWarning={errorWarning} />
+      <HandleErrors title={title} isModerated={isContentFlagged} checkedTOS={checkedTOS} summary={summary} errorWarning={errorWarning} loading={loading} />
       <br />
     </main>
   );

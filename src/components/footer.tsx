@@ -29,7 +29,7 @@ function Footer(){
         <li className="hover:underline text-blue-300 ">LinkedIn</li>
         </a>
         <a href='https://github.com/GIGI-CodeAce' target='_blank'>
-        <li className="hover:underline  hover:text-gray-500 text-black">Github </li>
+        <li className="hover:underline text-gray-400">Github </li>
         </a>
         <a 
             href="https://mail.google.com/mail/?view=cm&fs=1&to=gigicodeace@gmail.com&su=Inquiry&body=Hello," 
@@ -39,7 +39,7 @@ function Footer(){
             </ul>
             </div>
         </footer>
-    <h1 className="bg-[#020303e9] text-white text-sm">v1.4.3</h1>
+    <h1 className="bg-[#020303e9] text-white text-sm">v1.4.4</h1>
         </main>
     )
 }

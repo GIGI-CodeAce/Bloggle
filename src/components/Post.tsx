@@ -1,7 +1,7 @@
 import React,{ useState } from "react"
 import { Link } from "react-router-dom"
 import ReactTimeAgo from "react-time-ago"
-import { API_BASE } from "./api"
+// import { API_BASE } from "./api"
 
 export interface PostProps {
   _id: number
@@ -81,6 +81,7 @@ function PostContent({
     );
   }
   const hasValidTags = tags?.some(tag => tag && tag.startsWith('#'));
+  const [imageError, setImageError] = useState(false)
 
   return (
     <div className="flex items-center w-full overflow-hidden space-x-2 sm:space-x-4 min-h-[18px] max-h-[180px] transition-all">
@@ -88,7 +89,8 @@ function PostContent({
         className={`w-[160px] min-w-[160px] xl:w-[330px] sm:w-[200px] h-[120px] xl:h-[180px] shrink-0 object-fill rounded-xl ${
           hoveredIndex === _id ? "border" : ""
         }`}
-        src={cover.startsWith("http") ? cover : `${API_BASE}/${cover}`}
+        src={!imageError ? cover : 'https://raw.githubusercontent.com/GIGIsOtherStuff/mainWebMedia/main/AppImages/others/imageNotFound.jpeg'}
+        onError={() => setImageError(true)}
         alt="Cover"
       />
 

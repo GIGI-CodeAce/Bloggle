@@ -154,7 +154,7 @@ function CoverImage({ src, alt }:any) {
 
       <div className="relative">
           <CoverImage
-            src={`${API_BASE}/${postInfo.cover}`}
+            src={postInfo.cover}
             alt="cover"
           />
 
