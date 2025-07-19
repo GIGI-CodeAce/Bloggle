@@ -2,7 +2,7 @@
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/GIGIsOtherStuff/mainWebMedia/main/AppImages/myProjectsImgs/bloggleLogo.png" 
-      width="40%" height="250" alt="project-image">
+      width="40%" height="300" alt="project-image">
 </p>
 
 <p id="description">

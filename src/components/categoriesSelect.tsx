@@ -2,9 +2,9 @@ import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 
 function CategoriesTab() {
-  const location = useLocation();
+  const location = useLocation()
   const currentPath = location.pathname;
-  const [hoveringLink, setHoveringLink] = useState<string | null>(null);
+  const [hoveringLink, setHoveringLink] = useState<string | null>(null)
 
   const baseStyle =
     "mr-3 p-1 rounded-t-xl cursor-pointer border-b-4 border-transparent hover:border hover:font-medium";
@@ -68,4 +68,4 @@ function CategoriesTab() {
   );
 }
 
-export default CategoriesTab;
+export default CategoriesTab
