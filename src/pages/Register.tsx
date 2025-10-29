@@ -17,51 +17,59 @@ function RegisterPage() {
 
   useEffect(() => {
     setWarningMessage('')
-    setSuccessMessage('')
+    // setSuccessMessage('')
   }, [username, password])
 
- async function Register(e: FormEvent) {
+async function Register(e: FormEvent) {
   e.preventDefault();
 
-  setWarningMessage('')
-  setSuccessMessage('')
-
+  setWarningMessage('');
+  setSuccessMessage('');
 
   if (!username || !password) {
     setWarningMessage('Please enter your register information');
-    return
+    return;
   }
 
   if (password !== repeatPassword) {
     setWarningMessage('Passwords do not match.');
-    return
+    return;
   }
 
-  const response = await fetch(`${API_BASE}/register`, {
-    method: 'POST',
-    body: JSON.stringify({ username, password }),
-    headers: { 'Content-Type': 'application/json' },
-    credentials: 'include',
-  })
-
-  if (response.status !== 200) {
-    const errorData = await response.json()
-    if (errorData?.error === 'Username already exists') {
-      setWarningMessage('Username already taken')
-    } else {
-        if(username.length > 15 || username.length <= 3){
-    setWarningMessage('Username should be over 4 and less than 15 characters long')
-  }else{
-    setWarningMessage('Registration failed. Please try again.')
+  if (username.length > 15 || username.length <= 3) {
+    setWarningMessage('Username should be over 4 and less than 15 characters long');
+    return;
   }
+
+  try {
+    const response = await fetch(`${API_BASE}/register`, {
+      method: 'POST',
+      body: JSON.stringify({ username, password }),
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      if (errorData?.error === 'Username already exists') {
+        setWarningMessage('Username already taken');
+      } else {
+        setWarningMessage('Registration failed. Please try again.');
+      }
+      return;
     }
-  } else {
-    setSuccessMessage('Account created. Go to login to sign in.')
+
+    setSuccessMessage('Account created. Go to login to sign in.');
     setTimeout(() => {
-      ResetRegister()
-    }, 2222)
+      ResetRegister();
+    }, 2000);
+
+  } catch (error) {
+    console.error('Server error:', error);
+    setWarningMessage('Server not running or unreachable.');
   }
 }
+
 
   return (
     <main className="max-w-screen-xl mx-auto p-1">

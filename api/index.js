@@ -7,7 +7,7 @@ import multer from 'multer'
 import PostModel from './models/post.js'
 import moderationRoutes from './moderation/moderation.js'
 import { LoginPost,RegisterPost } from './accountRegisterAssets.js'
-import { PostPost,PutPost,GetPostId,PostLikeId,DeletePostById } from './createPostAssetes.js'
+import { PostPost,PutPost,GetPostId,PostLikeId,DeletePostById } from './createPostAssets.js'
 
 import dotenv from 'dotenv';
 import path from 'path';
