@@ -142,6 +142,8 @@ app.get('/news', async (req, res) => {
   }
 });
 
+console.log(PORT);
+
 
 app.listen(PORT, () => {
   console.log(`🟩 Listening on port ${PORT}`)

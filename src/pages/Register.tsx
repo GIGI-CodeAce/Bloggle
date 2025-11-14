@@ -1,9 +1,11 @@
 import { useState, useEffect, type FormEvent } from "react"
 import { API_BASE } from "../components/api"
+import { useNavigate } from "react-router-dom"
 
 function RegisterPage() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const navigate = useNavigate()
   const [repeatPassword, setRepeatPassword] = useState('')
   const [warningMessage, setWarningMessage] = useState('')
   const [successMessage, setSuccessMessage] = useState('')
@@ -129,6 +131,10 @@ async function Register(e: FormEvent) {
             <div className="text-center m-2">
         <h1 className="text-center text-lg font-extrabold">
           Welcome! <span className="text-gray-600">Happy to see you there</span>
+          <div className="text-gray-600 text-[16px]">Already have an account? 
+            <span className="text-black cursor-pointer underline active:text-gray-400" 
+            onClick={()=> navigate('/login')}> Login</span>
+            </div>
         </h1>
       </div>
     </main>

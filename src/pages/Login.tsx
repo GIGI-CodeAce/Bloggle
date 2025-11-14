@@ -2,10 +2,12 @@ import { useContext, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { UserContext } from "../userContext";
 import { API_BASE } from "../components/api";
+import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate()
   const [redirect, setRedirect] = useState(false);
   const [notRunningServer, setNotRunningServer] = useState(false);
   const { setUserInfo } = useContext(UserContext);
@@ -111,8 +113,9 @@ function LoginPage() {
       </form>
 
       {/* Warning / Error messages */}
+      <div className="h-6 mt-2 mb-1">
       {warningDisplay && (
-        <div className="text-center text-red-600 m-2">
+        <div className="text-center text-red-600">
           {notRunningServer ? (
             <h1>Server not running or unreachable.</h1>
           ) : username === '' && password === '' ? (
@@ -122,6 +125,12 @@ function LoginPage() {
           )}
         </div>
       )}
+      </div>
+
+        <div className="text-center text-lg font-extrabold text-gray-600 text-[16px]">Dont have an account yet?
+            <span className="text-black cursor-pointer underline active:text-gray-400" 
+            onClick={()=> navigate('/register')}> Register</span>
+            </div>
     </main>
   );
 }
