@@ -190,7 +190,8 @@ try {
               onKeyDown={handleKeyDown}
               className="border border-gray-500 p-2 flex-1 pl-7 rounded-lg"
               type="text"
-              placeholder="Add a tag (min 2, max 15 chars)"
+              maxLength={20}
+              placeholder="Add a tag (min 2, max 20 chars)"
             />
             <button
               type="button"

@@ -19,7 +19,7 @@ export function addTag({ tagInput, tagList, setTagList, setTagInput }: AddTagPro
 
   if (
     rawTag.length >= 2 &&
-    rawTag.length <= 15 &&
+    rawTag.length <= 20 &&
     !tagList.includes(cleaned)
   ) {
     setTagList([...tagList, cleaned])
