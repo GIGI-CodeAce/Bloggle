@@ -23,11 +23,11 @@ function LoginPage() {
   }
 
   async function Login(e: any) {
-    e.preventDefault();
+    e.preventDefault()
 
     if (username === '' && password === '') {
       setWarningDisplay(true);
-      setNotRunningServer(false);
+      setNotRunningServer(false)
       return;
     }
 
@@ -126,4 +126,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default LoginPage

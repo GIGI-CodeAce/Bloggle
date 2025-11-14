@@ -18,53 +18,57 @@ const queryHuggingFaceModel = async (modelUrl, text) => {
       Authorization: `Bearer ${HF_API_KEY}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ inputs: text }),
+    body: JSON.stringify({
+      inputs: text,
+      parameters: {}
+    }),
   });
 
-  const contentType = response.headers.get('content-type') || ''
+  const contentType = response.headers.get('content-type') || '';
   if (!contentType.includes('application/json')) {
-    const text = await response.text()
-    throw new Error(`Model endpoint returned non-JSON response: ${text}`)
+    const raw = await response.text();
+    throw new Error(`Model endpoint returned non-JSON response: ${raw}`);
   }
 
-  const result = await response.json()
+  const result = await response.json();
 
   if (result.error) {
-    throw new Error(`Model failed: ${result.error}`)
+    throw new Error(`Model failed: ${result.error}`);
   }
 
-  return result;
+  // Router sometimes wraps in { results: [...] }
+  return result.results || result;
 };
 
-
-// List of models and evaluation logic
+// ---- Model Definitions ----
 const models = [
   {
     name: 'hate-speech',
-    url: 'https://api-inference.huggingface.co/models/facebook/roberta-hate-speech-dynabench-r4-target',
+    url: 'https://router.huggingface.co/hf-inference/models/facebook/roberta-hate-speech-dynabench-r4-target',
     check: (result) => {
-      if (!Array.isArray(result) || !Array.isArray(result[0])) {
-        console.warn('⚠️ Unexpected format from hate-speech model:', result)
+      // expect: [[{label,score},...]]
+      const arr = Array.isArray(result) ? result : [];
+      if (!Array.isArray(arr[0])) {
+        console.warn('⚠️ Unexpected format from hate-speech model:', result);
         return false;
       }
-      const top = result[0].reduce((a, b) => (a.score > b.score ? a : b))
+      const top = arr[0].reduce((a, b) => (a.score > b.score ? a : b));
       return top.label?.toLowerCase() === 'hate' && top.score > 0.6;
     },
   },
   {
     name: 'toxicity',
-    url: 'https://api-inference.huggingface.co/models/unitary/toxic-bert',
+    url: 'https://router.huggingface.co/hf-inference/models/unitary/toxic-bert',
     check: (result) => {
-      if (!Array.isArray(result)) {
-        console.warn('⚠️ Unexpected format from toxicity model:', result);
-        return false;
-      }
-      const toxic = result.find((r) => r.label?.toLowerCase() === 'toxic');
+      // expect: [{label,score}, ...]
+      const arr = Array.isArray(result) ? result : [];
+      const toxic = arr.find((r) => r.label?.toLowerCase() === 'toxic');
       return toxic && toxic.score > 0.7;
     },
   },
 ];
 
+// ---- Moderation Endpoint ----
 router.post('/moderate', async (req, res) => {
   const { title = '', summary = '', content = '' } = req.body;
   const text = `${title}\n${summary}\n${content}`;
@@ -78,8 +82,10 @@ router.post('/moderate', async (req, res) => {
 
     for (const model of models) {
       console.log(`🔍 Checking with ${model.name}...`);
+
       const result = await queryHuggingFaceModel(model.url, text);
       const flagged = model.check(result);
+
       report.push({ model: model.name, flagged, result });
 
       if (flagged) {
@@ -103,4 +109,4 @@ router.post('/moderate', async (req, res) => {
   }
 });
 
-export default router;
+export default router
